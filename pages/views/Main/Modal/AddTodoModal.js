@@ -3,7 +3,7 @@ import { useRecoilState } from "recoil";
 import { openAddTodoModal } from "../../../recoil/openAddTodoModal";
 
 function AddTodoModal() {
-    
+
     const newTodoItem = {
         id: 0,
         label: "",
@@ -50,15 +50,15 @@ function AddTodoModal() {
             arrayTempTodo.push(newTodoItem)
             
             localStorage.setItem("todoList", JSON.stringify(arrayTempTodo))
-            clearData();
+            onCancelClick();
         }
     }
 
     const validateNewTodoItem = (paramItem) => {
-        if(paramItem.label == ""){
+        /*if(paramItem.label == ""){
             alert("label is not null");
             return false
-        }
+        }*/
         return true;
     }
 

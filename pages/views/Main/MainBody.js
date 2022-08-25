@@ -6,12 +6,10 @@ import TodoTime from "./TodoItem/TodoTime";
 function MainBody() {
 
     const [todoListStorage, setTodoListStorage] = useState([]);
-    const [state, setState ] = useState(todoListStorage.length);
 
     useEffect(() => {
         setTodoListStorage(JSON.parse(localStorage.getItem("todoList")) || [])
-        setState(todoListStorage.length)
-    }, state)
+    })
     return (
         <>
             <div>
