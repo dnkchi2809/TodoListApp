@@ -27,7 +27,7 @@ function EditTodoModal() {
     const onCancelClick = () => {
         setSelectItem(null);
         setOpenModalEditTodo(false);
-    }
+    } 
 
     const onSaveClick = () => {
         if (updateTodoItem.history.length <= 0) {
