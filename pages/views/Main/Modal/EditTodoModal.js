@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useRecoilState } from "recoil";
+import { selector, useRecoilState } from "recoil";
 import { openEditTodoModal } from "../../../recoil/openEditTodoModal";
 import { todoItemSelect } from "../../../recoil/todoItemSelect";
 
@@ -14,25 +14,66 @@ function EditTodoModal() {
         detail: "",
         createDate: "",
         folderId: 0,
-        history:[]
+        history: Array()
+    })
+
+    const [updateHistory, setUpdateHistory] = useState({
+        historyId: 0,
+        updateDate: "",
+        updateLabel: "",
+        updateDetail: ""
     })
 
     const onCancelClick = () => {
-        setOpenModalEditTodo(false);
         setSelectItem(null);
+        setOpenModalEditTodo(false);
     }
 
     const onSaveClick = () => {
+        if (updateTodoItem.history.length <= 0) {
+            updateHistory.historyId = 0;
+        }
+        else {
+            updateHistory.historyId = (updateTodoItem.history.length - 1).historyId + 1;
+        }
+        updateHistory.updateDate = new Date().toISOString().slice(0, 10);
+
+        /*console.log(typeof(updateTodoItem.history));
+
+        let arrayHistoryTemp = updateTodoItem.history;
+
+        arrayHistoryTemp.push(updateHistory);
+
+        updateTodoItem.history = arrayHistoryTemp;
+
+        console.log(updateTodoItem);*/
+
         onCancelClick()
     }
 
     const onChangeLabel = (event) => {
-        
+        updateHistory.updateLabel = event.target.value;
+        updateTodoItem.label = event.target.value;
     }
 
     const onChangeTodoDetail = (event) => {
-        
+        updateHistory.updateDetail = event.target.value;
+        updateTodoItem.detail = event.target.value;
     }
+
+    useEffect(() => {
+        if (selectItem !== null) {
+            setUpdateTodoItem({
+                ...updateTodoItem,
+                id: selectItem.id,
+                label: selectItem.label,
+                detail: selectItem.detail,
+                createDate: selectItem.createDate,
+                folderId: selectItem.folderId,
+                history: selectItem.history
+            })
+        }
+    }, selectItem)
 
     useEffect(() => {
         let modal = document.getElementById("editModal");
@@ -55,10 +96,10 @@ function EditTodoModal() {
                             <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                 <div className="flex">
                                     <div className="w-3/4">
-                                        <input className="w-full mb-3 text-lg font-medium" defaultValue={selectItem !== null ? selectItem.label : null} onInput={onChangeLabel}></input>
+                                        <input type='text' id='editModalLabel' defaultValue={updateTodoItem.label} className="w-full mb-3 text-lg font-medium" onChange={onChangeLabel}></input>
                                     </div>
                                     <div className="w-1/4">
-                                        <p className="mb-3 font-thin text-blue-500 text-right">{selectItem !== null ? selectItem.createDate : null}</p>
+                                        <p className="mb-3 font-thin text-blue-500 text-right">{updateTodoItem.createDate}</p>
                                     </div>
                                 </div>
                                 <div className="sm:flex sm:items-start">
@@ -118,14 +159,14 @@ function EditTodoModal() {
                                             </div>
                                             <div className="py-2 px-4 bg-white rounded-b-lg dark:bg-gray-800">
                                                 <label for="editIdDetail" className="sr-only">Publish post</label>
-                                                <textarea defaultValue={selectItem !== null ? selectItem.detail : null} rows="8" className="block px-0 w-full text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write an article..." required="" onInput={onChangeTodoDetail}></textarea>
+                                                <textarea defaultValue={updateTodoItem.detail} rows="10" className="block px-0 w-full text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write an article..." required="" onInput={onChangeTodoDetail}></textarea>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                             </div>
                             <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                                <button data-modal-toggle="editModal" type="button" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"  onClick={onSaveClick}>Save</button>
+                                <button data-modal-toggle="editModal" type="button" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm" onClick={onSaveClick}>Save</button>
                                 <button data-modal-toggle="editModal" type="button" className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" onClick={onCancelClick}>Cancel</button>
                             </div>
                         </div>

@@ -21,7 +21,7 @@ function MainBody() {
                         ?
                         todoListStorage.map((todoItem, index) => {
                             return (
-                                <div className="col-todo-list">
+                                <div className="col-todo-list" key={"todoCardItem" + index}>
                                     <TodoCard item={todoItem}/>
                                 </div>
                             )

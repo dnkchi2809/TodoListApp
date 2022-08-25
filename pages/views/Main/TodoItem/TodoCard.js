@@ -13,7 +13,8 @@ function TodoCard(props) {
     const [selectItem, setSelectItem] = useRecoilState(todoItemSelect);
 
     const onEditTodoClick = () => {
-        setSelectItem(props.item);
+       
+        setSelectItem(props.item);        
         setOpenModalEditTodo(true);
     }
 
