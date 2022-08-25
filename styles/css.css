@@ -1,0 +1,22 @@
+.dropdownMenu {
+    position: absolute;
+    inset: 0px auto auto 0px;
+    margin: 0px;
+    transform: translate(322px, 66px);
+}
+
+@media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    .col-todo-list{
+        width: 100%;
+        padding-bottom: 20px;
+    }
+}
+
+@media only screen and (min-width: 769px) {
+    .col-todo-list{
+        width: 25%;
+        padding: 20px;
+    }
+}
+
