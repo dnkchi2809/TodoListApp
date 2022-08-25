@@ -96,7 +96,7 @@ function EditTodoModal() {
                             <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                 <div className="flex">
                                     <div className="w-3/4">
-                                        <input type='text' id='editModalLabel' defaultValue={updateTodoItem.label} className="w-full mb-3 text-lg font-medium" onChange={onChangeLabel}></input>
+                                        <input type='text' id='editModalLabel' defaultValue={updateTodoItem.label} className="w-full mb-3 text-lg font-medium" onChange={(event) => onChangeLabel(event)}></input>
                                     </div>
                                     <div className="w-1/4">
                                         <p className="mb-3 font-thin text-blue-500 text-right">{updateTodoItem.createDate}</p>
