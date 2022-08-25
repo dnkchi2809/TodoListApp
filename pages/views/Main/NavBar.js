@@ -1,4 +1,10 @@
+import { ExportFile } from "./Action/ExportFile";
+
 function NavBar() {
+    const onExportClick = () => {
+        ExportFile();
+    }
+
     return (
         <>
             <nav className="px-2 bg-white border-gray-200 dark:bg-gray-900 dark:border-gray-700">
@@ -39,7 +45,7 @@ function NavBar() {
                                 <a href="#" className="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Import</a>
                             </li>
                             <li>
-                                <a href="#" className="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Export</a>
+                                <a href="#" onClick={onExportClick} className="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Export</a>
                             </li>
                         </ul>
                     </div>
