@@ -25,6 +25,12 @@ function EditTodoModal() {
     })
 
     const onCancelClick = () => {
+        setUpdateHistory({
+            historyId: 0,
+            updateDate: "",
+            updateLabel: "",
+            updateDetail: ""
+        })
         setSelectItem(null);
         setOpenModalEditTodo(false);
     }
@@ -35,23 +41,22 @@ function EditTodoModal() {
             updateHistory.historyId = 0;
         }
         else {
-            updateHistory.historyId = (updateTodoItem.history.length - 1).historyId + 1;
+            updateHistory.historyId = updateTodoItem.history[(updateTodoItem.history.length) - 1].historyId + 1;
         }
         updateHistory.updateDate = new Date().toISOString().slice(0, 10);
 
-        // console.log(updateTodoItem.history);
+        //update history log
+        for (let item of updateTodoItem.history) {
+            if (item.historyId !== updateHistory.historyId) {
+                updateTodoItem.history = [...updateTodoItem.history, updateHistory];
+                break;
+            }
+        }
 
-        // updateTodoItem.history.map((item) => {
-        //     if(item.historyId !== updateHistory.historyId){
-        //         console.log("khac");
-        //     }
-        // })
-
-        console.log(updateTodoItem)
         //save edit to storage
         const todoList = JSON.parse(localStorage.getItem("todoList"));
         todoList.map((itemTodo, index) => {
-            if(itemTodo.id == updateTodoItem.id){
+            if (itemTodo.id == updateTodoItem.id) {
                 todoList.splice(index, 1, updateTodoItem);
             }
         });

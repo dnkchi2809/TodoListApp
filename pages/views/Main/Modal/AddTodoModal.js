@@ -12,7 +12,7 @@ function AddTodoModal() {
         folderId: 0,
         history: Array({
             historyId: 0,
-            historyDate : ""
+            updateDate : ""
         })
     });
 
