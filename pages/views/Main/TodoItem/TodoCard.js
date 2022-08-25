@@ -22,7 +22,7 @@ function TodoCard() {
                     <p className="text-center text-lg font-medium">Label</p>
                 </div>
                 <div className="mb-3">
-                    <input value="aaaaa" readonly className="w-full rounded-lg p-4"></input>
+                    <input value="aaaaa" readOnly className="w-full rounded-lg p-4"></input>
                 </div>
                 <div className="flex">
                     <div className="w-1/2">
