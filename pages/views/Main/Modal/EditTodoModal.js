@@ -27,7 +27,7 @@ function EditTodoModal() {
     const onCancelClick = () => {
         setSelectItem(null);
         setOpenModalEditTodo(false);
-    } 
+    }
 
     const onSaveClick = () => {
         if (updateTodoItem.history.length <= 0) {
@@ -38,15 +38,15 @@ function EditTodoModal() {
         }
         updateHistory.updateDate = new Date().toISOString().slice(0, 10);
 
-        /*console.log(typeof(updateTodoItem.history));
+        console.log(updateTodoItem.history);
 
-        let arrayHistoryTemp = updateTodoItem.history;
+        updateTodoItem.history.map((item) => {
+            if(item.historyId !== updateHistory.historyId){
+                console.log("khac");
+            }
+        })
 
-        arrayHistoryTemp.push(updateHistory);
-
-        updateTodoItem.history = arrayHistoryTemp;
-
-        console.log(updateTodoItem);*/
+        console.log(updateTodoItem)
 
         onCancelClick()
     }
@@ -96,7 +96,7 @@ function EditTodoModal() {
                             <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                 <div className="flex">
                                     <div className="w-3/4">
-                                        <input type='text' id='editModalLabel' defaultValue={updateTodoItem.label} className="w-full mb-3 text-lg font-medium" onChange={(event) => onChangeLabel(event)}></input>
+                                        <input type='text' id='editModalLabel' onInput={onChangeLabel} value={updateTodoItem.label} className="w-full mb-3 text-lg font-medium"></input>
                                     </div>
                                     <div className="w-1/4">
                                         <p className="mb-3 font-thin text-blue-500 text-right">{updateTodoItem.createDate}</p>
@@ -159,7 +159,7 @@ function EditTodoModal() {
                                             </div>
                                             <div className="py-2 px-4 bg-white rounded-b-lg dark:bg-gray-800">
                                                 <label for="editIdDetail" className="sr-only">Publish post</label>
-                                                <textarea defaultValue={updateTodoItem.detail} rows="10" className="block px-0 w-full text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write an article..." required="" onInput={onChangeTodoDetail}></textarea>
+                                                <textarea onInput={onChangeTodoDetail} value={updateTodoItem.detail} rows="10" className="block px-0 w-full text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write an article..." required=""></textarea>
                                             </div>
                                         </div>
                                     </form>

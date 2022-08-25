@@ -10,7 +10,10 @@ function AddTodoModal() {
         detail: "",
         createDate: "",
         folderId: 0,
-        history: Array(0)
+        history: Array({
+            historyId: 0,
+            historyDate : ""
+        })
     });
 
     const [openModalAddTodo, setOpenModalAddTodo] = useRecoilState(openAddTodoModal);
