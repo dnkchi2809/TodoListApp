@@ -1,35 +1,65 @@
 import { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { openEditTodoModal } from "../../../recoil/openEditTodoModal";
+import { todoItemSelect } from "../../../recoil/todoItemSelect";
 
 
 function EditTodoModal() {
     const [openModalEditTodo, setOpenModalEditTodo] = useRecoilState(openEditTodoModal);
+    const [selectItem, setSelectItem] = useRecoilState(todoItemSelect);
+
+    const [updateTodoItem, setUpdateTodoItem] = useState({
+        id: 0,
+        label: "",
+        detail: "",
+        createDate: "",
+        folderId: 0,
+        history:[]
+    })
 
     const onCancelClick = () => {
         setOpenModalEditTodo(false);
-        let modal = document.getElementById("editModal");
-        modal.classList.add("hidden");
+        setSelectItem(null);
+    }
+
+    const onSaveClick = () => {
+        onCancelClick()
+    }
+
+    const onChangeLabel = (event) => {
+        
+    }
+
+    const onChangeTodoDetail = (event) => {
+        
     }
 
     useEffect(() => {
+        let modal = document.getElementById("editModal");
         if (openModalEditTodo) {
-            let modal = document.getElementById("editModal");
             modal.classList.remove("hidden");
+        }
+        else {
+            modal.classList.add("hidden");
         }
     })
     return (
         <>
             {/*Modal*/}
             <div id="editModal" tabindex="-1" aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
-                <div className="fixed inset-0 bg-gray-200 bg-opacity-70 transition-opacity"></div>
+                <div className="fixed inset-0 bg-gray-200 bg-opacity-60 transition-opacity"></div>
 
                 <div className="fixed z-10 inset-0 overflow-y-auto">
                     <div className="flex items-center sm:items-center justify-center min-h-full p-4 text-center sm:p-0">
                         <div className="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
                             <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                                <div className="sm:flex sm:items-start">
-                                    <input placeholder="To Do Label" className="w-full mb-3"></input>
+                                <div className="flex">
+                                    <div className="w-3/4">
+                                        <input className="w-full mb-3 text-lg font-medium" defaultValue={selectItem !== null ? selectItem.label : null} onInput={onChangeLabel}></input>
+                                    </div>
+                                    <div className="w-1/4">
+                                        <p className="mb-3 font-thin text-blue-500 text-right">{selectItem !== null ? selectItem.createDate : null}</p>
+                                    </div>
                                 </div>
                                 <div className="sm:flex sm:items-start">
                                     <form className="w-full">
@@ -87,15 +117,15 @@ function EditTodoModal() {
                                                 </div>
                                             </div>
                                             <div className="py-2 px-4 bg-white rounded-b-lg dark:bg-gray-800">
-                                                <label for="editor" className="sr-only">Publish post</label>
-                                                <textarea id="editor" rows="8" className="block px-0 w-full text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write an article..." required=""></textarea>
+                                                <label for="editIdDetail" className="sr-only">Publish post</label>
+                                                <textarea defaultValue={selectItem !== null ? selectItem.detail : null} rows="8" className="block px-0 w-full text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write an article..." required="" onInput={onChangeTodoDetail}></textarea>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                             </div>
                             <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                                <button data-modal-toggle="editModal" type="button" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">Save</button>
+                                <button data-modal-toggle="editModal" type="button" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"  onClick={onSaveClick}>Save</button>
                                 <button data-modal-toggle="editModal" type="button" className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" onClick={onCancelClick}>Cancel</button>
                             </div>
                         </div>

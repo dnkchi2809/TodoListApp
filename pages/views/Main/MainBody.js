@@ -22,7 +22,7 @@ function MainBody() {
                         todoListStorage.map((todoItem, index) => {
                             return (
                                 <div className="col-todo-list">
-                                    <TodoCard />
+                                    <TodoCard item={todoItem}/>
                                 </div>
                             )
                         })

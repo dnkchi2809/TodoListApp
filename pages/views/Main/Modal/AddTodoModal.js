@@ -4,22 +4,26 @@ import { openAddTodoModal } from "../../../recoil/openAddTodoModal";
 
 function AddTodoModal() {
 
-    const newTodoItem = {
+    const [newTodoItem, setNewTodoItem] = useState({
         id: 0,
         label: "",
         detail: "",
         createDate: "",
         folderId: 0,
         history: []
-    }
+    });
 
     const [openModalAddTodo, setOpenModalAddTodo] = useRecoilState(openAddTodoModal);
 
-    const onCancelClick = () => {
-        setOpenModalAddTodo(false);
-        let modal = document.getElementById("addModal");
-        modal.classList.add("hidden");
+    const clearData = () => {
+        document.getElementById("idLabel").value = "";
+        document.getElementById("idDetail").value = "";
     }
+
+    const onCancelClick = () => {
+        clearData();
+        setOpenModalAddTodo(false);
+    } 
 
     const onInputLabelTodo = (event) => {
         newTodoItem.label = event.target.value;
@@ -32,11 +36,10 @@ function AddTodoModal() {
 
     const onSaveNewTodo = () => {
         const validTodo = validateNewTodoItem(newTodoItem);
-        var arrayTempTodo = [];
 
+        var arrayTempTodo = [];
         var todoListStorage = JSON.parse(localStorage.getItem("todoList")) || [];
         arrayTempTodo = todoListStorage;
-        console.log(todoListStorage);
 
         if (validTodo) {
             if(todoListStorage.length <= 0){
@@ -45,7 +48,6 @@ function AddTodoModal() {
             else{
                 newTodoItem.id = todoListStorage[(todoListStorage.length - 1)].id + 1;
             }
-            console.log(newTodoItem);
 
             arrayTempTodo.push(newTodoItem)
             
@@ -55,21 +57,20 @@ function AddTodoModal() {
     }
 
     const validateNewTodoItem = (paramItem) => {
-        /*if(paramItem.label == ""){
+        if(paramItem.label == ""){
             alert("label is not null");
             return false
-        }*/
+        }
         return true;
     }
 
-    const clearData = () => {
-        onCancelClick();
-    }
-
     useEffect(() => {
+        let modal = document.getElementById("addModal");
         if (openModalAddTodo) {
-            let modal = document.getElementById("addModal");
             modal.classList.remove("hidden");
+        }
+        else{
+            modal.classList.add("hidden");
         }
     })
     return (
@@ -83,7 +84,7 @@ function AddTodoModal() {
                         <div className="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
                             <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                 <div className="sm:flex sm:items-start">
-                                    <input placeholder="To Do Label" className="w-full mb-3" onInput={onInputLabelTodo}></input>
+                                    <input id="idLabel" placeholder="To Do Label" className="w-full mb-3 text-lg font-medium" onInput={onInputLabelTodo}></input>
                                 </div>
                                 <div className="sm:flex sm:items-start">
                                     <form className="w-full">
@@ -141,8 +142,8 @@ function AddTodoModal() {
                                                 </div>
                                             </div>
                                             <div className="py-2 px-4 bg-white rounded-b-lg dark:bg-gray-800">
-                                                <label for="editor" className="sr-only">Publish post</label>
-                                                <textarea id="editor" rows="8" className="block px-0 w-full text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write an article..." required="" onInput={onInputDetailTodo}></textarea>
+                                                <label for="idDetail" className="sr-only">Publish post</label>
+                                                <textarea id="idDetail" rows="8" className="block px-0 w-full text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write an article..." required="" onInput={onInputDetailTodo}></textarea>
                                             </div>
                                         </div>
                                     </form>
