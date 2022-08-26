@@ -1,9 +1,35 @@
+import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { selectArrayItems } from "../../recoil/selectManyItems";
 import { ExportFile } from "../NavBar/ExportFile";
 
 function NavBar() {
+    const [arrayItems, setArrayItems] = useRecoilState(selectArrayItems);
+
+    const [allData, setAllData] = useState(null);
+
+    // let dataSelected = allData.filter((item) => {
+    //     return allData[0];
+    // })
+    let dataSelected = []; 
+    allData.map((itemData) => {
+        arrayItems.map((item) => {
+            if(item == itemData.id){
+                dataSelected.push(itemData);
+            }
+        });
+    });
+
     const onExportClick = () => {
-        ExportFile();
+        console.log(dataSelected)
+        ExportFile(JSON.stringify(dataSelected));
+        setArrayItems([]);
     }
+
+    useEffect(() => {
+        setAllData(JSON.parse(localStorage.getItem("todoList")));
+
+    }, arrayItems)
 
     return (
         <>

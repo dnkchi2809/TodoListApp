@@ -1,8 +1,9 @@
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { openDeleteTodoModal } from "../../../recoil/openDeleteTodoModal";
 import { openEditTodoModal } from "../../../recoil/openEditTodoModal";
+import { selectArrayItems } from "../../../recoil/selectManyItems";
 import { todoItemSelect } from "../../../recoil/todoItemSelect";
 import DeleteTodoModal from "../Modal/DeleteTodoModal";
 import EditTodoModal from "../Modal/EditTodoModal";
@@ -14,6 +15,7 @@ function TodoCard(props) {
     const [openModalDeleteTodo, setOpenModalDeleteTodo] = useRecoilState(openDeleteTodoModal);
 
     const [selectItem, setSelectItem] = useRecoilState(todoItemSelect);
+    const [arrayItems, setArrayItems] = useRecoilState(selectArrayItems);
 
     const onEditTodoClick = () => {
         setSelectItem(props.item);
@@ -26,7 +28,6 @@ function TodoCard(props) {
     }
 
     const onSelectTodoItemClick = () => {
-        setSelectItem(props.item);
         router.push({
             pathname: '/[todoItemId]',
             query: { todoItemId: props.item.id },
@@ -35,11 +36,31 @@ function TodoCard(props) {
         })
     }
 
+    const onSelectManyItemClick = () => {
+        const item = document.getElementById(props.item.id)
+
+        if (item.checked) {
+            setArrayItems([...arrayItems, item.value])
+        }
+        else {
+            let newArrayItems = [];
+            newArrayItems = arrayItems.filter((element) => {
+                return element !== item.value
+            })
+            setArrayItems(newArrayItems);
+        }
+    }
+
     return (
         <>
-            <div className="px-3 py-4 w-full h-40 bg-blue-200 rounded-lg border border-blue-200 shadow-md dark:bg-blue-800 dark:border-blue-700" onClick={onSelectTodoItemClick}>
-                <div className="mb-3">
-                    <p className="text-center text-lg font-medium">{props.item.label}</p>
+            <div className="px-3 py-4 w-full h-40 bg-blue-200 rounded-lg border border-blue-200 shadow-md dark:bg-blue-800 dark:border-blue-700">
+                <div className="mb-3 flex">
+                    <div className="w-4/5" onClick={onSelectTodoItemClick}>
+                        <p className="text-lg font-medium">{props.item.label}</p>
+                    </div>
+                    <div className="w-1/5 flex justify-end">
+                        <input id={props.item.id} type="checkbox" value={props.item.id} onClick={onSelectManyItemClick} class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                    </div>
                 </div>
                 <div className="mb-3">
                     <input value={props.item.detail} readOnly className="w-full rounded-lg p-4"></input>

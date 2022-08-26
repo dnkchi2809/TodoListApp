@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 function TodoDetail(props) {
     const router = useRouter();
 
-    const itemId = props.itemId
+    const itemId = props.itemId;
 
     const [todoItem, setTodoItem] = useState(null);
 
@@ -22,7 +22,17 @@ function TodoDetail(props) {
         updateDate: "",
         updateLabel: "",
         updateDetail: ""
-    })
+    });
+
+    const onChangeLabel = (event) => {
+        updateHistory.updateLabel = event.target.value;
+        updateTodoItem.label = event.target.value;
+    }
+
+    const onChangeTodoDetail = (event) => {
+        updateHistory.updateDetail = event.target.value;
+        updateTodoItem.detail = event.target.value;
+    }
 
     const clearData = () => {
         setUpdateTodoItem({
@@ -64,6 +74,7 @@ function TodoDetail(props) {
                 break;
             }
         }
+        console.log(updateHistory);
 
         //save edit to storage
         const validUpdateTodoItem = validateUpdateTodoItem(updateTodoItem);
@@ -78,29 +89,19 @@ function TodoDetail(props) {
 
             console.log(todoList);
 
-            localStorage.setItem("todoList", JSON.stringify(todoList));
+            localStorage.setItem("todoList", JSON.stringify(todoList))
 
-            alert("Update successful");
-
-            clearData();
+            alert("Update successfull");
+            //onBackClick();
         }
-    }
 
-    const onChangeLabel = (event) => {
-        updateHistory.updateLabel = event.target.value;
-        updateTodoItem.label = event.target.value;
-    }
-
-    const onChangeTodoDetail = (event) => {
-        updateHistory.updateDetail = event.target.value;
-        updateTodoItem.detail = event.target.value;
     }
 
     const validateUpdateTodoItem = (paramItem) => {
-        if (paramItem.label == "") {
-            alert("label is invalid");
-            return false
-        }
+        // if (paramItem.label == "") {
+        //     alert("Label is invalid");
+        //     return false
+        // }
         return true;
     }
 
@@ -121,11 +122,11 @@ function TodoDetail(props) {
     useEffect(() => {
         const arrayTodoList = JSON.parse(localStorage.getItem("todoList"));
         arrayTodoList.map((item) => {
-            if (item.id = itemId) {
+            if (item.id == itemId) {
                 setTodoItem(item);
             }
         })
-    });
+    }, itemId);
 
     return (
         <div className="px-5">

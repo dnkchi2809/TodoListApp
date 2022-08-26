@@ -1,5 +1,5 @@
-export const ExportFile = () => {
-    let data = localStorage.getItem("todoList");
+export const ExportFile = (data) => {
+
     let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(data);
 
     let exportFileDefaultName = 'data.json';

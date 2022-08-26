@@ -4,7 +4,6 @@ import TodoCardAdd from "./TodoItem/TodoCardAdd";
 import TodoTime from "./TodoItem/TodoTime";
 
 function MainBody() {
-
     const [todoListStorage, setTodoListStorage] = useState([]);
 
     useEffect(() => {
@@ -22,7 +21,7 @@ function MainBody() {
                         todoListStorage.map((todoItem, index) => {
                             return (
                                 <div className="col-todo-list" key={"todoCardItem" + index}>
-                                    <TodoCard item={todoItem}/>
+                                    <TodoCard item={todoItem} />
                                 </div>
                             )
                         })
@@ -32,7 +31,6 @@ function MainBody() {
                 <div className="col-todo-list">
                     <TodoCardAdd />
                 </div>
-
             </div>
         </>
     )
