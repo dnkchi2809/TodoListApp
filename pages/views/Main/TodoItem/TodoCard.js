@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { openDeleteTodoModal } from "../../../recoil/openDeleteTodoModal";
 import { openEditTodoModal } from "../../../recoil/openEditTodoModal";
@@ -7,14 +8,15 @@ import DeleteTodoModal from "../Modal/DeleteTodoModal";
 import EditTodoModal from "../Modal/EditTodoModal";
 
 function TodoCard(props) {
+    const router = useRouter();
+
     const [openModalEditTodo, setOpenModalEditTodo] = useRecoilState(openEditTodoModal);
     const [openModalDeleteTodo, setOpenModalDeleteTodo] = useRecoilState(openDeleteTodoModal);
 
     const [selectItem, setSelectItem] = useRecoilState(todoItemSelect);
 
     const onEditTodoClick = () => {
-       
-        setSelectItem(props.item);        
+        setSelectItem(props.item);
         setOpenModalEditTodo(true);
     }
 
@@ -22,18 +24,29 @@ function TodoCard(props) {
         setSelectItem(props.item);
         setOpenModalDeleteTodo(true);
     }
+
+    const onSelectTodoItemClick = () => {
+        setSelectItem(props.item);
+        router.push({
+            pathname: '/[todoItemId]',
+            query: { todoItemId: props.item.id },
+        }).then(() => {
+            router.reload();
+        })
+    }
+
     return (
         <>
-            <div className="px-3 py-4 w-full h-40 bg-blue-200 rounded-lg border border-blue-200 shadow-md dark:bg-blue-800 dark:border-blue-700">
+            <div className="px-3 py-4 w-full h-40 bg-blue-200 rounded-lg border border-blue-200 shadow-md dark:bg-blue-800 dark:border-blue-700" onClick={onSelectTodoItemClick}>
                 <div className="mb-3">
-                    <p id={props.item.id} className="text-center text-lg font-medium">{props.item.label}</p>
+                    <p className="text-center text-lg font-medium">{props.item.label}</p>
                 </div>
                 <div className="mb-3">
                     <input value={props.item.detail} readOnly className="w-full rounded-lg p-4"></input>
                 </div>
                 <div className="flex">
                     <div className="w-1/2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6" onClick={onEditTodoClick}>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6" onClick={onEditTodoClick}>
                             <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
                         </svg>
                     </div>
@@ -45,8 +58,8 @@ function TodoCard(props) {
                 </div>
             </div>
 
-            <EditTodoModal/>
-            <DeleteTodoModal/>
+            <EditTodoModal />
+            <DeleteTodoModal />
         </>
     )
 }

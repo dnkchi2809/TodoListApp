@@ -54,18 +54,22 @@ function EditTodoModal() {
         }
 
         //save edit to storage
-        const todoList = JSON.parse(localStorage.getItem("todoList"));
-        todoList.map((itemTodo, index) => {
-            if (itemTodo.id == updateTodoItem.id) {
-                todoList.splice(index, 1, updateTodoItem);
-            }
-        });
+        const validUpdateTodoItem = validateUpdateTodoItem(updateTodoItem);
 
-        console.log(todoList);
+        if (validUpdateTodoItem) {
+            const todoList = JSON.parse(localStorage.getItem("todoList"));
+            todoList.map((itemTodo, index) => {
+                if (itemTodo.id == updateTodoItem.id) {
+                    todoList.splice(index, 1, updateTodoItem);
+                }
+            });
 
-        localStorage.setItem("todoList", JSON.stringify(todoList))
+            console.log(todoList);
 
-        onCancelClick()
+            localStorage.setItem("todoList", JSON.stringify(todoList))
+
+            onCancelClick()
+        }
     }
 
     const onChangeLabel = (event) => {
@@ -76,6 +80,14 @@ function EditTodoModal() {
     const onChangeTodoDetail = (event) => {
         updateHistory.updateDetail = event.target.value;
         updateTodoItem.detail = event.target.value;
+    }
+
+    const validateUpdateTodoItem = (paramItem) => {
+        if (paramItem.label == "") {
+            alert("Label is invalid");
+            return false
+        }
+        return true;
     }
 
     useEffect(() => {

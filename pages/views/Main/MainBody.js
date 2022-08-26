@@ -29,7 +29,7 @@ function MainBody() {
                         :
                         null
                 }
-                <div class="col-todo-list">
+                <div className="col-todo-list">
                     <TodoCardAdd />
                 </div>
 

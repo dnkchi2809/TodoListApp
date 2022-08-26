@@ -61,7 +61,7 @@ function AddTodoModal() {
 
     const validateNewTodoItem = (paramItem) => {
         if(paramItem.label == ""){
-            alert("label is not null");
+            alert("Label is invalid");
             return false
         }
         return true;
