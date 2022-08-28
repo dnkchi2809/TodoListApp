@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { openDeleteTodoModal } from "../../../recoil/openDeleteTodoModal";
 import { openEditTodoModal } from "../../../recoil/openEditTodoModal";
+import { selectAllItems } from "../../../recoil/selectAllItems";
 import { selectArrayItems } from "../../../recoil/selectManyItems";
 import { todoItemSelect } from "../../../recoil/todoItemSelect";
 import DeleteTodoModal from "../Modal/DeleteTodoModal";
@@ -15,6 +16,7 @@ function TodoCard(props) {
     const [openModalDeleteTodo, setOpenModalDeleteTodo] = useRecoilState(openDeleteTodoModal);
 
     const [selectItem, setSelectItem] = useRecoilState(todoItemSelect);
+    const [selectAll, setSelectAll] = useRecoilState(selectAllItems);
     const [arrayItems, setArrayItems] = useRecoilState(selectArrayItems);
 
     const onEditTodoClick = () => {
@@ -37,6 +39,8 @@ function TodoCard(props) {
     }
 
     const onSelectManyItemClick = () => {
+        setSelectAll(false);
+
         const item = document.getElementById(props.item.id)
 
         if (item.checked) {
@@ -50,6 +54,15 @@ function TodoCard(props) {
             setArrayItems(newArrayItems);
         }
     }
+    
+    useEffect(() => {
+        if(selectAll){
+            document.getElementById(props.item.id).checked = true;
+        }
+        else if(arrayItems.length == 0){
+            document.getElementById(props.item.id).checked = false;
+        }
+    }, [selectAll])
 
     return (
         <>
@@ -59,7 +72,7 @@ function TodoCard(props) {
                         <p className="text-lg font-medium">{props.item.label}</p>
                     </div>
                     <div className="w-1/5 flex justify-end">
-                        <input id={props.item.id} type="checkbox" value={props.item.id} onClick={onSelectManyItemClick} class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                        <input id={props.item.id} type="checkbox" value={props.item.id} onClick={onSelectManyItemClick} className="selectItemClass w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                     </div>
                 </div>
                 <div className="mb-3">

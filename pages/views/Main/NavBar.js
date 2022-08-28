@@ -2,15 +2,13 @@ import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { selectArrayItems } from "../../recoil/selectManyItems";
 import { ExportFile } from "../NavBar/ExportFile";
+import { ImportFile } from "../NavBar/ImportFile";
 
 function NavBar() {
     const [arrayItems, setArrayItems] = useRecoilState(selectArrayItems);
 
-    const [allData, setAllData] = useState(null);
+    const [allData, setAllData] = useState([]);
 
-    // let dataSelected = allData.filter((item) => {
-    //     return allData[0];
-    // })
     let dataSelected = []; 
     allData.map((itemData) => {
         arrayItems.map((item) => {
@@ -26,9 +24,12 @@ function NavBar() {
         setArrayItems([]);
     }
 
+    const onImportClick = () => {
+        ImportFile();
+    }
+
     useEffect(() => {
         setAllData(JSON.parse(localStorage.getItem("todoList")));
-
     }, arrayItems)
 
     return (
@@ -68,7 +69,7 @@ function NavBar() {
                                 <a href="#" className="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Folders</a>
                             </li>
                             <li>
-                                <a href="#" className="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Import</a>
+                                <a href="#" onClick={onImportClick} className="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Import</a>
                             </li>
                             <li>
                                 <a href="#" onClick={onExportClick} className="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Export</a>

@@ -52,9 +52,9 @@ function AddTodoModal() {
                 newTodoItem.id = todoListStorage[(todoListStorage.length - 1)].id + 1;
             }
 
-            arrayTempTodo.push(newTodoItem)
+            arrayTempTodo.push(newTodoItem);
             
-            localStorage.setItem("todoList", JSON.stringify(arrayTempTodo))
+            localStorage.setItem("todoList", JSON.stringify(arrayTempTodo));
             onCancelClick();
         }
     }
