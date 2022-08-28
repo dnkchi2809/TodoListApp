@@ -51,8 +51,9 @@ function addDataToStorage(data) {
         }
     });
 
-    if(arrayTempTodo !== []){
-    localStorage.setItem("todoList", JSON.stringify(arrayTempTodo));
+    if (arrayTempTodo !== []) {
+        localStorage.setItem("todoList", JSON.stringify(arrayTempTodo));
+        alert("Successfull import!")
     }
 }
 
