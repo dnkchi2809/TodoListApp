@@ -89,9 +89,9 @@ function TodoDetail(props) {
 
             console.log(todoList);
 
-            localStorage.setItem("todoList", JSON.stringify(todoList))
+            //localStorage.setItem("todoList", JSON.stringify(todoList))
 
-            alert("Update successfull");
+            //alert("Update successfull");
             //onBackClick();
         }
 
@@ -117,7 +117,7 @@ function TodoDetail(props) {
                 history: todoItem.history
             })
         }
-    }, itemId)
+    }, todoItem)
 
     useEffect(() => {
         const arrayTodoList = JSON.parse(localStorage.getItem("todoList"));

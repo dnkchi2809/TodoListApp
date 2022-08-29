@@ -29,7 +29,7 @@ function NavBar() {
     }
 
     useEffect(() => {
-        setAllData(JSON.parse(localStorage.getItem("todoList")));
+        setAllData(JSON.parse(localStorage.getItem("todoList")) || []);
     }, arrayItems)
 
     return (
