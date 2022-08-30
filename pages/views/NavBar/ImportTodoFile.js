@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 function onChange(event) {
     var reader = new FileReader();
     reader.onload = onReaderLoad;
@@ -65,7 +63,7 @@ const validateNewTodoItem = (paramItem, paramIndex) => {
     return true;
 }
 
-export const ImportFile = () => {
+export const ImportTodoFile = () => {
     let linkElement = document.createElement('input');
     linkElement.setAttribute('type', "file");
     linkElement.click();

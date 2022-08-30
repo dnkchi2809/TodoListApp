@@ -13,8 +13,8 @@ function MainBody() {
     const [selectAll, setSelectAll] = useRecoilState(selectAllItems);
     const [arrayItems, setArrayItems] = useRecoilState(selectArrayItems);
 
-    let [isShowing, setIsShowing] = useState(false)
-    let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500)
+    let [isShowing, setIsShowing] = useState(false);
+    let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
     const onSelectAllClick = () => {
         let selectAllButton = document.getElementById("idSelectAll");
@@ -25,12 +25,12 @@ function MainBody() {
             setSelectAll(false);
             setArrayItems([]);
         }
-    }
+    };
 
     useEffect(() => {
         setIsShowing(false)
         resetIsShowing()
-    }, [])
+    }, []);
 
     useEffect(() => {
         if (selectAll) {
@@ -43,11 +43,23 @@ function MainBody() {
         else {
             document.getElementById("idSelectAll").checked = false;
         }
-    }, [selectAll])
+    }, [selectAll]);
+
+    useEffect(() => {
+        const folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
+        if (folderListStorage.length == 0) {
+            localStorage.setItem("folderList", JSON.stringify([{
+                id: 0,
+                name: "Default Folder",
+                todoItemArray: [],
+                createDate : new Date().toISOString().slice(0, 10)
+            }]));
+        }
+    }, []);
 
     useEffect(() => {
         setTodoListStorage(JSON.parse(localStorage.getItem("todoList")) || []);
-    }, [todoListStorage, selectAll, arrayItems])
+    }, [todoListStorage, selectAll, arrayItems]);
     return (
         <>
             <div>

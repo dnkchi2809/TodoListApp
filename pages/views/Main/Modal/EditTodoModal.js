@@ -105,7 +105,7 @@ function EditTodoModal() {
                 history: selectItem.history
             })
         }
-    }, selectItem)
+    }, [selectItem])
 
     useEffect(() => {
         let modal = document.getElementById("editModal");

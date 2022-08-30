@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
+import { openImportModal } from "../../recoil/openImportModal";
 import { selectArrayItems } from "../../recoil/selectManyItems";
-import { ExportFile } from "../NavBar/ExportFile";
-import { ImportFile } from "../NavBar/ImportFile";
+import { ExportFile } from "../NavBar/ExportTodoFile";
+import { ImportFile } from "../NavBar/ImportTodoFile";
+import ImportModal from "../NavBar/Modal/ImportModal";
 
 function NavBar() {
     const [arrayItems, setArrayItems] = useRecoilState(selectArrayItems);
+
+    const [importModal, setImportModal] = useRecoilState(openImportModal);
 
     const [allData, setAllData] = useState([]);
 
@@ -19,13 +23,13 @@ function NavBar() {
     });
 
     const onExportClick = () => {
-        console.log(dataSelected)
         ExportFile(JSON.stringify(dataSelected));
         setArrayItems([]);
     }
 
     const onImportClick = () => {
-        ImportFile();
+        // ImportFile();
+        setImportModal(true);
     }
 
     useEffect(() => {
@@ -66,7 +70,7 @@ function NavBar() {
     </div>*/}
                             </li>
                             <li>
-                                <a href="#" className="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Folders</a>
+                                <a href="/folders" className="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Folders</a>
                             </li>
                             <li>
                                 <a href="#" onClick={onImportClick} className="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Import</a>
@@ -78,6 +82,8 @@ function NavBar() {
                     </div>
                 </div>
             </nav>
+
+            <ImportModal />
         </>
     )
 }

@@ -3,11 +3,15 @@ import { useRecoilState } from "recoil";
 import { openAddTodoModal } from "../../../recoil/openAddTodoModal";
 import { Transition } from '@headlessui/react';
 import { useTimeoutFn } from 'react-use';
+import FolderSelect from "../../Folders/FolderItem/FolderSelect";
+import { selectFolder } from "../../../recoil/selectFolder";
 
 function AddTodoModal() {
 
     let [isShowing, setIsShowing] = useState(false);
     let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
+
+    const [selectedFolder, setSelectedFolder] = useRecoilState(selectFolder);
 
     const [newTodoItem, setNewTodoItem] = useState({
         id: 0,
@@ -49,6 +53,8 @@ function AddTodoModal() {
         var todoListStorage = JSON.parse(localStorage.getItem("todoList")) || [];
         arrayTempTodo = todoListStorage;
 
+        var folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
+
         if (validTodo) {
             if (todoListStorage.length <= 0) {
                 newTodoItem.id = 0;
@@ -60,6 +66,15 @@ function AddTodoModal() {
             arrayTempTodo.push(newTodoItem);
 
             localStorage.setItem("todoList", JSON.stringify(arrayTempTodo));
+
+            folderListStorage.map((folder) => {
+                if (folder.id == newTodoItem.folderId){
+                    folder.todoItemArray.push(newTodoItem.id);                                                                                                                                            
+                }                  
+            });
+
+            localStorage.setItem("folderList", JSON.stringify(folderListStorage));
+
             onCancelClick();
         }
     }
@@ -73,6 +88,8 @@ function AddTodoModal() {
     }
 
     useEffect(() => {
+        newTodoItem.folderId = selectedFolder.id;
+
         let modal = document.getElementById("addModal");
         if (openModalAddTodo) {
             modal.classList.remove("hidden");
@@ -101,13 +118,14 @@ function AddTodoModal() {
                     leaveFrom="opacity-100 scale-100 "
                     leaveTo="opacity-0 scale-50 "
                 >
-                    <div className="fixed z-10 inset-0 overflow-y-auto">
+                    <div className="fixed z-10 inset-0 overflow-y-auto shadow-md">
                         <div className="flex items-center sm:items-center justify-center min-h-full p-4 text-center sm:p-0">
                             <div className="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
                                 <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                     <div className="sm:flex sm:items-start">
                                         <input id="idLabel" placeholder="To Do Label" className="w-full mb-3 text-lg font-medium" onInput={onInputLabelTodo}></input>
                                     </div>
+                                    <FolderSelect />
                                     <div className="sm:flex sm:items-start">
                                         <form className="w-full">
                                             <div className="w-full bg-gray-50 rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600">

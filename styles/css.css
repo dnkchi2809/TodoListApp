@@ -5,11 +5,38 @@
     transform: translate(322px, 66px);
 }
 
+.folder-card{
+    background-image: url(../public/image/folder.png);
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#image-note{
+    background-image: url(../public/image/notes.png);
+}
+
+#image-folder{
+    background-image: url(../public/image/folders.png);
+}
+
+
 @media only screen and (max-width: 768px) {
     /* For mobile phones: */
     .col-todo-list{
         width: 100%;
         padding-bottom: 20px;
+    }
+
+    .col-folder-list{
+        width: 50%;
+        padding-bottom: 20px;
+    }
+
+    .image-import{
+        background-size: auto 50%;
+        background-repeat: no-repeat;
+        background-position: center;
     }
 }
 
@@ -17,6 +44,17 @@
     .col-todo-list{
         width: 25%;
         padding: 20px;
+    }
+
+    .col-folder-list{
+        width: 20%;
+        padding-bottom: 20px;
+    }
+
+    .image-import{
+        background-size: auto 100%;
+        background-repeat: no-repeat;
+        background-position: center;
     }
 }
 
