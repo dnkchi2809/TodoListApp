@@ -16,7 +16,7 @@ function FolderSelect() {
     return (
         <>
             <div className="flex mb-3">
-                <div className="w-1/2 flex items-center text-gray-400">
+                <div className="w-1/2 flex items-center text-gray-600">
                     <p className="">Select Folder</p>
                 </div>
                 <div className="w-1/2 flex flex-wrap justify-end items-end mx-auto">

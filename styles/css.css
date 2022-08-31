@@ -56,5 +56,10 @@
         background-repeat: no-repeat;
         background-position: center;
     }
+
+    .padding-class{
+        padding-left: 20px;
+        padding-right: 20px;
+    }
 }
 

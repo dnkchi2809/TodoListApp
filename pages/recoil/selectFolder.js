@@ -4,6 +4,6 @@ export const selectFolder = atom({
     key: "selectFolder",
     default: {
         id: 0,
-        name: "Select Folder"
+        name: "Default Folder"
     }
 });

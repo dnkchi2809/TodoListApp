@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { selectFolder } from "../../recoil/selectFolder";
+import FolderSelect from "../Folders/FolderItem/FolderSelect";
+import { useRecoilState } from "recoil";
 
 function TodoDetail(props) {
-    const router = useRouter();
-
     const itemId = props.itemId;
 
     const [todoItem, setTodoItem] = useState(null);
+
+    const [selectedFolder, setSelectedFolder] = useRecoilState(selectFolder);
 
     const [updateTodoItem, setUpdateTodoItem] = useState({
         id: 0,
         label: "",
         detail: "",
         createDate: "",
-        folderId: 0,
+        folderId: selectedFolder.id,
         history: Array()
     })
 
@@ -58,6 +60,7 @@ function TodoDetail(props) {
     }
 
     const onUpdateClick = () => {
+        updateTodoItem.folderId = selectedFolder.id;
         // create history
         if (updateTodoItem.history.length <= 0) {
             updateHistory.historyId = 0;
@@ -74,7 +77,6 @@ function TodoDetail(props) {
                 break;
             }
         }
-        console.log(updateHistory);
 
         //save edit to storage
         const validUpdateTodoItem = validateUpdateTodoItem(updateTodoItem);
@@ -87,12 +89,29 @@ function TodoDetail(props) {
                 }
             });
 
-            console.log(todoList);
+            localStorage.setItem("todoList", JSON.stringify(todoList));
 
-            //localStorage.setItem("todoList", JSON.stringify(todoList))
+            let folderListStorage = JSON.parse(localStorage.getItem("folderList"));
 
-            //alert("Update successfull");
-            //onBackClick();
+            folderListStorage.map((folder) => {
+                if (folder.id !== updateTodoItem.folderId) {
+                    folder.todoItemArray.map((todoItem, index) => {
+                        if (todoItem == updateTodoItem.id) {
+                            folder.todoItemArray.splice(index, 1);
+                        }
+                    })
+                }
+                else {
+                    if (folder.todoItemArray.indexOf(updateTodoItem.id) < 0) {
+                        folder.todoItemArray = [...folder.todoItemArray, updateTodoItem.id];
+                    }
+                }
+            });
+
+            localStorage.setItem("folderList", JSON.stringify(folderListStorage));
+
+            alert("Update successfull");
+            // onBackClick();
         }
 
     }
@@ -106,6 +125,18 @@ function TodoDetail(props) {
     }
 
     useEffect(() => {
+        let folderListStorage = JSON.parse(localStorage.getItem("folderList"));
+
+        if (todoItem !== null) {
+            folderListStorage.map((folder) => {
+                if (folder.id == todoItem.folderId) {
+                    setSelectedFolder(folder);
+                }
+            });
+        }
+    }, [todoItem]);
+
+    useEffect(() => {
         if (todoItem !== null) {
             setUpdateTodoItem({
                 ...updateTodoItem,
@@ -113,11 +144,11 @@ function TodoDetail(props) {
                 label: todoItem.label,
                 detail: todoItem.detail,
                 createDate: todoItem.createDate,
-                folderId: todoItem.folderId,
+                folderId: selectFolder.folderId,
                 history: todoItem.history
             })
         }
-    }, todoItem)
+    }, [todoItem])
 
     useEffect(() => {
         const arrayTodoList = JSON.parse(localStorage.getItem("todoList"));
@@ -126,10 +157,10 @@ function TodoDetail(props) {
                 setTodoItem(item);
             }
         })
-    }, itemId);
+    }, [itemId]);
 
     return (
-        <div className="px-5">
+        <div className="padding-class">
             <div className="flex">
                 <div className="w-3/4">
                     <input type='text' onChange={onChangeLabel} defaultValue={todoItem !== null ? todoItem.label : null} className="w-full mb-3 text-lg font-medium"></input>
@@ -138,6 +169,9 @@ function TodoDetail(props) {
                     <p className="mb-3 font-thin text-blue-500 text-right">{todoItem !== null ? todoItem.createDate : null}</p>
                 </div>
             </div>
+            {
+                todoItem !== null ? <FolderSelect /> : null
+            }
             <div className="sm:flex sm:items-start">
                 <form className="w-full">
                     <div className="w-full bg-gray-50 rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600">

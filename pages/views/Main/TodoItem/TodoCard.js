@@ -22,8 +22,8 @@ function TodoCard(props) {
     const [selectAll, setSelectAll] = useRecoilState(selectAllItems);
     const [arrayItems, setArrayItems] = useRecoilState(selectArrayItems);
 
-    let [isShowing, setIsShowing] = useState(false)
-    let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500)
+    let [isShowing, setIsShowing] = useState(false);
+    let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
     const onEditTodoClick = () => {
         setSelectItem(props.item);
@@ -37,7 +37,7 @@ function TodoCard(props) {
 
     const onSelectTodoItemClick = () => {
         router.push({
-            pathname: '/[todoItemId]',
+            pathname: '/todo/[todoItemId]',
             query: { todoItemId: props.item.id },
         }).then(() => {
             router.reload();
@@ -64,7 +64,7 @@ function TodoCard(props) {
     useEffect(() => {
         setIsShowing(false)
         resetIsShowing()
-    }, [])
+    }, []);
 
     useEffect(() => {
         if (isShowing) {

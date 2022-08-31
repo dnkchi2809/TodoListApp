@@ -14,7 +14,7 @@ function TodoTime() {
 
     return (
         <>
-            <div className="flex mb-5 px-5">
+            <div className="flex padding-class mb-5">
 
                 <div className="w-1/2">
                     <p className="text-2xl">To Do List</p>

@@ -1,14 +1,17 @@
 import { useState, useEffect, Fragment } from "react";
-import { selector, useRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { openEditTodoModal } from "../../../recoil/openEditTodoModal";
 import { todoItemSelect } from "../../../recoil/todoItemSelect";
 import { Transition } from '@headlessui/react';
 import { useTimeoutFn } from 'react-use';
+import FolderSelect from "../../Folders/FolderItem/FolderSelect";
+import { selectFolder } from "../../../recoil/selectFolder";
 
 
 function EditTodoModal() {
     const [openModalEditTodo, setOpenModalEditTodo] = useRecoilState(openEditTodoModal);
     const [selectItem, setSelectItem] = useRecoilState(todoItemSelect);
+    const [selectedFolder, setSelectedFolder] = useRecoilState(selectFolder);
 
     let [isShowing, setIsShowing] = useState(false);
     let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
@@ -18,7 +21,7 @@ function EditTodoModal() {
         label: "",
         detail: "",
         createDate: "",
-        folderId: 0,
+        folderId: selectedFolder.id,
         history: Array()
     })
 
@@ -41,6 +44,7 @@ function EditTodoModal() {
     }
 
     const onSaveClick = () => {
+        updateTodoItem.folderId = selectedFolder.id;
         // create history
         if (updateTodoItem.history.length <= 0) {
             updateHistory.historyId = 0;
@@ -69,9 +73,28 @@ function EditTodoModal() {
                 }
             });
 
-            localStorage.setItem("todoList", JSON.stringify(todoList))
+            localStorage.setItem("todoList", JSON.stringify(todoList));
 
-            onCancelClick()
+            let folderListStorage = JSON.parse(localStorage.getItem("folderList"));
+
+            folderListStorage.map((folder) => {
+                if (folder.id !== updateTodoItem.folderId) {
+                    folder.todoItemArray.map((todoItem, index) => {
+                        if (todoItem == updateTodoItem.id) {
+                            folder.todoItemArray.splice(index, 1);
+                        }
+                    })
+                }
+                else{
+                    if(folder.todoItemArray.indexOf(updateTodoItem.id) < 0){
+                        folder.todoItemArray = [...folder.todoItemArray, updateTodoItem.id];
+                    }
+                }
+            });
+
+            localStorage.setItem("folderList", JSON.stringify(folderListStorage));
+
+            onCancelClick();
         }
     }
 
@@ -94,6 +117,18 @@ function EditTodoModal() {
     }
 
     useEffect(() => {
+        let folderListStorage = JSON.parse(localStorage.getItem("folderList"));
+
+        if (selectItem !== null) {
+            folderListStorage.map((folder) => {
+                if (folder.id == selectItem.folderId) {
+                    setSelectedFolder(folder);
+                }
+            });
+        }
+    }, [selectItem]);
+
+    useEffect(() => {
         if (selectItem !== null) {
             setUpdateTodoItem({
                 ...updateTodoItem,
@@ -101,11 +136,11 @@ function EditTodoModal() {
                 label: selectItem.label,
                 detail: selectItem.detail,
                 createDate: selectItem.createDate,
-                folderId: selectItem.folderId,
+                folderId: selectFolder.id,
                 history: selectItem.history
-            })
+            });
         }
-    }, [selectItem])
+    }, [selectItem]);
 
     useEffect(() => {
         let modal = document.getElementById("editModal");
@@ -147,6 +182,7 @@ function EditTodoModal() {
                                             <p className="mb-3 font-thin text-blue-500 text-right">{updateTodoItem.createDate}</p>
                                         </div>
                                     </div>
+                                    <FolderSelect />
                                     <div className="sm:flex sm:items-start">
                                         <form className="w-full">
                                             <div className="w-full bg-gray-50 rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
