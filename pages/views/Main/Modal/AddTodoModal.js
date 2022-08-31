@@ -17,6 +17,7 @@ function AddTodoModal() {
         id: 0,
         label: "",
         detail: "",
+        state : "Todo",
         createDate: "",
         folderId: 0,
         history: Array({
@@ -35,6 +36,10 @@ function AddTodoModal() {
     const onCancelClick = () => {
         clearData();
         setOpenModalAddTodo(false);
+        setSelectedFolder({
+            id: 0,
+            name: "Default Folder"
+        });
     }
 
     const onInputLabelTodo = (event) => {

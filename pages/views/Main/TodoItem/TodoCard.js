@@ -89,7 +89,7 @@ function TodoCard(props) {
                 leaveFrom="opacity-100 scale-100 "
                 leaveTo="opacity-0 scale-50 "
             >
-                <div className="px-3 py-4 w-full h-40 bg-blue-200 rounded-lg border border-blue-200 shadow-md dark:bg-blue-800 dark:border-blue-700">
+                <div className="px-3 py-4 w-full h-40 bg-blue-200 rounded-lg border border-blue-200 shadow-xl dark:bg-blue-800 dark:border-blue-700">
                     <div className="mb-3 flex">
                         <div className="w-4/5" onClick={onSelectTodoItemClick}>
                             <p className="text-lg font-medium">{props.item.label}</p>

@@ -6,6 +6,7 @@
 }
 
 .folder-card{
+    height: 130%;
     background-image: url(../public/image/folder.png);
     background-size: auto 100%;
     background-repeat: no-repeat;
@@ -19,7 +20,6 @@
 #image-folder{
     background-image: url(../public/image/folders.png);
 }
-
 
 @media only screen and (max-width: 768px) {
     /* For mobile phones: */

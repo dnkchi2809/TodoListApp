@@ -4,14 +4,17 @@ import { selectAllItems } from "../../recoil/selectAllItems";
 import { selectArrayItems } from "../../recoil/selectManyItems";
 import TodoCard from "./TodoItem/TodoCard";
 import TodoCardAdd from "./TodoItem/TodoCardAdd";
-import TodoTime from "./TodoItem/TodoTime";
+import TodoState from "./TodoItem/TodoState";
 import { Transition } from '@headlessui/react';
 import { useTimeoutFn } from 'react-use';
+import { selectState } from "../../recoil/selectState";
 
 function MainBody() {
     const [todoListStorage, setTodoListStorage] = useState([]);
     const [selectAll, setSelectAll] = useRecoilState(selectAllItems);
     const [arrayItems, setArrayItems] = useRecoilState(selectArrayItems);
+
+    const [selectedState, setSelectedState] = useRecoilState(selectState);
 
     let [isShowing, setIsShowing] = useState(false);
     let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
@@ -28,8 +31,8 @@ function MainBody() {
     };
 
     useEffect(() => {
-        setIsShowing(false)
-        resetIsShowing()
+        setIsShowing(false);
+        resetIsShowing();
     }, []);
 
     useEffect(() => {
@@ -58,12 +61,22 @@ function MainBody() {
     }, []);
 
     useEffect(() => {
-        setTodoListStorage(JSON.parse(localStorage.getItem("todoList")) || []);
+        if(selectedState.name == "All"){
+            setTodoListStorage(JSON.parse(localStorage.getItem("todoList")) || []);
+        }
+        else{
+            let todoListStorage = JSON.parse(localStorage.getItem("todoList")) || [];
+            let filterTodoState = todoListStorage.filter((todo) => {
+                return todo.state == selectedState.name
+            })
+            setTodoListStorage(filterTodoState);
+        }
+        
     }, [todoListStorage, selectAll, arrayItems]);
     return (
         <>
             <div>
-                <TodoTime />
+                <TodoState/>
             </div>
             <div>
                 <input id="idSelectAll" type="checkbox" onClick={onSelectAllClick} className="ml-5 w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" /> Select All

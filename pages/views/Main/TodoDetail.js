@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { selectFolder } from "../../recoil/selectFolder";
 import FolderSelect from "../Folders/FolderItem/FolderSelect";
 import { useRecoilState } from "recoil";
+import { selectStateOfItem } from "../../recoil/selectStateOfItem";
+import TodoStateOfItem from "./TodoItem/TodoStateOfItem";
 
 function TodoDetail(props) {
     const itemId = props.itemId;
@@ -9,6 +11,8 @@ function TodoDetail(props) {
     const [todoItem, setTodoItem] = useState(null);
 
     const [selectedFolder, setSelectedFolder] = useRecoilState(selectFolder);
+
+    const [selectedState, setSelectedState] = useRecoilState(selectStateOfItem);
 
     const [updateTodoItem, setUpdateTodoItem] = useState({
         id: 0,
@@ -61,6 +65,7 @@ function TodoDetail(props) {
 
     const onUpdateClick = () => {
         updateTodoItem.folderId = selectedFolder.id;
+        updateTodoItem.state = selectedState.name;
         // create history
         if (updateTodoItem.history.length <= 0) {
             updateHistory.historyId = 0;
@@ -125,6 +130,14 @@ function TodoDetail(props) {
     }
 
     useEffect(() => {
+        if (todoItem !== null) {
+            setSelectedState({
+                name: todoItem.state
+            });
+        }
+    }, [todoItem]);
+
+    useEffect(() => {
         let folderListStorage = JSON.parse(localStorage.getItem("folderList"));
 
         if (todoItem !== null) {
@@ -166,11 +179,18 @@ function TodoDetail(props) {
                     <input type='text' onChange={onChangeLabel} defaultValue={todoItem !== null ? todoItem.label : null} className="w-full mb-3 text-lg font-medium"></input>
                 </div>
                 <div className="w-1/4">
-                    <p className="mb-3 font-thin text-blue-500 text-right">{todoItem !== null ? todoItem.createDate : null}</p>
+                    <p className="mb-3 font-thin text-blue-500 text-right">Create Date:  {todoItem !== null ? todoItem.createDate : null}</p>
                 </div>
             </div>
             {
-                todoItem !== null ? <FolderSelect /> : null
+                todoItem !== null
+                    ?
+                    <>  
+                        <TodoStateOfItem />
+                        <FolderSelect />
+                    </>
+                    :
+                    null
             }
             <div className="sm:flex sm:items-start">
                 <form className="w-full">
@@ -229,7 +249,7 @@ function TodoDetail(props) {
                         </div>
                         <div className="py-2 px-4 bg-white rounded-b-lg dark:bg-gray-800">
                             <label for="editIdDetail" className="sr-only">Publish post</label>
-                            <textarea onChange={onChangeTodoDetail} defaultValue={todoItem !== null ? todoItem.detail : null} rows="20" className="block px-0 w-full text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write an article..." required=""></textarea>
+                            <textarea onChange={onChangeTodoDetail} defaultValue={todoItem !== null ? todoItem.detail : null} rows="15" className="block px-0 w-full text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write an article..." required=""></textarea>
                         </div>
                     </div>
                 </form>

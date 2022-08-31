@@ -6,12 +6,14 @@ import { Transition } from '@headlessui/react';
 import { useTimeoutFn } from 'react-use';
 import FolderSelect from "../../Folders/FolderItem/FolderSelect";
 import { selectFolder } from "../../../recoil/selectFolder";
-
+import { selectStateOfItem } from "../../../recoil/selectStateOfItem";
+import TodoStateOfItem from "../TodoItem/TodoStateOfItem";
 
 function EditTodoModal() {
     const [openModalEditTodo, setOpenModalEditTodo] = useRecoilState(openEditTodoModal);
     const [selectItem, setSelectItem] = useRecoilState(todoItemSelect);
     const [selectedFolder, setSelectedFolder] = useRecoilState(selectFolder);
+    const [selectedState, setSelectedState] = useRecoilState(selectStateOfItem);
 
     let [isShowing, setIsShowing] = useState(false);
     let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
@@ -21,6 +23,7 @@ function EditTodoModal() {
         label: "",
         detail: "",
         createDate: "",
+        state : selectedState.name,
         folderId: selectedFolder.id,
         history: Array()
     })
@@ -41,10 +44,15 @@ function EditTodoModal() {
         })
         setSelectItem(null);
         setOpenModalEditTodo(false);
+        setSelectedFolder({
+            id: 0,
+            name: "Default Folder"
+        });
     }
 
     const onSaveClick = () => {
         updateTodoItem.folderId = selectedFolder.id;
+        updateTodoItem.state = selectedState.name;
         // create history
         if (updateTodoItem.history.length <= 0) {
             updateHistory.historyId = 0;
@@ -85,8 +93,8 @@ function EditTodoModal() {
                         }
                     })
                 }
-                else{
-                    if(folder.todoItemArray.indexOf(updateTodoItem.id) < 0){
+                else {
+                    if (folder.todoItemArray.indexOf(updateTodoItem.id) < 0) {
                         folder.todoItemArray = [...folder.todoItemArray, updateTodoItem.id];
                     }
                 }
@@ -117,6 +125,14 @@ function EditTodoModal() {
     }
 
     useEffect(() => {
+        if (selectItem !== null) {
+            setSelectedState({
+                name : selectItem.state
+            });
+        }
+    }, [selectItem]);
+
+    useEffect(() => {
         let folderListStorage = JSON.parse(localStorage.getItem("folderList"));
 
         if (selectItem !== null) {
@@ -135,6 +151,7 @@ function EditTodoModal() {
                 id: selectItem.id,
                 label: selectItem.label,
                 detail: selectItem.detail,
+                state: selectedState.name,
                 createDate: selectItem.createDate,
                 folderId: selectFolder.id,
                 history: selectItem.history
@@ -182,6 +199,7 @@ function EditTodoModal() {
                                             <p className="mb-3 font-thin text-blue-500 text-right">{updateTodoItem.createDate}</p>
                                         </div>
                                     </div>
+                                    <TodoStateOfItem />
                                     <FolderSelect />
                                     <div className="sm:flex sm:items-start">
                                         <form className="w-full">
