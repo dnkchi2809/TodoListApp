@@ -26,11 +26,13 @@ function DeleteTodoModal(props) {
         var folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
 
         folderListStorage.map((folder) => {
-            if (folder.id == selectItem.folderId){
+            if (folder.id == selectItem.folderId) {
                 folder.todoItemArray.map((todo, index) => {
-                    folder.todoItemArray.splice(index, 1);
-                })                                                                                                                                      
-            }                  
+                    if (todo == selectItem.id) {
+                        folder.todoItemArray.splice(index, 1);
+                    }
+                })
+            }
         });
 
         localStorage.setItem("folderList", JSON.stringify(folderListStorage));
