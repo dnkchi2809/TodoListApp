@@ -5,8 +5,27 @@ import { todoItemSelect } from "../../../recoil/todoItemSelect";
 import { Transition } from '@headlessui/react';
 import { useTimeoutFn } from 'react-use';
 
+interface Todo {
+    id: number,
+    label: string,
+    detail: string,
+    createDate: string,
+    state: string,
+    folderId: number,
+    history: {
+        historyId: number,
+        updateDate: string
+    }[]
+};
 
-function DeleteTodoModal(props) {
+interface Folder {
+    id: number,
+    name: string,
+    createDate: string,
+    todoItemArray: number[]
+};
+
+function DeleteTodoModal() {
     const [openModalDeleteTodo, setOpenModalDeleteTodo] = useRecoilState(openDeleteTodoModal);
     const [selectItem, setSelectItem] = useRecoilState(todoItemSelect);
 
@@ -15,17 +34,29 @@ function DeleteTodoModal(props) {
 
     const onCancelClick = () => {
         setOpenModalDeleteTodo(false);
-        setSelectItem(null);
+        setSelectItem({
+            id: 0,
+            label: "",
+            detail: "",
+            createDate: "",
+            state: "",
+            folderId: 0,
+            history: [{
+              historyId: 0,
+              updateDate: ""
+            }]
+          });
     }
 
     const onConfirmDeleteClick = () => {
-        var arrayTempTodo = [];
+        var arrayTempTodo: [];
+        // @ts-ignore
         var todoListStorage = JSON.parse(localStorage.getItem("todoList")) || [];
         arrayTempTodo = todoListStorage;
-
+        // @ts-ignore
         var folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
 
-        folderListStorage.map((folder) => {
+        folderListStorage.map((folder: Folder) => {
             if (folder.id == selectItem.folderId) {
                 folder.todoItemArray.map((todo, index) => {
                     if (todo == selectItem.id) {
@@ -37,7 +68,7 @@ function DeleteTodoModal(props) {
 
         localStorage.setItem("folderList", JSON.stringify(folderListStorage));
 
-        arrayTempTodo.map((item, index) => {
+        arrayTempTodo.map((item: Todo, index) => {
             if (item.id == selectItem.id) {
                 arrayTempTodo.splice(index, 1);
             }
@@ -45,10 +76,10 @@ function DeleteTodoModal(props) {
 
         localStorage.setItem("todoList", JSON.stringify(arrayTempTodo))
         onCancelClick();
-    }
+    };
 
     useEffect(() => {
-        let modal = document.getElementById("deleteModal");
+        let modal = document.getElementById("deleteModal") as HTMLFormElement;
         if (openModalDeleteTodo) {
             modal.classList.remove("hidden");
             setIsShowing(true);
@@ -63,7 +94,7 @@ function DeleteTodoModal(props) {
     return (
         <>
             {/*Modal*/}
-            <div id="deleteModal" tabindex="-1" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full flex justify-center items-center inset-0 bg-gray-200 bg-opacity-60 transition-opacity">
+            <div id="deleteModal" tabIndex={-1} className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full flex justify-center items-center inset-0 bg-gray-200 bg-opacity-60 transition-opacity">
                 <div className="relative p-4 w-full max-w-md h-full md:h-auto">
                     <Transition
                         as={Fragment}

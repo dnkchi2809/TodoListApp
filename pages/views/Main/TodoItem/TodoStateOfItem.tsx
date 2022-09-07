@@ -3,28 +3,42 @@ import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 import { useRecoilState } from 'recoil';
 import { openEditTodoModal } from '../../../recoil/openEditTodoModal';
-import { selectState } from '../../../recoil/selectState';
+import { selectStateOfItem } from '../../../recoil/selectStateOfItem';
 
 const state = [
-    { name: 'All' },
     { name: 'Todo' },
     { name: 'In progess' },
     { name: 'Pending' },
     { name: 'Done' }
 ]
 
-function TodoState() {
+function TodoStateOfItem() {
 
-    const [selectedState, setSelectedState] = useRecoilState(selectState);
+    const [selectedState, setSelectedState] = useRecoilState(selectStateOfItem);
+
+    const [style, setStyle] = useState(0)
+
+    const [openModalEditTodo, setOpenModalEditTodo] = useRecoilState(openEditTodoModal);
+
+    useEffect(() => {
+        if (openModalEditTodo) {
+            setStyle(1);
+        }
+        else {
+            setStyle(0);
+        }
+    })
 
     return (
         <>
-
-            <div className="flex justify-end items-end padding-class mb-2">
-                <div className="flex flex-wrap justify-end items-end">
+            <div className="flex mb-2">
+                <div className='flex justify-center items-center text-gray-600 text-blue-500 mr-5'>
+                    State:
+                </div>
+                <div className="flex flex-wrap">
                     <Listbox value={selectedState} onChange={setSelectedState}>
                         <div className="relative mt-1 w-40">
-                            <Listbox.Button className="relative w-full cursor-default shadow-md rounded-lg bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+                            <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
                                 <span className="block truncate">{selectedState.name}</span>
                                 <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                     <SelectorIcon
@@ -49,7 +63,7 @@ function TodoState() {
                                             }
                                             value={state}
                                         >
-                                            {({ selectedState }) => (
+                                            {({ selectedState } : any) => (
                                                 <>
                                                     <span
                                                         className={`block truncate ${selectedState ? 'font-medium' : 'font-normal'
@@ -73,8 +87,9 @@ function TodoState() {
                 </div>
             </div>
 
+
         </>
     )
 }
 
-export default TodoState;
+export default TodoStateOfItem;

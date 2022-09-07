@@ -3,9 +3,8 @@ import { useRecoilState } from "recoil";
 import { Transition } from '@headlessui/react';
 import { useTimeoutFn } from 'react-use';
 import { openImportModal } from "../../../recoil/openImportModal";
-import Notes from "../../../../public/image/notes.png";
 import { ImportTodoFile } from "../ImportTodoFile";
-import {ImportFolderFile} from "../ImportFolderFile";
+import { ImportFolderFile } from "../ImportFolderFile";
 
 function ImportModal() {
     let [isShowing, setIsShowing] = useState(false);
@@ -19,14 +18,14 @@ function ImportModal() {
 
     const onImportTodoClick = () => {
         ImportTodoFile();
-    } 
+    }
 
     const onImportFolderClick = () => {
         ImportFolderFile();
-    } 
-    
+    }
+
     useEffect(() => {
-        let modal = document.getElementById("idImportModal");
+        let modal = document.getElementById("idImportModal") as HTMLFormElement;
         if (importModal) {
             modal.classList.remove("hidden");
             setIsShowing(true);
@@ -41,7 +40,7 @@ function ImportModal() {
 
     return (
         <>
-            <div id="idImportModal" tabindex="-1" aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full" onClick={onCancelClick}>
+            <div id="idImportModal" tabIndex={-1} aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full" onClick={onCancelClick}>
                 <div className="fixed inset-0 bg-gray-200 bg-opacity-70 transition-opacity"></div>
 
                 <Transition

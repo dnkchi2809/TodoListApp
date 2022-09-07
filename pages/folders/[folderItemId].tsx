@@ -3,7 +3,7 @@ import NavBar from '../views/Main/NavBar'
 import { useRouter } from "next/router";
 import FolderDetail from '../views/Folders/FolderItem/FolderDetail';
 
-export default function DetailTodo() {
+export default function DetailFolder() {
   const router = useRouter();
   const { folderItemId } = router.query;
 
@@ -17,7 +17,7 @@ export default function DetailTodo() {
 
       <main>
         <NavBar />
-        <FolderDetail folderId={folderItemId} />
+        <FolderDetail folderId={Number(folderItemId)} id={0} label={''} detail={''} createDate={''} state={''} history={[]} />
       </main>
     </div>
   )

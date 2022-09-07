@@ -7,10 +7,17 @@ import { selectArrayFolders } from "../../recoil/selectArrayFolders";
 import { selectAllFolders } from "../../recoil/selectAllFolders";
 import { useRecoilState } from "recoil";
 
+interface Folder {
+    id: number,
+    name: string,
+    createDate : string,
+    todoItemArray : []
+};
+
 function FoldersBody() {
     const [folderListStorage, setFolderListStorage] = useState([]);
 
-    const [arrayFolder, setArrayFolder] = useRecoilState(selectArrayFolders);
+    const [arrayFolder, setArrayFolder] = useRecoilState(selectArrayFolders as any);
 
     const [selectAll, setSelectAll] = useRecoilState(selectAllFolders);
 
@@ -18,7 +25,7 @@ function FoldersBody() {
     let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
     const onSelectAllClick = () => {
-        let selectAllButton = document.getElementById("idSelectAllFolders");
+        let selectAllButton = document.getElementById("idSelectAllFolders") as HTMLFormElement;
         if (selectAllButton.checked) {
             setSelectAll(true);
         }
@@ -35,18 +42,20 @@ function FoldersBody() {
 
     useEffect(() => {
         if (selectAll) {
-            let newArrayFolders = [];
-            folderListStorage.map((folder) => {
+            let newArrayFolders : any[] = [];
+            folderListStorage.map((folder : Folder) => {
                 newArrayFolders.push(String(folder.id));
             })
             setArrayFolder(newArrayFolders);
         }
         else {
-            document.getElementById("idSelectAllFolders").checked = false;
+            let selectAllButton = document.getElementById("idSelectAllFolders") as HTMLFormElement;
+            selectAllButton.checked = false;
         }
     }, [selectAll]);
 
     useEffect(() => {
+        // @ts-ignore
         const folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
         if (folderListStorage.length == 0) {
             localStorage.setItem("folderList", JSON.stringify([{
@@ -59,6 +68,7 @@ function FoldersBody() {
     }, []);
 
     useEffect(() => {
+        // @ts-ignore
         setFolderListStorage(JSON.parse(localStorage.getItem("folderList")) || []);
     }, [folderListStorage]);
 
@@ -71,10 +81,10 @@ function FoldersBody() {
                 {
                     folderListStorage.length > 0
                         ?
-                        folderListStorage.map((folderItem, index) => {
+                        folderListStorage.map((folderItem : Folder, index) => {
                             return (
                                 <div className="col-folder-list" key={"folderCardItem" + index}>
-                                    <FolderCard item={folderItem} />
+                                    <FolderCard {...folderItem} />
                                 </div>
                             )
                         })

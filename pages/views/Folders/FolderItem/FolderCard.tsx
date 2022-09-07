@@ -4,7 +4,14 @@ import { useRecoilState } from "recoil";
 import { selectAllFolders } from "../../../recoil/selectAllFolders";
 import { selectArrayFolders } from "../../../recoil/selectArrayFolders";
 
-function FolderCard(props) {
+interface Folder {
+    id: number,
+    name: string,
+    createDate : string,
+    todoItemArray : []
+}
+
+function FolderCard(props : Folder) {
     const router = useRouter();
 
     const [arrayFolder, setArrayFolder] = useRecoilState(selectArrayFolders);
@@ -13,35 +20,39 @@ function FolderCard(props) {
     const onFolderCardClick = () => {
         router.push({
             pathname: '/folders/[folderItemId]',
-            query: { folderItemId: props.item.id },
+            query: { folderItemId: props.id },
         }).then(() => {
             router.reload();
         })
     };
 
     const onSelectFolderClick = () => {
+      
         setSelectAll(false);
         
-        const folder = document.getElementById(props.item.id)
+        const folder = document.getElementById(String(props.id)) as HTMLFormElement;
 
         if (folder.checked) {
-            setArrayFolder([...arrayFolder, folder.id])
+            let newArrayFolder = arrayFolder;
+            newArrayFolder = [...arrayFolder, Number(folder.id)];
+            setArrayFolder(newArrayFolder);
         }
         else {
             let newArrayFolders = [];
             newArrayFolders = arrayFolder.filter((element) => {
-                return element !== folder.id
+                return Number(element) !== Number(folder.id)
             })
             setArrayFolder(newArrayFolders);
         }
     };
 
     useEffect(() => {
+        let item = document.getElementById(String(props.id)) as HTMLFormElement;
         if (selectAll) {
-            document.getElementById(props.item.id).checked = true;
+            item.checked = true;
         }
         else if (arrayFolder.length == 0) {
-            document.getElementById(props.item.id).checked = false;
+            item.checked = false;
         }
     }, [selectAll])
 
@@ -49,11 +60,11 @@ function FolderCard(props) {
         <>
             <div className="w-full h-full px-3 py-5 folder-card text-white">
                 <div>
-                    <input id={props.item.id} type="checkbox" onClick={onSelectFolderClick} className="selectItemClass w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                    <input id={String(props.id)} type="checkbox" onClick={onSelectFolderClick} className="selectItemClass w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                 </div>
                 <div className="text-center" onClick={onFolderCardClick}>
-                    <p>{props.item.name}</p>
-                    <p>Todo : {props.item.todoItemArray.length}</p>
+                    <p>{props.name}</p>
+                    <p>Todo : {props.todoItemArray.length}</p>
 
                 </div>
             </div>

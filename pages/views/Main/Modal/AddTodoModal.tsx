@@ -1,102 +1,103 @@
 import { useState, useEffect, Fragment } from "react";
 import { useRecoilState } from "recoil";
-import { openEditTodoModal } from "../../../recoil/openEditTodoModal";
-import { todoItemSelect } from "../../../recoil/todoItemSelect";
+import { openAddTodoModal } from "../../../recoil/openAddTodoModal";
 import { Transition } from '@headlessui/react';
 import { useTimeoutFn } from 'react-use';
 import FolderSelect from "../../Folders/FolderItem/FolderSelect";
 import { selectFolder } from "../../../recoil/selectFolder";
-import { selectStateOfItem } from "../../../recoil/selectStateOfItem";
-import TodoStateOfItem from "../TodoItem/TodoStateOfItem";
 
-function EditTodoModal() {
-    const [openModalEditTodo, setOpenModalEditTodo] = useRecoilState(openEditTodoModal);
-    const [selectItem, setSelectItem] = useRecoilState(todoItemSelect);
-    const [selectedFolder, setSelectedFolder] = useRecoilState(selectFolder);
-    const [selectedState, setSelectedState] = useRecoilState(selectStateOfItem);
+interface Todo {
+    id: number,
+    label: string,
+    detail: string,
+    createDate: string,
+    state: string,
+    folderId: number,
+    history: {
+        historyId: number,
+        updateDate: string
+    }[]
+};
+
+interface Folder {
+    id: number,
+    name: string,
+    createDate: string,
+    todoItemArray: number[]
+};
+
+function AddTodoModal() {
 
     let [isShowing, setIsShowing] = useState(false);
     let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
-    const [updateTodoItem, setUpdateTodoItem] = useState({
+    const [selectedFolder, setSelectedFolder] = useRecoilState(selectFolder);
+
+    const [newTodoItem, setNewTodoItem] = useState({
         id: 0,
         label: "",
         detail: "",
+        state: "Todo",
         createDate: "",
-        state : selectedState.name,
-        folderId: selectedFolder.id,
-        history: Array()
-    })
+        folderId: 0,
+        history: [{
+            historyId: 0,
+            updateDate: ""
+        }]
+    });
 
-    const [updateHistory, setUpdateHistory] = useState({
-        historyId: 0,
-        updateDate: "",
-        updateLabel: "",
-        updateDetail: ""
-    })
+    const [openModalAddTodo, setOpenModalAddTodo] = useRecoilState(openAddTodoModal);
+
+    const clearData = () => {
+        let idLabel = document.getElementById("idLabel") as HTMLFormElement;
+        idLabel.value = "";
+        let idDetail = document.getElementById("idDetail") as HTMLFormElement;
+        idDetail.value = "";
+    }
 
     const onCancelClick = () => {
-        setUpdateHistory({
-            historyId: 0,
-            updateDate: "",
-            updateLabel: "",
-            updateDetail: ""
-        })
-        setSelectItem(null);
-        setOpenModalEditTodo(false);
+        clearData();
+        setOpenModalAddTodo(false);
         setSelectedFolder({
             id: 0,
             name: "Default Folder"
         });
     }
 
-    const onSaveClick = () => {
-        updateTodoItem.folderId = selectedFolder.id;
-        updateTodoItem.state = selectedState.name;
-        // create history
-        if (updateTodoItem.history.length <= 0) {
-            updateHistory.historyId = 0;
-        }
-        else {
-            updateHistory.historyId = updateTodoItem.history[(updateTodoItem.history.length) - 1].historyId + 1;
-        }
-        updateHistory.updateDate = new Date().toISOString().slice(0, 10);
+    const onInputLabelTodo = (event: any) => {
+        newTodoItem.label = event.target.value;
+        newTodoItem.createDate = new Date().toISOString().slice(0, 10);
+    }
 
-        //update history log
-        for (let item of updateTodoItem.history) {
-            if (item.historyId !== updateHistory.historyId) {
-                updateTodoItem.history = [...updateTodoItem.history, updateHistory];
-                break;
+    const onInputDetailTodo = (event: any) => {
+        newTodoItem.detail = event.target.value;
+    }
+
+    const onSaveNewTodo = () => {
+        const validTodo = validateNewTodoItem(newTodoItem);
+
+        var arrayTempTodo = [];
+        // @ts-ignore
+        var todoListStorage = JSON.parse(localStorage.getItem("todoList")) || [];
+        arrayTempTodo = todoListStorage;
+        // @ts-ignore
+        var folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
+
+        if (validTodo) {
+            if (todoListStorage.length <= 0) {
+                newTodoItem.id = 0;
             }
-        }
+            else {
+                newTodoItem.id = todoListStorage[(todoListStorage.length - 1)].id + 1;
+            }
 
-        //save edit to storage
-        const validUpdateTodoItem = validateUpdateTodoItem(updateTodoItem);
+            arrayTempTodo.push(newTodoItem);
 
-        if (validUpdateTodoItem) {
-            const todoList = JSON.parse(localStorage.getItem("todoList"));
-            todoList.map((itemTodo, index) => {
-                if (itemTodo.id == updateTodoItem.id) {
-                    todoList.splice(index, 1, updateTodoItem);
-                }
-            });
+            localStorage.setItem("todoList", JSON.stringify(arrayTempTodo));
 
-            localStorage.setItem("todoList", JSON.stringify(todoList));
-
-            let folderListStorage = JSON.parse(localStorage.getItem("folderList"));
-
-            folderListStorage.map((folder) => {
-                if (folder.id !== updateTodoItem.folderId) {
-                    folder.todoItemArray.map((todoItem, index) => {
-                        if (todoItem == updateTodoItem.id) {
-                            folder.todoItemArray.splice(index, 1);
-                        }
-                    })
-                }
-                else {
-                    if (folder.todoItemArray.indexOf(updateTodoItem.id) < 0) {
-                        folder.todoItemArray = [...folder.todoItemArray, updateTodoItem.id];
-                    }
+            folderListStorage.map((folder : Folder) => {
+                if (folder.id == newTodoItem.folderId) {
+                    folder.todoItemArray.push(newTodoItem.id);
                 }
             });
 
@@ -106,17 +107,7 @@ function EditTodoModal() {
         }
     }
 
-    const onChangeLabel = (event) => {
-        updateHistory.updateLabel = event.target.value;
-        updateTodoItem.label = event.target.value;
-    }
-
-    const onChangeTodoDetail = (event) => {
-        updateHistory.updateDetail = event.target.value;
-        updateTodoItem.detail = event.target.value;
-    }
-
-    const validateUpdateTodoItem = (paramItem) => {
+    const validateNewTodoItem = (paramItem: Todo) => {
         if (paramItem.label == "") {
             alert("Label is invalid");
             return false
@@ -125,43 +116,10 @@ function EditTodoModal() {
     }
 
     useEffect(() => {
-        if (selectItem !== null) {
-            setSelectedState({
-                name : selectItem.state
-            });
-        }
-    }, [selectItem]);
+        newTodoItem.folderId = selectedFolder.id;
 
-    useEffect(() => {
-        let folderListStorage = JSON.parse(localStorage.getItem("folderList"));
-
-        if (selectItem !== null) {
-            folderListStorage.map((folder) => {
-                if (folder.id == selectItem.folderId) {
-                    setSelectedFolder(folder);
-                }
-            });
-        }
-    }, [selectItem]);
-
-    useEffect(() => {
-        if (selectItem !== null) {
-            setUpdateTodoItem({
-                ...updateTodoItem,
-                id: selectItem.id,
-                label: selectItem.label,
-                detail: selectItem.detail,
-                state: selectedState.name,
-                createDate: selectItem.createDate,
-                folderId: selectFolder.id,
-                history: selectItem.history
-            });
-        }
-    }, [selectItem]);
-
-    useEffect(() => {
-        let modal = document.getElementById("editModal");
-        if (openModalEditTodo) {
+        let modal = document.getElementById("addModal") as HTMLFormElement;
+        if (openModalAddTodo) {
             modal.classList.remove("hidden");
             setIsShowing(true);
             resetIsShowing();
@@ -175,8 +133,9 @@ function EditTodoModal() {
     return (
         <>
             {/*Modal*/}
-            <div id="editModal" tabindex="-1" aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
-                <div className="fixed inset-0 bg-gray-200 bg-opacity-60 transition-opacity"></div>
+            <div id="addModal" tabIndex={-1} aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+                <div className="fixed inset-0 bg-gray-200 bg-opacity-70 transition-opacity"></div>
+
                 <Transition
                     as={Fragment}
                     show={isShowing}
@@ -187,19 +146,13 @@ function EditTodoModal() {
                     leaveFrom="opacity-100 scale-100 "
                     leaveTo="opacity-0 scale-50 "
                 >
-                    <div className="fixed z-10 inset-0 overflow-y-auto">
+                    <div className="fixed z-10 inset-0 overflow-y-auto shadow-md">
                         <div className="flex items-center sm:items-center justify-center min-h-full p-4 text-center sm:p-0">
                             <div className="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
                                 <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                                    <div className="flex">
-                                        <div className="w-3/4">
-                                            <input type='text' id='editModalLabel' onChange={onChangeLabel} value={updateTodoItem.label} className="w-full mb-3 text-lg font-medium"></input>
-                                        </div>
-                                        <div className="w-1/4">
-                                            <p className="mb-3 font-thin text-blue-500 text-right">{updateTodoItem.createDate}</p>
-                                        </div>
+                                    <div className="sm:flex sm:items-start">
+                                        <input id="idLabel" placeholder="To Do Label" className="w-full mb-3 text-lg font-medium" onInput={onInputLabelTodo}></input>
                                     </div>
-                                    <TodoStateOfItem />
                                     <FolderSelect />
                                     <div className="sm:flex sm:items-start">
                                         <form className="w-full">
@@ -257,16 +210,16 @@ function EditTodoModal() {
                                                     </div>
                                                 </div>
                                                 <div className="py-2 px-4 bg-white rounded-b-lg dark:bg-gray-800">
-                                                    <label for="editIdDetail" className="sr-only">Publish post</label>
-                                                    <textarea onChange={onChangeTodoDetail} value={updateTodoItem.detail} rows="10" className="block px-0 w-full text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write an article..." required=""></textarea>
+                                                    <label htmlFor="idDetail" className="sr-only">Publish post</label>
+                                                    <textarea id="idDetail" rows={8} className="block px-0 w-full text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write an article..." onInput={onInputDetailTodo}></textarea>
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
                                 </div>
                                 <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                                    <button data-modal-toggle="editModal" type="button" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm" onClick={onSaveClick}>Save</button>
-                                    <button data-modal-toggle="editModal" type="button" className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" onClick={onCancelClick}>Cancel</button>
+                                    <button data-modal-toggle="addModal" type="button" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm" onClick={onSaveNewTodo}>Save</button>
+                                    <button data-modal-toggle="addModal" type="button" className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" onClick={onCancelClick}>Cancel</button>
                                 </div>
                             </div>
                         </div>
@@ -277,4 +230,4 @@ function EditTodoModal() {
     )
 }
 
-export default EditTodoModal;
+export default AddTodoModal;

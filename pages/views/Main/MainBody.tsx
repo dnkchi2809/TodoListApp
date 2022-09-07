@@ -9,10 +9,23 @@ import { Transition } from '@headlessui/react';
 import { useTimeoutFn } from 'react-use';
 import { selectState } from "../../recoil/selectState";
 
+interface Todo {
+    id: number,
+    label: string,
+    detail: string,
+    createDate: string,
+    state: string,
+    folderId: number,
+    history: {
+        historyId: number,
+        updateDate: string
+    }[]
+};
+
 function MainBody() {
     const [todoListStorage, setTodoListStorage] = useState([]);
     const [selectAll, setSelectAll] = useRecoilState(selectAllItems);
-    const [arrayItems, setArrayItems] = useRecoilState(selectArrayItems);
+    const [arrayItems, setArrayItems] = useRecoilState(selectArrayItems as any);
 
     const [selectedState, setSelectedState] = useRecoilState(selectState);
 
@@ -28,7 +41,7 @@ function MainBody() {
     const [rows, setRows] = useState([]);
 
     const onSelectAllClick = () => {
-        let selectAllButton = document.getElementById("idSelectAll");
+        let selectAllButton = document.getElementById("idSelectAll") as HTMLFormElement;
         if (selectAllButton.checked) {
             setSelectAll(true);
         }
@@ -38,7 +51,7 @@ function MainBody() {
         }
     };
 
-    const onWindowWheel = (event) => {
+    const onWindowWheel = (event: any) => {
         var y = event.deltaY;
         if (y > 0) {
             setPage(page + 1);
@@ -55,18 +68,20 @@ function MainBody() {
 
     useEffect(() => {
         if (selectAll) {
-            let newArrayItems = [];
-            todoListStorage.map((todoItem) => {
-                newArrayItems.push(String(todoItem.id));
+            let newArrayItems: any[] = [];
+            todoListStorage.map((todoItem: Todo) => {
+                newArrayItems.push(Number(todoItem.id));
             })
             setArrayItems(newArrayItems);
         }
         else {
-            document.getElementById("idSelectAll").checked = false;
+            let idSelectAll = document.getElementById("idSelectAll") as HTMLFormElement;
+            idSelectAll.checked = false;
         }
     }, [selectAll]);
 
     useEffect(() => {
+        // @ts-ignore
         const folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
         if (folderListStorage.length == 0) {
             localStorage.setItem("folderList", JSON.stringify([{
@@ -80,11 +95,13 @@ function MainBody() {
 
     useEffect(() => {
         if (selectedState.name == "All") {
+            // @ts-ignore
             setTodoListStorage(JSON.parse(localStorage.getItem("todoList")) || []);
         }
         else {
+            // @ts-ignore
             let todoListStorage = JSON.parse(localStorage.getItem("todoList")) || [];
-            let filterTodoState = todoListStorage.filter((todo) => {
+            let filterTodoState = todoListStorage.filter((todo: Todo) => {
                 return todo.state == selectedState.name
             })
             setTodoListStorage(filterTodoState);
@@ -132,10 +149,10 @@ function MainBody() {
                     {
                         rows.length > 0
                             ?
-                            rows.map((todoItem, index) => {
+                            rows.map((todoItem: Todo, index) => {
                                 return (
                                     <div className="col-todo-list" key={"todoCardItem" + index}>
-                                        <TodoCard item={todoItem} />
+                                        <TodoCard {...todoItem} />
                                     </div>
                                 )
                             })

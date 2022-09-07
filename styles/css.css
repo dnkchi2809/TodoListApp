@@ -1,3 +1,13 @@
+body {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    overflow-y: scroll;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
 .dropdownMenu {
     position: absolute;
     inset: 0px auto auto 0px;
@@ -5,7 +15,7 @@
     transform: translate(322px, 66px);
 }
 
-.folder-card{
+.folder-card {
     height: 130%;
     background-image: url(../public/image/folder.png);
     background-size: auto 100%;
@@ -13,27 +23,28 @@
     background-position: center;
 }
 
-#image-note{
+#image-note {
     background-image: url(../public/image/notes.png);
 }
 
-#image-folder{
+#image-folder {
     background-image: url(../public/image/folders.png);
 }
 
 @media only screen and (max-width: 768px) {
+
     /* For mobile phones: */
-    .col-todo-list{
+    .col-todo-list {
         width: 100%;
         padding-bottom: 20px;
     }
 
-    .col-folder-list{
+    .col-folder-list {
         width: 50%;
         padding-bottom: 20px;
     }
 
-    .image-import{
+    .image-import {
         background-size: auto 50%;
         background-repeat: no-repeat;
         background-position: center;
@@ -41,25 +52,24 @@
 }
 
 @media only screen and (min-width: 765px) {
-    .col-todo-list{
+    .col-todo-list {
         width: 20%;
         padding: 20px;
     }
 
-    .col-folder-list{
+    .col-folder-list {
         width: 20%;
         padding-bottom: 20px;
     }
 
-    .image-import{
+    .image-import {
         background-size: auto 100%;
         background-repeat: no-repeat;
         background-position: center;
     }
 
-    .padding-class{
+    .padding-class {
         padding-left: 20px;
         padding-right: 20px;
     }
 }
-

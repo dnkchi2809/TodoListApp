@@ -3,7 +3,6 @@ import { Transition } from '@headlessui/react';
 import { useTimeoutFn } from 'react-use';
 import TodoCardAdd from "../../Main/TodoItem/TodoCardAdd";
 import TodoCard from "../../Main/TodoItem/TodoCard";
-import styles from '../../../../styles/Home.module.css'
 import { useRecoilState } from "recoil";
 import { openDeleteFolderModal } from "../../../recoil/openDeleteFolderModal";
 import DeleteFolderModal from "../Modal/DeleteFolderModal";
@@ -12,14 +11,38 @@ import { selectArrayItems } from "../../../recoil/selectManyItems";
 import { selectState } from "../../../recoil/selectState";
 import TodoState from "../../Main/TodoItem/TodoState";
 
-function FolderDetail(props) {
+interface Todo {
+    id: number,
+    label: string,
+    detail: string,
+    createDate: string,
+    state: string,
+    folderId: number,
+    history: {
+        historyId: number,
+        updateDate: string
+    }[]
+};
 
+interface Folder {
+    id: number,
+    name: string,
+    createDate: string,
+    todoItemArray: []
+};
+
+function FolderDetail(props: Todo) {
     let [isShowing, setIsShowing] = useState(false);
     let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
-    let folderId = props.folderId;
+    let folderId = Number(props.folderId);
 
-    const [folderSelect, setFolderSelect] = useState([]);
+    const [folderSelect, setFolderSelect] = useState([{
+        id: 0,
+        name: "",
+        createDate: "",
+        todoItemArray: []
+    }]);
 
     const [todoItemList, setTodoItemList] = useState([]);
 
@@ -30,12 +53,13 @@ function FolderDetail(props) {
 
     const [deleteFolderModal, setDeleteFolderModal] = useRecoilState(openDeleteFolderModal);
 
-    const onChangeFolderName = (event) => {
+    const onChangeFolderName = (event: any) => {
         if (event.target.value !== "") {
             let arrayTempFolder = [];
+            // @ts-ignore
             let folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
             arrayTempFolder = folderListStorage;
-            arrayTempFolder.map((folder) => {
+            arrayTempFolder.map((folder: Folder) => {
                 if (folder.id == folderId) {
                     folder.name = event.target.value;
                 }
@@ -54,7 +78,7 @@ function FolderDetail(props) {
     };
 
     const onSelectAllClick = () => {
-        let selectAllButton = document.getElementById("idSelectAllTodoOfFolder");
+        let selectAllButton = document.getElementById("idSelectAllTodoOfFolder") as HTMLFormElement;
         if (selectAllButton.checked) {
             setSelectAll(true);
         }
@@ -71,37 +95,41 @@ function FolderDetail(props) {
 
     useEffect(() => {
         if (selectAll) {
-            let newArrayItems = [];
-            todoItemList.map((todoItem) => {
+            let newArrayItems: any[] = [];
+            todoItemList.map((todoItem: Todo) => {
                 newArrayItems.push(String(todoItem.id));
             })
             setArrayItems(newArrayItems);
         }
         else {
-            document.getElementById("idSelectAllTodoOfFolder").checked = false;
+            let selectAllButton = document.getElementById("idSelectAllTodoOfFolder") as HTMLFormElement;
+            selectAllButton.checked = false;
         }
     }, [selectAll]);
 
     useEffect(() => {
+        // @ts-ignore
         const folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
 
-        setFolderSelect(folderListStorage.filter((folder) => {
+        setFolderSelect(folderListStorage.filter((folder: Folder) => {
             return folder.id == folderId;
         }));
     }, [folderId]);
 
     useEffect(() => {
         if (folderId >= 0) {
+            // @ts-ignore
             const todoListStorage = JSON.parse(localStorage.getItem("todoList")) || [];
 
             if (selectedState.name == "All") {
-                setTodoItemList(todoListStorage.filter((todo) => {
+                setTodoItemList(todoListStorage.filter((todo: Todo) => {
                     return todo.folderId == folderId;
                 }));
             }
             else {
+                // @ts-ignore
                 let todoListStorage = JSON.parse(localStorage.getItem("todoList")) || [];
-                let filterTodoState = todoListStorage.filter((todo) => {
+                let filterTodoState = todoListStorage.filter((todo: Todo) => {
                     return todo.folderId == folderId && todo.state == selectedState.name
                 })
                 setTodoItemList(filterTodoState);
@@ -114,7 +142,7 @@ function FolderDetail(props) {
             <div className="">
                 <div className="flex padding-class">
                     <div className="w-3/4">
-                        <input onChange={onChangeFolderName} defaultValue={folderSelect.length > 0 ? folderSelect[0].name : null} className="w-full mb-3 text-lg font-medium"></input>
+                        <input onChange={onChangeFolderName} defaultValue={folderSelect.length > 0 ? folderSelect[0].name : ""} className="w-full mb-3 text-lg font-medium"></input>
                     </div>
                     <div className="w-1/4">
                         <p className="mb-3 font-thin text-blue-500 text-right">Create Date: {folderSelect.length > 0 ? folderSelect[0].createDate : null}</p>
@@ -132,10 +160,10 @@ function FolderDetail(props) {
                     {
                         todoItemList.length > 0
                             ?
-                            todoItemList.map((todoItem, index) => {
+                            todoItemList.map((todoItem: Todo, index) => {
                                 return (
                                     <div className="col-todo-list" key={"todoCardItem" + index}>
-                                        <TodoCard item={todoItem} />
+                                        <TodoCard {...todoItem} />
                                     </div>
                                 )
                             })
@@ -166,7 +194,7 @@ function FolderDetail(props) {
                 </div>
             </div>
 
-            <DeleteFolderModal folderId={folderId} />
+            <DeleteFolderModal folderId={folderId} id={0} label={""} detail={""} createDate={""} state={""} history={[]} />
         </>
     )
 }

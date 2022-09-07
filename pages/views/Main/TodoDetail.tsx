@@ -4,11 +4,44 @@ import FolderSelect from "../Folders/FolderItem/FolderSelect";
 import { useRecoilState } from "recoil";
 import { selectStateOfItem } from "../../recoil/selectStateOfItem";
 import TodoStateOfItem from "./TodoItem/TodoStateOfItem";
+import { useRouter } from "next/router";
 
-function TodoDetail(props) {
+interface Todo {
+    id: number,
+    label: string,
+    detail: string,
+    createDate: string,
+    state: string,
+    folderId: number,
+    history: {
+        historyId: number,
+        updateDate: string
+    }[]
+};
+
+interface Folder {
+    id: number,
+    name: string,
+    createDate: string,
+    todoItemArray: number[]
+};
+
+
+function TodoDetail(props : any) {
     const itemId = props.itemId;
 
-    const [todoItem, setTodoItem] = useState(null);
+    const [todoItem, setTodoItem] = useState({
+        id: 0,
+        label: "",
+        detail: "",
+        createDate: "",
+        state: "",
+        folderId: 0,
+        history: [{
+            historyId: 0,
+            updateDate: ""
+        }]
+    });
 
     const [selectedFolder, setSelectedFolder] = useRecoilState(selectFolder);
 
@@ -18,6 +51,7 @@ function TodoDetail(props) {
         id: 0,
         label: "",
         detail: "",
+        state: selectedState.name,
         createDate: "",
         folderId: selectedFolder.id,
         history: Array()
@@ -30,12 +64,12 @@ function TodoDetail(props) {
         updateDetail: ""
     });
 
-    const onChangeLabel = (event) => {
+    const onChangeLabel = (event: any) => {
         updateHistory.updateLabel = event.target.value;
         updateTodoItem.label = event.target.value;
     }
 
-    const onChangeTodoDetail = (event) => {
+    const onChangeTodoDetail = (event: any) => {
         updateHistory.updateDetail = event.target.value;
         updateTodoItem.detail = event.target.value;
     }
@@ -45,6 +79,7 @@ function TodoDetail(props) {
             id: 0,
             label: "",
             detail: "",
+            state: "",
             createDate: "",
             folderId: 0,
             history: Array()
@@ -87,8 +122,9 @@ function TodoDetail(props) {
         const validUpdateTodoItem = validateUpdateTodoItem(updateTodoItem);
 
         if (validUpdateTodoItem) {
+            // @ts-ignore
             const todoList = JSON.parse(localStorage.getItem("todoList"));
-            todoList.map((itemTodo, index) => {
+            todoList.map((itemTodo: Todo, index: number) => {
                 if (itemTodo.id == updateTodoItem.id) {
                     todoList.splice(index, 1, updateTodoItem);
                 }
@@ -96,11 +132,12 @@ function TodoDetail(props) {
 
             localStorage.setItem("todoList", JSON.stringify(todoList));
 
+            // @ts-ignore
             let folderListStorage = JSON.parse(localStorage.getItem("folderList"));
 
-            folderListStorage.map((folder) => {
+            folderListStorage.map((folder: Folder) => {
                 if (folder.id !== updateTodoItem.folderId) {
-                    folder.todoItemArray.map((todoItem, index) => {
+                    folder.todoItemArray.map((todoItem: number, index: number) => {
                         if (todoItem == updateTodoItem.id) {
                             folder.todoItemArray.splice(index, 1);
                         }
@@ -116,12 +153,10 @@ function TodoDetail(props) {
             localStorage.setItem("folderList", JSON.stringify(folderListStorage));
 
             alert("Update successfull");
-            // onBackClick();
         }
-
     }
 
-    const validateUpdateTodoItem = (paramItem) => {
+    const validateUpdateTodoItem = (paramItem: Todo) => {
         // if (paramItem.label == "") {
         //     alert("Label is invalid");
         //     return false
@@ -138,10 +173,11 @@ function TodoDetail(props) {
     }, [todoItem]);
 
     useEffect(() => {
+        // @ts-ignore
         let folderListStorage = JSON.parse(localStorage.getItem("folderList"));
 
         if (todoItem !== null) {
-            folderListStorage.map((folder) => {
+            folderListStorage.map((folder: Folder) => {
                 if (folder.id == todoItem.folderId) {
                     setSelectedFolder(folder);
                 }
@@ -156,16 +192,18 @@ function TodoDetail(props) {
                 id: todoItem.id,
                 label: todoItem.label,
                 detail: todoItem.detail,
+                state: selectedState.name,
                 createDate: todoItem.createDate,
-                folderId: selectFolder.folderId,
+                folderId: todoItem.folderId,
                 history: todoItem.history
             })
         }
     }, [todoItem])
 
     useEffect(() => {
+        // @ts-ignore
         const arrayTodoList = JSON.parse(localStorage.getItem("todoList"));
-        arrayTodoList.map((item) => {
+        arrayTodoList.map((item: Todo) => {
             if (item.id == itemId) {
                 setTodoItem(item);
             }
@@ -176,16 +214,16 @@ function TodoDetail(props) {
         <div className="padding-class">
             <div className="flex">
                 <div className="w-3/4">
-                    <input type='text' onChange={onChangeLabel} defaultValue={todoItem !== null ? todoItem.label : null} className="w-full mb-3 text-lg font-medium"></input>
+                    <input type='text' onChange={onChangeLabel} value={todoItem.label} className="w-full mb-3 text-lg font-medium"></input>
                 </div>
                 <div className="w-1/4">
-                    <p className="mb-3 font-thin text-blue-500 text-right">Create Date:  {todoItem !== null ? todoItem.createDate : null}</p>
+                    <p className="mb-3 font-thin text-blue-500 text-right">Create Date:  {todoItem.createDate}</p>
                 </div>
             </div>
             {
                 todoItem !== null
                     ?
-                    <>  
+                    <>
                         <TodoStateOfItem />
                         <FolderSelect />
                     </>
@@ -248,8 +286,8 @@ function TodoDetail(props) {
                             </div>
                         </div>
                         <div className="py-2 px-4 bg-white rounded-b-lg dark:bg-gray-800">
-                            <label for="editIdDetail" className="sr-only">Publish post</label>
-                            <textarea onChange={onChangeTodoDetail} defaultValue={todoItem !== null ? todoItem.detail : null} rows="15" className="block px-0 w-full text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write an article..." required=""></textarea>
+                            <label htmlFor="editIdDetail" className="sr-only">Publish post</label>
+                            <textarea onChange={onChangeTodoDetail} defaultValue={todoItem.detail} rows={15} className="block px-0 w-full text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write an article..."></textarea>
                         </div>
                     </div>
                 </form>

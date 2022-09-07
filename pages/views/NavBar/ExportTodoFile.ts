@@ -1,4 +1,4 @@
-export const ExportFile = (data) => {
+export const ExportFile = (data : string) => {
 
     let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(data);
 

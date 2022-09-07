@@ -4,6 +4,26 @@ import { Transition } from '@headlessui/react';
 import { useTimeoutFn } from 'react-use';
 import { openAddFolderModal } from "../../../recoil/opennAddFolderModal";
 
+interface Folder {
+    id: number,
+    name: string,
+    createDate: string,
+    todoItemArray: []
+};
+
+interface Todo {
+    id: number,
+    label: string,
+    detail: string,
+    createDate: string,
+    state: string,
+    folderId: number,
+    history: {
+        historyId: number,
+        updateDate: string
+    }[]
+};
+
 function AddFolderModal() {
 
     let [isShowing, setIsShowing] = useState(false);
@@ -13,12 +33,12 @@ function AddFolderModal() {
         id: 0,
         name: "",
         createDate: "",
-        todoItemArray: Array()
+        todoItemArray: []
     });
 
     const [openModalAddFolder, setOpenModalAddFolder] = useRecoilState(openAddFolderModal);
 
-    const onChangeFolderName = (event) => {
+    const onChangeFolderName = (event : any) => {
         newFolderItem.name = event.target.value;
     }
 
@@ -31,9 +51,11 @@ function AddFolderModal() {
     }
 
     const onCreateFolderClick = () => {
-        const validFolder = validateFolder(newFolderItem);
+        // const validFolder = validateFolder(newFolderItem);
+        const validFolder = true;
 
         var arrayTempFolder = [];
+        // @ts-ignore
         var folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
         arrayTempFolder = folderListStorage;
 
@@ -53,8 +75,8 @@ function AddFolderModal() {
         }
     }
 
-    const validateFolder = (paramFolder) => {
-        if (paramFolder.label == "") {
+    const validateFolder = (paramFolder : Folder) => {
+        if (paramFolder.name == "") {
             alert("Folder Name is invalid");
             return false;
         }
@@ -62,7 +84,7 @@ function AddFolderModal() {
     }
 
     useEffect(() => {
-        let modal = document.getElementById("addFolderModal");
+        let modal = document.getElementById("addFolderModal") as HTMLFormElement;
         if (openModalAddFolder) {
             modal.classList.remove("hidden");
             setIsShowing(true);
@@ -77,7 +99,7 @@ function AddFolderModal() {
 
     return (
         <>
-            <div id="addFolderModal" tabindex="-1" aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+            <div id="addFolderModal" tabIndex={-1} aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
                 <div className="fixed inset-0 bg-gray-200 bg-opacity-70 transition-opacity"></div>
 
                 <Transition

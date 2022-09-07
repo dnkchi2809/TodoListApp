@@ -6,8 +6,22 @@ import { selectAllItems } from "../../recoil/selectAllItems";
 import { selectArrayFolders } from "../../recoil/selectArrayFolders";
 import { selectArrayItems } from "../../recoil/selectManyItems";
 import { ExportFile } from "../NavBar/ExportTodoFile";
-import { ImportFile } from "../NavBar/ImportTodoFile";
 import ImportModal from "../NavBar/Modal/ImportModal";
+
+interface ItemData {
+    id : number,
+    label: string,
+    detail: string,
+    createDate: string,
+    state: string,
+    folderId: number,
+    history: [
+        {
+            historyId: number,
+            updateDate: string
+        }
+    ]
+}
 
 function NavBar() {
     const [arrayItems, setArrayItems] = useRecoilState(selectArrayItems);
@@ -22,9 +36,9 @@ function NavBar() {
 
     const [allData, setAllData] = useState([]);
 
-    let dataSelected = [];
+    let dataSelected : any[] = [];
 
-    allData.map((itemData) => {
+    allData.map((itemData : any) => {
         if (dataType == 0) {
             arrayItems.map((item) => {
                 if (item == itemData.id) {
@@ -50,11 +64,14 @@ function NavBar() {
     }
 
     useEffect(() => {
+      
         if (arrayItems.length > 0) {
+            // @ts-ignore
             setAllData(JSON.parse(localStorage.getItem("todoList")));
             setDataType(0);
         }
         if (arrayFolder.length > 0) {
+            // @ts-ignore
             setAllData(JSON.parse(localStorage.getItem("folderList")));
             setDataType(1);
         }
@@ -67,7 +84,7 @@ function NavBar() {
                 <div className="container flex flex-wrap justify-end items-end mx-auto">
                     <button data-collapse-toggle="mobile-menu" type="button" className="inline-flex justify-center items-center ml-3 text-gray-400 rounded-lg md:hidden hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:text-gray-400 dark:hover:text-white dark:focus:ring-gray-500" aria-controls="mobile-menu-2" aria-expanded="false">
                         <span className="sr-only">Open main menu</span>
-                        <svg className="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+                        <svg className="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"></path></svg>
                     </button>
                     <div className="hidden w-full md:block md:w-auto" id="mobile-menu">
                         <ul className="flex flex-col p-4 mt-4 bg-gray-50 rounded-lg border border-gray-100 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">

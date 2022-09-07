@@ -1,12 +1,30 @@
 import { useState, useEffect, Fragment } from "react";
 import { useRecoilState } from "recoil";
 import { openDeleteFolderModal } from "../../../recoil/openDeleteFolderModal";
-import { todoItemSelect } from "../../../recoil/todoItemSelect";
 import { Transition } from '@headlessui/react';
 import { useTimeoutFn } from 'react-use';
 
+interface Folder {
+    id: number,
+    name: string,
+    createDate: string,
+    todoItemArray: []
+};
 
-function DeleteFolderModal(props) {
+interface Todo {
+    id: number,
+    label: string,
+    detail: string,
+    createDate: string,
+    state: string,
+    folderId: number,
+    history: {
+        historyId: number,
+        updateDate: string
+    }[]
+};
+
+function DeleteFolderModal(props: Todo) {
 
     let [isShowing, setIsShowing] = useState(false);
     let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
@@ -29,11 +47,12 @@ function DeleteFolderModal(props) {
             onCancelClick();
         }
         else {
-            var arrayTempFolder = [];
+            var arrayTempFolder: [];
+            // @ts-ignore
             var folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
             arrayTempFolder = folderListStorage;
 
-            folderListStorage.map((folder, index) => {
+            folderListStorage.map((folder: Folder, index: number) => {
                 if (folder.id == folderId) {
                     arrayTempFolder.splice(index, 1);
                 }
@@ -50,25 +69,27 @@ function DeleteFolderModal(props) {
     }
 
     useEffect(() => {
+        // @ts-ignore
         const folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
 
-        setFolderSelect(folderListStorage.filter((folder) => {
+        setFolderSelect(folderListStorage.filter((folder: Folder) => {
             return folder.id == folderId;
         }));
     }, [folderId]);
 
     useEffect(() => {
         if (folderId >= 0) {
+            // @ts-ignore
             const todoListStorage = JSON.parse(localStorage.getItem("todoList")) || [];
 
-            setTodoItemList(todoListStorage.filter((todo) => {
+            setTodoItemList(todoListStorage.filter((todo : Todo) => {
                 return todo.folderId == folderId;
             }));
         }
     })
 
     useEffect(() => {
-        let modal = document.getElementById("deleteFolderModal");
+        let modal = document.getElementById("deleteFolderModal") as HTMLFormElement;
         if (deleteFolderModal) {
             modal.classList.remove("hidden");
             setIsShowing(true);
@@ -83,7 +104,7 @@ function DeleteFolderModal(props) {
     return (
         <>
             {/*Modal*/}
-            <div id="deleteFolderModal" tabindex="-1" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full flex justify-center items-center inset-0 bg-gray-200 bg-opacity-60 transition-opacity">
+            <div id="deleteFolderModal" tabIndex={-1} className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full flex justify-center items-center inset-0 bg-gray-200 bg-opacity-60 transition-opacity">
                 <div className="relative p-4 w-full max-w-md h-full md:h-auto">
                     <Transition
                         as={Fragment}
