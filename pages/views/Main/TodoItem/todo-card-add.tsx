@@ -1,7 +1,6 @@
-import { useState } from "react";
 import { useRecoilState } from "recoil";
-import { openAddTodoModal } from "../../../recoil/openAddTodoModal";
-import AddTodoModal from "../Modal/AddTodoModal";
+import { openAddTodoModal } from "../../../../Recoil/open-add-todo-modal";
+import AddTodoModal from "../Modal/add-todo-modal";
 
 function TodoCardAdd() {
 

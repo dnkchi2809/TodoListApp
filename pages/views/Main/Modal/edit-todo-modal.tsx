@@ -1,13 +1,13 @@
 import { useState, useEffect, Fragment } from "react";
 import { useRecoilState } from "recoil";
-import { openEditTodoModal } from "../../../recoil/openEditTodoModal";
-import { todoItemSelect } from "../../../recoil/todoItemSelect";
+import { openEditTodoModal } from "../../../../Recoil/open-edit-todo-modal";
+import { todoItemSelect } from "../../../../Recoil/todo-item-select";
 import { Transition } from '@headlessui/react';
 import { useTimeoutFn } from 'react-use';
-import FolderSelect from "../../Folders/FolderItem/FolderSelect";
-import { selectFolder } from "../../../recoil/selectFolder";
-import { selectStateOfItem } from "../../../recoil/selectStateOfItem";
-import TodoStateOfItem from "../TodoItem/TodoStateOfItem";
+import FolderSelect from "../../Folders/FolderItem/folder-select";
+import { selectFolder } from "../../../../Recoil/select-folder";
+import { selectStateOfItem } from "../../../../Recoil/select-state-of-item";
+import TodoStateOfItem from "../TodoItem/todo-state-of-item";
 
 interface Todo {
     id: number,

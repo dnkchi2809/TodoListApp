@@ -2,12 +2,13 @@ import { Fragment, useEffect, useState } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 import { useRecoilState } from 'recoil';
-import { openEditTodoModal } from '../../../recoil/openEditTodoModal';
-import { selectStateOfItem } from '../../../recoil/selectStateOfItem';
+import { openEditTodoModal } from '../../../../Recoil/open-edit-todo-modal';
+import { selectStateOfItem } from '../../../../Recoil/select-state-of-item';
 
 const state = [
     { name: 'Todo' },
     { name: 'In progess' },
+    
     { name: 'Pending' },
     { name: 'Done' }
 ]

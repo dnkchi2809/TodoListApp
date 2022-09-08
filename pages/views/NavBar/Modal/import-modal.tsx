@@ -2,9 +2,9 @@ import { useState, useEffect, Fragment } from "react";
 import { useRecoilState } from "recoil";
 import { Transition } from '@headlessui/react';
 import { useTimeoutFn } from 'react-use';
-import { openImportModal } from "../../../recoil/openImportModal";
-import { ImportTodoFile } from "../ImportTodoFile";
-import { ImportFolderFile } from "../ImportFolderFile";
+import { openImportModal } from "../../../../Recoil/open-import-modal";
+import { ImportTodoFile } from "../import-todo-file";
+import { ImportFolderFile } from "../import-folder-file";
 
 function ImportModal() {
     let [isShowing, setIsShowing] = useState(false);

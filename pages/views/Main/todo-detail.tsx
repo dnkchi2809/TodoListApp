@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { selectFolder } from "../../recoil/selectFolder";
-import FolderSelect from "../Folders/FolderItem/FolderSelect";
+import { selectFolder } from "../../../Recoil/select-folder";
+import FolderSelect from "../Folders/FolderItem/folder-select";
 import { useRecoilState } from "recoil";
-import { selectStateOfItem } from "../../recoil/selectStateOfItem";
-import TodoStateOfItem from "./TodoItem/TodoStateOfItem";
-import { useRouter } from "next/router";
+import { selectStateOfItem } from "../../../Recoil/select-state-of-item";
+import TodoStateOfItem from "./TodoItem/todo-state-of-item";
 
 interface Todo {
     id: number,

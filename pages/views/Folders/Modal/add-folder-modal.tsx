@@ -2,7 +2,7 @@ import { useState, useEffect, Fragment } from "react";
 import { useRecoilState } from "recoil";
 import { Transition } from '@headlessui/react';
 import { useTimeoutFn } from 'react-use';
-import { openAddFolderModal } from "../../../recoil/opennAddFolderModal";
+import { openAddFolderModal } from "../../../../Recoil/openn-add-folder-modal";
 
 interface Folder {
     id: number,

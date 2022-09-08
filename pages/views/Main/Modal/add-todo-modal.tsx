@@ -1,10 +1,10 @@
 import { useState, useEffect, Fragment } from "react";
 import { useRecoilState } from "recoil";
-import { openAddTodoModal } from "../../../recoil/openAddTodoModal";
+import { openAddTodoModal } from "../../../../Recoil/open-add-todo-modal";
 import { Transition } from '@headlessui/react';
 import { useTimeoutFn } from 'react-use';
-import FolderSelect from "../../Folders/FolderItem/FolderSelect";
-import { selectFolder } from "../../../recoil/selectFolder";
+import FolderSelect from "../../Folders/FolderItem/folder-select";
+import { selectFolder } from "../../../../Recoil/select-folder";
 
 interface Todo {
     id: number,

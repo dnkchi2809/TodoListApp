@@ -1,13 +1,13 @@
 import { useRouter } from "next/router";
 import { useEffect, useState, Fragment } from "react";
 import { useRecoilState } from "recoil";
-import { openDeleteTodoModal } from "../../../recoil/openDeleteTodoModal";
-import { openEditTodoModal } from "../../../recoil/openEditTodoModal";
-import { selectAllItems } from "../../../recoil/selectAllItems";
-import { selectArrayItems } from "../../../recoil/selectManyItems";
-import { todoItemSelect } from "../../../recoil/todoItemSelect";
-import DeleteTodoModal from "../Modal/DeleteTodoModal";
-import EditTodoModal from "../Modal/EditTodoModal";
+import { openDeleteTodoModal } from "../../../../Recoil/open-delete-todo-modal";
+import { openEditTodoModal } from "../../../../Recoil/open-edit-todo-modal";
+import { selectAllItems } from "../../../../Recoil/select-allI-iems";
+import { selectArrayItems } from "../../../../Recoil/select-many-items";
+import { todoItemSelect } from "../../../../Recoil/todo-item-select";
+import DeleteTodoModal from "../Modal/delete-todo-modal";
+import EditTodoModal from "../Modal/edit-todo-modal";
 import { Transition } from '@headlessui/react';
 import { useTimeoutFn } from 'react-use';
 

@@ -1,13 +1,13 @@
 import { useEffect, useState, Fragment } from "react";
 import { useRecoilState } from "recoil";
-import { selectAllItems } from "../../recoil/selectAllItems";
-import { selectArrayItems } from "../../recoil/selectManyItems";
-import TodoCard from "./TodoItem/TodoCard";
-import TodoCardAdd from "./TodoItem/TodoCardAdd";
-import TodoState from "./TodoItem/TodoState";
+import { selectAllItems } from "../../../Recoil/select-allI-iems";
+import { selectArrayItems } from "../../../Recoil/select-many-items";
+import TodoCard from "./TodoItem/todo-card";
+import TodoCardAdd from "./TodoItem/todo-card-add";
+import TodoState from "./TodoItem/todo-state";
 import { Transition } from '@headlessui/react';
 import { useTimeoutFn } from 'react-use';
-import { selectState } from "../../recoil/selectState";
+import { selectState } from "../../../Recoil/select-state";
 
 interface Todo {
     id: number,

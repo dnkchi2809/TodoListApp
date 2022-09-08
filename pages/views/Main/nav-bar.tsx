@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { openImportModal } from "../../recoil/openImportModal";
-import { selectAllFolders } from "../../recoil/selectAllFolders";
-import { selectAllItems } from "../../recoil/selectAllItems";
-import { selectArrayFolders } from "../../recoil/selectArrayFolders";
-import { selectArrayItems } from "../../recoil/selectManyItems";
-import { ExportFile } from "../NavBar/ExportTodoFile";
-import ImportModal from "../NavBar/Modal/ImportModal";
+import { openImportModal } from "../../../Recoil/open-import-modal";
+import { selectAllFolders } from "../../../Recoil/select-all-folders";
+import { selectAllItems } from "../../../Recoil/select-allI-iems";
+import { selectArrayFolders } from "../../../Recoil/select-array-folders";
+import { selectArrayItems } from "../../../Recoil/select-many-items";
+import { ExportFile } from "../NavBar/export-todo-file";
+import ImportModal from "../NavBar/Modal/import-modal";
 
 interface ItemData {
     id : number,

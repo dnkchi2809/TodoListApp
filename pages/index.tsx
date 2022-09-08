@@ -1,6 +1,6 @@
 import Head from 'next/head'
-import MainBody from './views/Main/MainBody'
-import NavBar from './views/Main/NavBar'
+import MainBody from './views/Main/main-body'
+import NavBar from './views/Main/nav-bar'
 
 
 export default function Home() {

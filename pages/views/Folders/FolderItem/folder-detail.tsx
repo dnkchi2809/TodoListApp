@@ -1,15 +1,15 @@
 import { useEffect, useState, Fragment } from "react";
 import { Transition } from '@headlessui/react';
 import { useTimeoutFn } from 'react-use';
-import TodoCardAdd from "../../Main/TodoItem/TodoCardAdd";
-import TodoCard from "../../Main/TodoItem/TodoCard";
+import TodoCardAdd from "../../Main/TodoItem/todo-card-add";
+import TodoCard from "../../Main/TodoItem/todo-card";
 import { useRecoilState } from "recoil";
-import { openDeleteFolderModal } from "../../../recoil/openDeleteFolderModal";
-import DeleteFolderModal from "../Modal/DeleteFolderModal";
-import { selectAllItems } from "../../../recoil/selectAllItems";
-import { selectArrayItems } from "../../../recoil/selectManyItems";
-import { selectState } from "../../../recoil/selectState";
-import TodoState from "../../Main/TodoItem/TodoState";
+import { openDeleteFolderModal } from "../../../../Recoil/open-delete-folder-modal";
+import DeleteFolderModal from "../Modal/delete-folder-modal";
+import { selectAllItems } from "../../../../Recoil/select-allI-iems";
+import { selectArrayItems } from "../../../../Recoil/select-many-items";
+import { selectState } from "../../../../Recoil/select-state";
+import TodoState from "../../Main/TodoItem/todo-state";
 
 interface Todo {
     id: number,
