@@ -1,25 +1,29 @@
 interface DataItem {
     id: number,
     name: string,
-    createDate : string,
-    todoItemArray : []
+    createDate: string,
+    todoItemArray: []
 }
 
 function onChange(event: any) {
-    var reader = new FileReader();
+    let reader = new FileReader();
     reader.onload = onReaderLoad;
     reader.readAsText(event.target.files[0]);
 }
 
 function onReaderLoad(event: any) {
-    var obj = JSON.parse(event.target.result);
-    addDataToStorage(obj);
+    try {
+        let obj = JSON.parse(event.target.result);
+        addDataToStorage(obj);
+    } catch (err) {
+        alert("File input invalid")
+    }
 }
 
 function addDataToStorage(data: []) {
-    var arrayTempFolder: [DataItem];
+    let arrayTempFolder: [DataItem];
     // @ts-ignore
-    var folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
+    let folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
     arrayTempFolder = folderListStorage;
 
     data.map((dataItem: DataItem, index) => {
@@ -53,7 +57,7 @@ function addDataToStorage(data: []) {
     }
 }
 
-const validateNewFolderItem = (paramItem : DataItem, paramIndex : number) => {
+const validateNewFolderItem = (paramItem: DataItem, paramIndex: number) => {
     if (paramItem.name == "") {
         alert("Folder name index " + paramIndex + " is invalid");
         return false
@@ -64,6 +68,7 @@ const validateNewFolderItem = (paramItem : DataItem, paramIndex : number) => {
 export const ImportFolderFile = () => {
     let linkElement = document.createElement('input');
     linkElement.setAttribute('type', "file");
+    linkElement.setAttribute('accept', '.json');
     linkElement.click();
     linkElement.addEventListener('change', onChange);
 }

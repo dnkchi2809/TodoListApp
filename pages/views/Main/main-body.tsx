@@ -1,4 +1,4 @@
-import { useEffect, useState, Fragment } from "react";
+import { useEffect, useState, Fragment, useRef } from "react";
 import { useRecoilState } from "recoil";
 import { selectAllItems } from "../../../Recoil/select-allI-iems";
 import { selectArrayItems } from "../../../Recoil/select-many-items";
@@ -26,11 +26,15 @@ function MainBody() {
     const [todoListStorage, setTodoListStorage] = useState([]);
     const [selectAll, setSelectAll] = useRecoilState(selectAllItems);
     const [arrayItems, setArrayItems] = useRecoilState(selectArrayItems as any);
-
+    
     const [selectedState, setSelectedState] = useRecoilState(selectState);
 
     let [isShowing, setIsShowing] = useState(false);
     let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
+
+    const [inputSelectAll, setInputSelectAll] = useState(false);
+
+    const selectAllInput = useRef<HTMLInputElement>(null);
 
     const limit = 10;
 
@@ -41,18 +45,17 @@ function MainBody() {
     const [rows, setRows] = useState([]);
 
     const onSelectAllClick = () => {
-        let selectAllButton = document.getElementById("idSelectAll") as HTMLFormElement;
-        if (selectAllButton.checked) {
+        setInputSelectAll(!inputSelectAll);
+        if (selectAllInput.current?.checked) {
             setSelectAll(true);
-        }
-        else {
+        } else {
             setSelectAll(false);
             setArrayItems([]);
-        }
+        };
     };
 
     const onWindowWheel = (event: any) => {
-        var y = event.deltaY;
+        let y = event.deltaY;
         if (y > 0) {
             setPage(page + 1);
         } else {
@@ -75,8 +78,7 @@ function MainBody() {
             setArrayItems(newArrayItems);
         }
         else {
-            let idSelectAll = document.getElementById("idSelectAll") as HTMLFormElement;
-            idSelectAll.checked = false;
+            setInputSelectAll(false);
         }
     }, [selectAll]);
 
@@ -126,7 +128,7 @@ function MainBody() {
             </div>
             <div className="flex padding-class">
                 <div className="w-1/2 flex items-center">
-                    <input id="idSelectAll" type="checkbox" onClick={onSelectAllClick} className="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" /> &nbsp; Select All
+                    <input ref={selectAllInput} id="idSelectAll" checked={inputSelectAll} type="checkbox" onChange={onSelectAllClick} className="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" /> &nbsp; Select All
                 </div>
                 <div className="w-1/2 flex justify-end">
                     <div className="w-14">
@@ -151,19 +153,16 @@ function MainBody() {
                             ?
                             rows.map((todoItem: Todo, index) => {
                                 return (
-                                    <div className="col-todo-list" key={"todoCardItem" + index}>
-                                        <TodoCard {...todoItem} />
-                                    </div>
+                                    <>
+                                        <div className="col-todo-list" key={"todoCardItem" + index}>
+                                            <TodoCard {...todoItem} />
+                                        </div>
+                                    </>
                                 )
                             })
                             :
                             null
                     }
-
-                    <div className="col-todo-list">
-
-                    </div>
-
                 </div>
             </Transition>
         </div>

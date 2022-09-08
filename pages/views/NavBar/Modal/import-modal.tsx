@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment, useRef } from "react";
 import { useRecoilState } from "recoil";
 import { Transition } from '@headlessui/react';
 import { useTimeoutFn } from 'react-use';
@@ -12,7 +12,9 @@ function ImportModal() {
 
     const [importModal, setImportModal] = useRecoilState(openImportModal);
 
-    const onCancelClick = () => {
+    const idImportModal = useRef<HTMLDivElement>(null);
+
+    function onCancelClick() {
         setImportModal(false);
     }
 
@@ -25,22 +27,21 @@ function ImportModal() {
     }
 
     useEffect(() => {
-        let modal = document.getElementById("idImportModal") as HTMLFormElement;
         if (importModal) {
-            modal.classList.remove("hidden");
+            idImportModal.current?.classList.remove("hidden")
             setIsShowing(true);
             resetIsShowing();
         }
         else {
             setIsShowing(false);
             resetIsShowing();
-            modal.classList.add("hidden");
+            idImportModal.current?.classList.add("hidden")
         }
     })
 
     return (
         <>
-            <div id="idImportModal" tabIndex={-1} aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full" onClick={onCancelClick}>
+            <div ref={idImportModal} tabIndex={-1} aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full" onClick={onCancelClick}>
                 <div className="fixed inset-0 bg-gray-200 bg-opacity-70 transition-opacity"></div>
 
                 <Transition

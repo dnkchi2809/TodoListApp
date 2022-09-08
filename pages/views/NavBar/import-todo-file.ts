@@ -19,22 +19,26 @@ interface Folder {
 };
 
 function onChange(event: any) {
-    var reader = new FileReader();
+    let reader = new FileReader();
     reader.onload = onReaderLoad;
     reader.readAsText(event.target.files[0]);
 }
 
 function onReaderLoad(event: any) {
-    var obj = JSON.parse(event.target.result);
-    addDataToStorage(obj);
+    try {
+        let obj = JSON.parse(event.target.result);
+        addDataToStorage(obj);
+    } catch (err) {
+        alert("File input invalid")
+    }
 }
 
 function addDataToStorage(data: []) {
-    var arrayTempTodo: DataItem[];
+    let arrayTempTodo: DataItem[];
     // @ts-ignore
-    var todoListStorage = JSON.parse(localStorage.getItem("todoList")) || [];
+    let todoListStorage = JSON.parse(localStorage.getItem("todoList")) || [];
 
-    var folderListStorage: [];
+    let folderListStorage: [];
     // @ts-ignore
     folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
     arrayTempTodo = todoListStorage;
@@ -86,7 +90,7 @@ function addDataToStorage(data: []) {
     if (arrayTempTodo.length > 0) {
         localStorage.setItem("todoList", JSON.stringify(arrayTempTodo));
         localStorage.setItem("folderList", JSON.stringify(folderListStorage));
-        alert("Successfull import!");       
+        alert("Successfull import!");
     }
 }
 
@@ -101,6 +105,7 @@ const validateNewTodoItem = (paramItem: DataItem, paramIndex: number) => {
 export const ImportTodoFile = () => {
     let linkElement = document.createElement('input');
     linkElement.setAttribute('type', "file");
+    linkElement.setAttribute('accept', '.json');
     linkElement.click();
     linkElement.addEventListener('change', onChange);
 }

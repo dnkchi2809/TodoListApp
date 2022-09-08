@@ -8,7 +8,7 @@ import { selectStateOfItem } from '../../../../Recoil/select-state-of-item';
 const state = [
     { name: 'Todo' },
     { name: 'In progess' },
-    
+
     { name: 'Pending' },
     { name: 'Done' }
 ]
@@ -64,7 +64,7 @@ function TodoStateOfItem() {
                                             }
                                             value={state}
                                         >
-                                            {({ selectedState } : any) => (
+                                            {({ selectedState }: any) => (
                                                 <>
                                                     <span
                                                         className={`block truncate ${selectedState ? 'font-medium' : 'font-normal'
@@ -87,8 +87,6 @@ function TodoStateOfItem() {
                     </Listbox>
                 </div>
             </div>
-
-
         </>
     )
 }

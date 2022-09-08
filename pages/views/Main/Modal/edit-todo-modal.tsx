@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment, useRef } from "react";
 import { useRecoilState } from "recoil";
 import { openEditTodoModal } from "../../../../Recoil/open-edit-todo-modal";
 import { todoItemSelect } from "../../../../Recoil/todo-item-select";
@@ -37,6 +37,8 @@ function EditTodoModal() {
 
     let [isShowing, setIsShowing] = useState(false);
     let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
+
+    const editModal = useRef<HTMLDivElement>(null);
 
     const [updateTodoItem, setUpdateTodoItem] = useState({
         id: 0,
@@ -194,22 +196,21 @@ function EditTodoModal() {
     }, [selectItem]);
 
     useEffect(() => {
-        let modal = document.getElementById("editModal") as HTMLFormElement;
         if (openModalEditTodo) {
-            modal.classList.remove("hidden");
+            editModal.current?.classList.remove("hidden");
             setIsShowing(true);
             resetIsShowing();
         }
         else {
             setIsShowing(false);
             resetIsShowing();
-            modal.classList.add("hidden");
+            editModal.current?.classList.add("hidden");
         }
     })
     return (
         <>
             {/*Modal*/}
-            <div id="editModal" tabIndex={-1} aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+            <div ref={editModal} tabIndex={-1} aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
                 <div className="fixed inset-0 bg-gray-200 bg-opacity-60 transition-opacity"></div>
                 <Transition
                     as={Fragment}

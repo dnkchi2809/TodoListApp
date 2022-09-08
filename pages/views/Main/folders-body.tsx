@@ -1,4 +1,4 @@
-import { useEffect, useState, Fragment } from "react";
+import { useEffect, useState, Fragment, useRef } from "react";
 import { Transition } from '@headlessui/react';
 import { useTimeoutFn } from 'react-use';
 import FolderCard from "../Folders/FolderItem/folder-card";
@@ -24,9 +24,13 @@ function FoldersBody() {
     let [isShowing, setIsShowing] = useState(false);
     let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
+    const [inputSelectAll, setInputSelectAll] = useState(false);
+
+    const idSelectAllFolders = useRef<HTMLInputElement>(null);
+
     const onSelectAllClick = () => {
-        let selectAllButton = document.getElementById("idSelectAllFolders") as HTMLFormElement;
-        if (selectAllButton.checked) {
+        setInputSelectAll(!inputSelectAll)
+        if (idSelectAllFolders.current?.checked) {
             setSelectAll(true);
         }
         else {
@@ -49,8 +53,7 @@ function FoldersBody() {
             setArrayFolder(newArrayFolders);
         }
         else {
-            let selectAllButton = document.getElementById("idSelectAllFolders") as HTMLFormElement;
-            selectAllButton.checked = false;
+            setInputSelectAll(false);
         }
     }, [selectAll]);
 
@@ -75,7 +78,7 @@ function FoldersBody() {
     return (
         <>
             <div>
-                <input id="idSelectAllFolders" type="checkbox" onClick={onSelectAllClick} className="ml-3 w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" /> Select All
+                <input ref={idSelectAllFolders} checked={inputSelectAll} type="checkbox" onChange={onSelectAllClick} className="ml-3 w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" /> Select All
             </div>
             <div className="flex flex-wrap mt-5">
                 {

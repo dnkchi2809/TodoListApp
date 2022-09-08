@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment, useRef } from "react";
 import { useRecoilState } from "recoil";
 import { openDeleteFolderModal } from "../../../../Recoil/open-delete-folder-modal";
 import { Transition } from '@headlessui/react';
@@ -37,6 +37,8 @@ function DeleteFolderModal(props: Todo) {
 
     const [deleteFolderModal, setDeleteFolderModal] = useRecoilState(openDeleteFolderModal);
 
+    const delFolderModal = useRef<HTMLDivElement>(null);
+
     const onCancelClick = () => {
         setDeleteFolderModal(false);
     };
@@ -47,9 +49,9 @@ function DeleteFolderModal(props: Todo) {
             onCancelClick();
         }
         else {
-            var arrayTempFolder: [];
+            let arrayTempFolder: [];
             // @ts-ignore
-            var folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
+            let folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
             arrayTempFolder = folderListStorage;
 
             folderListStorage.map((folder: Folder, index: number) => {
@@ -89,22 +91,21 @@ function DeleteFolderModal(props: Todo) {
     })
 
     useEffect(() => {
-        let modal = document.getElementById("deleteFolderModal") as HTMLFormElement;
         if (deleteFolderModal) {
-            modal.classList.remove("hidden");
+            delFolderModal.current?.classList.remove("hidden");
             setIsShowing(true);
             resetIsShowing();
         }
         else {
             setIsShowing(false);
             resetIsShowing();
-            modal.classList.add("hidden");
+            delFolderModal.current?.classList.add("hidden");
         }
     })
     return (
         <>
             {/*Modal*/}
-            <div id="deleteFolderModal" tabIndex={-1} className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full flex justify-center items-center inset-0 bg-gray-200 bg-opacity-60 transition-opacity">
+            <div ref={delFolderModal} tabIndex={-1} className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full flex justify-center items-center inset-0 bg-gray-200 bg-opacity-60 transition-opacity">
                 <div className="relative p-4 w-full max-w-md h-full md:h-auto">
                     <Transition
                         as={Fragment}

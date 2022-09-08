@@ -1,4 +1,4 @@
-import { useEffect, useState, Fragment } from "react";
+import { useEffect, useState, Fragment, useRef } from "react";
 import { Transition } from '@headlessui/react';
 import { useTimeoutFn } from 'react-use';
 import TodoCardAdd from "../../Main/TodoItem/todo-card-add";
@@ -53,6 +53,10 @@ function FolderDetail(props: Todo) {
 
     const [deleteFolderModal, setDeleteFolderModal] = useRecoilState(openDeleteFolderModal);
 
+    const [inputSelectAll, setInputSelectAll] = useState(false);
+
+    const idSelectAllTodoOfFolder = useRef<HTMLInputElement>(null);
+
     const onChangeFolderName = (event: any) => {
         if (event.target.value !== "") {
             let arrayTempFolder = [];
@@ -78,8 +82,8 @@ function FolderDetail(props: Todo) {
     };
 
     const onSelectAllClick = () => {
-        let selectAllButton = document.getElementById("idSelectAllTodoOfFolder") as HTMLFormElement;
-        if (selectAllButton.checked) {
+        setInputSelectAll(!inputSelectAll);
+        if (idSelectAllTodoOfFolder.current?.checked) {
             setSelectAll(true);
         }
         else {
@@ -102,8 +106,7 @@ function FolderDetail(props: Todo) {
             setArrayItems(newArrayItems);
         }
         else {
-            let selectAllButton = document.getElementById("idSelectAllTodoOfFolder") as HTMLFormElement;
-            selectAllButton.checked = false;
+            setInputSelectAll(false);
         }
     }, [selectAll]);
 
@@ -150,7 +153,7 @@ function FolderDetail(props: Todo) {
                 </div>
                 <div className="flex items-center">
                     <div className="w-1/2">
-                        <input id="idSelectAllTodoOfFolder" type="checkbox" onClick={onSelectAllClick} className="ml-5 w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" /> Select All
+                        <input ref={idSelectAllTodoOfFolder} checked={inputSelectAll} type="checkbox" onChange={onSelectAllClick} className="ml-5 w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" /> Select All
                     </div>
                     <div className="w-1/2">
                         <TodoState />

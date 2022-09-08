@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment, useRef } from "react";
 import { useRecoilState } from "recoil";
 import { openDeleteTodoModal } from "../../../../Recoil/open-delete-todo-modal";
 import { todoItemSelect } from "../../../../Recoil/todo-item-select";
@@ -32,6 +32,8 @@ function DeleteTodoModal() {
     let [isShowing, setIsShowing] = useState(false);
     let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
+    const deleteModal = useRef<HTMLDivElement>(null);
+
     const onCancelClick = () => {
         setOpenModalDeleteTodo(false);
         setSelectItem({
@@ -49,12 +51,12 @@ function DeleteTodoModal() {
     }
 
     const onConfirmDeleteClick = () => {
-        var arrayTempTodo: [];
+        let arrayTempTodo: [];
         // @ts-ignore
-        var todoListStorage = JSON.parse(localStorage.getItem("todoList")) || [];
+        let todoListStorage = JSON.parse(localStorage.getItem("todoList")) || [];
         arrayTempTodo = todoListStorage;
         // @ts-ignore
-        var folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
+        let folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
 
         folderListStorage.map((folder: Folder) => {
             if (folder.id == selectItem.folderId) {
@@ -79,22 +81,21 @@ function DeleteTodoModal() {
     };
 
     useEffect(() => {
-        let modal = document.getElementById("deleteModal") as HTMLFormElement;
         if (openModalDeleteTodo) {
-            modal.classList.remove("hidden");
+            deleteModal.current?.classList.remove("hidden");
             setIsShowing(true);
             resetIsShowing();
         }
         else {
             setIsShowing(false);
             resetIsShowing();
-            modal.classList.add("hidden");
+            deleteModal.current?.classList.add("hidden");
         }
     })
     return (
         <>
             {/*Modal*/}
-            <div id="deleteModal" tabIndex={-1} className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full flex justify-center items-center inset-0 bg-gray-200 bg-opacity-60 transition-opacity">
+            <div ref={deleteModal} tabIndex={-1} className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full flex justify-center items-center inset-0 bg-gray-200 bg-opacity-60 transition-opacity">
                 <div className="relative p-4 w-full max-w-md h-full md:h-auto">
                     <Transition
                         as={Fragment}

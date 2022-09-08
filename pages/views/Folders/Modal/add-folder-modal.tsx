@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment, useRef } from "react";
 import { useRecoilState } from "recoil";
 import { Transition } from '@headlessui/react';
 import { useTimeoutFn } from 'react-use';
@@ -38,6 +38,8 @@ function AddFolderModal() {
 
     const [openModalAddFolder, setOpenModalAddFolder] = useRecoilState(openAddFolderModal);
 
+    const addFolderModal = useRef<HTMLDivElement>(null);
+
     const onChangeFolderName = (event : any) => {
         newFolderItem.name = event.target.value;
     }
@@ -54,9 +56,9 @@ function AddFolderModal() {
         // const validFolder = validateFolder(newFolderItem);
         const validFolder = true;
 
-        var arrayTempFolder = [];
+        let arrayTempFolder = [];
         // @ts-ignore
-        var folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
+        let folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
         arrayTempFolder = folderListStorage;
 
         if (validFolder) {
@@ -84,22 +86,21 @@ function AddFolderModal() {
     }
 
     useEffect(() => {
-        let modal = document.getElementById("addFolderModal") as HTMLFormElement;
         if (openModalAddFolder) {
-            modal.classList.remove("hidden");
+            addFolderModal.current?.classList.remove("hidden");
             setIsShowing(true);
             resetIsShowing();
         }
         else {
             setIsShowing(false);
             resetIsShowing();
-            modal.classList.add("hidden");
+            addFolderModal.current?.classList.add("hidden");
         }
     })
 
     return (
         <>
-            <div id="addFolderModal" tabIndex={-1} aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+            <div ref={addFolderModal} tabIndex={-1} aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
                 <div className="fixed inset-0 bg-gray-200 bg-opacity-70 transition-opacity"></div>
 
                 <Transition

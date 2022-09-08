@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment, useRef } from "react";
 import { useRecoilState } from "recoil";
 import { openAddTodoModal } from "../../../../Recoil/open-add-todo-modal";
 import { Transition } from '@headlessui/react';
@@ -48,11 +48,13 @@ function AddTodoModal() {
 
     const [openModalAddTodo, setOpenModalAddTodo] = useRecoilState(openAddTodoModal);
 
+    const addModal = useRef<HTMLDivElement>(null);
+    const idLabel = useRef<HTMLInputElement>(null);
+    const idDetail = useRef<HTMLTextAreaElement>(null);
+
     const clearData = () => {
-        let idLabel = document.getElementById("idLabel") as HTMLFormElement;
-        idLabel.value = "";
-        let idDetail = document.getElementById("idDetail") as HTMLFormElement;
-        idDetail.value = "";
+        idLabel.current!.value = "";
+        idDetail.current!.value = "";
     }
 
     const onCancelClick = () => {
@@ -76,12 +78,12 @@ function AddTodoModal() {
     const onSaveNewTodo = () => {
         const validTodo = validateNewTodoItem(newTodoItem);
 
-        var arrayTempTodo = [];
+        let arrayTempTodo = [];
         // @ts-ignore
-        var todoListStorage = JSON.parse(localStorage.getItem("todoList")) || [];
+        let todoListStorage = JSON.parse(localStorage.getItem("todoList")) || [];
         arrayTempTodo = todoListStorage;
         // @ts-ignore
-        var folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
+        let folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
 
         if (validTodo) {
             if (todoListStorage.length <= 0) {
@@ -118,22 +120,21 @@ function AddTodoModal() {
     useEffect(() => {
         newTodoItem.folderId = selectedFolder.id;
 
-        let modal = document.getElementById("addModal") as HTMLFormElement;
         if (openModalAddTodo) {
-            modal.classList.remove("hidden");
+            addModal.current?.classList.remove("hidden");
             setIsShowing(true);
             resetIsShowing();
         }
         else {
             setIsShowing(false);
             resetIsShowing();
-            modal.classList.add("hidden");
+            addModal.current?.classList.add("hidden");
         }
     })
     return (
         <>
             {/*Modal*/}
-            <div id="addModal" tabIndex={-1} aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
+            <div ref={addModal} tabIndex={-1} aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
                 <div className="fixed inset-0 bg-gray-200 bg-opacity-70 transition-opacity"></div>
 
                 <Transition
@@ -151,7 +152,7 @@ function AddTodoModal() {
                             <div className="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
                                 <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                     <div className="sm:flex sm:items-start">
-                                        <input id="idLabel" placeholder="To Do Label" className="w-full mb-3 text-lg font-medium" onInput={onInputLabelTodo}></input>
+                                        <input ref={idLabel} placeholder="To Do Label" className="w-full mb-3 text-lg font-medium" onInput={onInputLabelTodo}></input>
                                     </div>
                                     <FolderSelect />
                                     <div className="sm:flex sm:items-start">
@@ -211,7 +212,7 @@ function AddTodoModal() {
                                                 </div>
                                                 <div className="py-2 px-4 bg-white rounded-b-lg dark:bg-gray-800">
                                                     <label htmlFor="idDetail" className="sr-only">Publish post</label>
-                                                    <textarea id="idDetail" rows={8} className="block px-0 w-full text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write an article..." onInput={onInputDetailTodo}></textarea>
+                                                    <textarea ref={idDetail} rows={8} className="block px-0 w-full text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400" placeholder="Write an article..." onInput={onInputDetailTodo}></textarea>
                                                 </div>
                                             </div>
                                         </form>
