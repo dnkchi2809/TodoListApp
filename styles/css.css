@@ -16,7 +16,7 @@ body::-webkit-scrollbar {
 }
 
 .folder-card {
-    height: 130%;
+    height: 100%;
     background-image: url(../public/image/folder.png);
     background-size: auto 100%;
     background-repeat: no-repeat;

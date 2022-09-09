@@ -60,11 +60,11 @@ function ImportModal() {
                                 <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                                     <div className="flex items-center justify-center">
                                         <div className="w-1/2 p-5" onClick={onImportTodoClick} >
-                                            <div id="image-note" className="image-import px-3 py-4 w-full h-40 flex justify-center items-center text-white"></div>
+                                            <div id="image-note" className="image-import px-3 py-4 w-full h-40 flex justify-center items-center text-white" title="Import Todo"></div>
                                             <div className="text-center">Import Todo</div>
                                         </div>
                                         <div className="w-1/2" onClick={onImportFolderClick}>
-                                            <div id="image-folder" className="image-import px-3 py-4 w-full h-40 flex justify-center items-center text-white"></div>
+                                            <div id="image-folder" className="image-import px-3 py-4 w-full h-40 flex justify-center items-center text-white" title="Import Folder"></div>
                                             <div className="text-center">Import Folders</div>
                                         </div>
                                     </div>
