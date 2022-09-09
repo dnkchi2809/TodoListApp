@@ -28,7 +28,7 @@ function TodoStateOfItem() {
         else {
             setStyle(0);
         }
-    })
+    }, [openModalEditTodo])
 
     return (
         <>

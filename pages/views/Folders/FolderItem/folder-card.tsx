@@ -32,6 +32,7 @@ function FolderCard(props: Folder) {
     const onSelectFolderClick = () => {
 
         setSelectAll(false);
+        
         setCheckedInput(!checkedInput);
 
         if (inputSelectFolder.current?.checked) {
@@ -55,7 +56,7 @@ function FolderCard(props: Folder) {
         else if (arrayFolder.length == 0) {
             setCheckedInput(false);
         }
-    }, [selectAll])
+    }, [arrayFolder.length, selectAll])
 
     return (
         <>

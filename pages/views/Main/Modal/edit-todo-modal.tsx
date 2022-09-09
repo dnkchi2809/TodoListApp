@@ -165,7 +165,7 @@ function EditTodoModal() {
                 name: selectItem.state
             });
         }
-    }, [selectItem]);
+    }, [selectItem, setSelectedState]);
 
     useEffect(() => {
         // @ts-ignore
@@ -178,7 +178,7 @@ function EditTodoModal() {
                 }
             });
         }
-    }, [selectItem]);
+    }, [selectItem, setSelectedFolder]);
 
     useEffect(() => {
         if (selectItem !== null) {
@@ -193,6 +193,7 @@ function EditTodoModal() {
                 history: selectItem.history
             });
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectItem]);
 
     useEffect(() => {
@@ -206,7 +207,7 @@ function EditTodoModal() {
             resetIsShowing();
             editModal.current?.classList.add("hidden");
         }
-    })
+    }, [openModalEditTodo, resetIsShowing])
     return (
         <>
             {/*Modal*/}

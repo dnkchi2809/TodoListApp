@@ -8,6 +8,7 @@ import TodoState from "./TodoItem/todo-state";
 import { Transition } from '@headlessui/react';
 import { useTimeoutFn } from 'react-use';
 import { selectState } from "../../../Recoil/select-state";
+import { pageNavigate } from "../../../Recoil/page-navigate";
 
 interface Todo {
     id: number,
@@ -26,8 +27,10 @@ function MainBody() {
     const [todoListStorage, setTodoListStorage] = useState([]);
     const [selectAll, setSelectAll] = useRecoilState(selectAllItems);
     const [arrayItems, setArrayItems] = useRecoilState(selectArrayItems as any);
-    
+
     const [selectedState, setSelectedState] = useRecoilState(selectState);
+
+    const [selectedPage, setSelectedPage] = useRecoilState(pageNavigate);
 
     let [isShowing, setIsShowing] = useState(false);
     let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
@@ -49,25 +52,32 @@ function MainBody() {
         if (selectAllInput.current?.checked) {
             setSelectAll(true);
         } else {
-            setSelectAll(false);
             setArrayItems([]);
+            setSelectAll(false);
         };
     };
 
     const onWindowWheel = (event: any) => {
         let y = event.deltaY;
         if (y > 0) {
-            setPage(page + 1);
+            if(page < totalPage){
+                setPage(page + 1);
+            }
         } else {
-            setPage(page - 1);
+            if (page > 1) {
+                setPage(page - 1);
+            }
         }
     }
 
+    useEffect(() => {
+        setSelectedPage("home");
+    })
 
     useEffect(() => {
         setIsShowing(false);
         resetIsShowing();
-    }, [page, selectedState]);
+    }, [page, resetIsShowing, selectedState]);
 
     useEffect(() => {
         if (selectAll) {
@@ -77,7 +87,10 @@ function MainBody() {
             })
             setArrayItems(newArrayItems);
         }
-        else {
+    }, [selectAll, setArrayItems, todoListStorage]);
+
+    useEffect(() => {
+        if (!selectAll) {
             setInputSelectAll(false);
         }
     }, [selectAll]);
@@ -108,15 +121,9 @@ function MainBody() {
             })
             setTodoListStorage(filterTodoState);
         }
-    }, [todoListStorage, selectAll, arrayItems]);
+    }, [todoListStorage, selectAll, arrayItems, selectedState.name]);
 
     useEffect(() => {
-        if (page > totalPage) {
-            setPage(totalPage);
-        }
-        else if (page < 1) {
-            setPage(1);
-        }
         setTotalPage(Math.ceil(todoListStorage.length / limit));
         setRows(todoListStorage.slice((page - 1) * limit, page * limit));
     }, [todoListStorage, page])

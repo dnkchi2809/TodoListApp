@@ -96,7 +96,7 @@ function AddFolderModal() {
             resetIsShowing();
             addFolderModal.current?.classList.add("hidden");
         }
-    })
+    }, [openModalAddFolder, resetIsShowing])
 
     return (
         <>

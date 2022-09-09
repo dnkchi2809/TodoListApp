@@ -37,7 +37,7 @@ function ImportModal() {
             resetIsShowing();
             idImportModal.current?.classList.add("hidden")
         }
-    })
+    }, [importModal, resetIsShowing])
 
     return (
         <>
@@ -58,8 +58,8 @@ function ImportModal() {
                         <div className="flex items-center sm:items-center justify-center min-h-full p-4 text-center sm:p-0">
                             <div className="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
                                 <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                                    <div className="flex items-center justify-center">
-                                        <div className="w-1/2 p-5" onClick={onImportTodoClick} >
+                                    <div className="flex items-center justify-center p-5">
+                                        <div className="w-1/2" onClick={onImportTodoClick} >
                                             <div id="image-note" className="image-import px-3 py-4 w-full h-40 flex justify-center items-center text-white" title="Import Todo"></div>
                                             <div className="text-center">Import Todo</div>
                                         </div>

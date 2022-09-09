@@ -95,7 +95,7 @@ function FolderDetail(props: Todo) {
     useEffect(() => {
         setIsShowing(false)
         resetIsShowing()
-    }, []);
+    }, [resetIsShowing]);
 
     useEffect(() => {
         if (selectAll) {
@@ -108,7 +108,7 @@ function FolderDetail(props: Todo) {
         else {
             setInputSelectAll(false);
         }
-    }, [selectAll]);
+    }, [selectAll, setArrayItems, todoItemList]);
 
     useEffect(() => {
         // @ts-ignore
@@ -138,7 +138,7 @@ function FolderDetail(props: Todo) {
                 setTodoItemList(filterTodoState);
             }
         }
-    });
+    }, [folderId, selectedState.name]);
 
     return (
         <>

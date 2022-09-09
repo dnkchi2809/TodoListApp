@@ -34,16 +34,14 @@ function TodoCard(props: Todo) {
 
     const [selectItem, setSelectItem] = useRecoilState(todoItemSelect as any);
     const [selectAll, setSelectAll] = useRecoilState(selectAllItems);
-    const [arrayItems, setArrayItems] = useRecoilState(selectArrayItems);    
-
-    const [labelValue, setLabelValue] = useState(props.label)
+    const [arrayItems, setArrayItems] = useRecoilState(selectArrayItems);  
 
     let [isShowing, setIsShowing] = useState(false);
     let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
     const [checkedSkeleton, setCheckedSkeleton] = useState(false);
 
-    const inputSelectTodo = useRef<HTMLInputElement>(null); 
+    const inputSelectTodo = useRef<HTMLInputElement>(null);
     const [checkedInput, setCheckedInput] = useState(false)
 
     const onEditTodoClick = () => {
@@ -87,25 +85,21 @@ function TodoCard(props: Todo) {
     useEffect(() => {
         setIsShowing(false);
         resetIsShowing();
-    }, []);
+    }, [resetIsShowing]);
 
     useEffect(() => {
         setCheckedSkeleton(!checkedSkeleton);
-        if(labelValue.length > 15){
-            setLabelValue(labelValue.substring(0,15) + "...");
-        }    
-    }, [isShowing])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isShowing]);
 
     useEffect(() => {
-        if (isShowing) {
-            if (selectAll) {
-                setCheckedInput(true);
-            }
-            else if (arrayItems.length == 0) {
-                setCheckedInput(false);
-            }
+        if (selectAll) {
+            setCheckedInput(true);
         }
-    }, [selectAll])
+        else if (arrayItems.length == 0) {
+            setCheckedInput(false);
+        }
+    }, [arrayItems.length, selectAll])
 
     return (
         <>
@@ -124,8 +118,8 @@ function TodoCard(props: Todo) {
                     >
                         <div className="px-3 py-4 w-full h-full bg-blue-200 rounded-lg border border-blue-200 shadow-xl dark:bg-blue-800 dark:border-blue-700">
                             <div className="mb-3 flex ">
-                                <div className="w-4/5" onClick={onSelectTodoItemClick}>
-                                    <p className="text-lg font-medium">{labelValue}</p>
+                                <div className="w-4/5" onClick={onSelectTodoItemClick} title="Double click to see detail">
+                                    <p className="text-lg font-medium">{props.label.length > 15 ? props.label.substring(0, 15) + "..." : props.label}</p>
                                 </div>
                                 <div className="w-1/5 flex justify-end">
                                     <input ref={inputSelectTodo} id={String(props.id)} type="checkbox" checked={checkedInput} value={props.id} onChange={onSelectManyItemClick} className="selectItemClass w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
