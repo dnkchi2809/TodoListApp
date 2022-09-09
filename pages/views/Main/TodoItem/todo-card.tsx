@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState, Fragment } from "react";
+import { useEffect, useState, Fragment, useRef } from "react";
 import { useRecoilState } from "recoil";
 import { openDeleteTodoModal } from "../../../../Recoil/open-delete-todo-modal";
 import { openEditTodoModal } from "../../../../Recoil/open-edit-todo-modal";
@@ -34,7 +34,7 @@ function TodoCard(props: Todo) {
 
     const [selectItem, setSelectItem] = useRecoilState(todoItemSelect as any);
     const [selectAll, setSelectAll] = useRecoilState(selectAllItems);
-    const [arrayItems, setArrayItems] = useRecoilState(selectArrayItems);
+    const [arrayItems, setArrayItems] = useRecoilState(selectArrayItems);    
 
     const [labelValue, setLabelValue] = useState(props.label)
 
@@ -42,6 +42,9 @@ function TodoCard(props: Todo) {
     let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
     const [checkedSkeleton, setCheckedSkeleton] = useState(false);
+
+    const inputSelectTodo = useRef<HTMLInputElement>(null); 
+    const [checkedInput, setCheckedInput] = useState(false)
 
     const onEditTodoClick = () => {
         setSelectItem(props);
@@ -65,17 +68,17 @@ function TodoCard(props: Todo) {
     const onSelectManyItemClick = () => {
         setSelectAll(false);
 
-        const item = document.getElementById(String(props.id)) as HTMLFormElement;
+        setCheckedInput(!checkedInput);
 
-        if (item.checked) {
+        if (inputSelectTodo.current?.checked) {
             let newArrayTodo = arrayItems;
-            newArrayTodo = [...arrayItems, Number(item.value)];
+            newArrayTodo = [...arrayItems, Number(inputSelectTodo.current?.value)];
             setArrayItems(newArrayTodo);
         }
         else {
             let newArrayItems = [];
             newArrayItems = arrayItems.filter((element) => {
-                return element !== item.value
+                return element !== Number(inputSelectTodo.current?.value)
             })
             setArrayItems(newArrayItems);
         }
@@ -95,12 +98,11 @@ function TodoCard(props: Todo) {
 
     useEffect(() => {
         if (isShowing) {
-            let item = document.getElementById(String(props.id)) as HTMLFormElement;
             if (selectAll) {
-                item.checked = true;
+                setCheckedInput(true);
             }
             else if (arrayItems.length == 0) {
-                item.checked = false;
+                setCheckedInput(false);
             }
         }
     }, [selectAll])
@@ -126,7 +128,7 @@ function TodoCard(props: Todo) {
                                     <p className="text-lg font-medium">{labelValue}</p>
                                 </div>
                                 <div className="w-1/5 flex justify-end">
-                                    <input id={String(props.id)} type="checkbox" value={props.id} onClick={onSelectManyItemClick} className="selectItemClass w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                    <input ref={inputSelectTodo} id={String(props.id)} type="checkbox" checked={checkedInput} value={props.id} onChange={onSelectManyItemClick} className="selectItemClass w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                 </div>
                             </div>
                             <div className="mb-3">
@@ -134,8 +136,8 @@ function TodoCard(props: Todo) {
                             </div>
                             <div className="flex">
                                 <div className="w-1/2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6" onClick={onEditTodoClick}>
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6" onClick={onEditTodoClick}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
                                     </svg>
                                 </div>
                                 <div className="w-1/2 flex justify-end">
