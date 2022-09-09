@@ -6,6 +6,7 @@ import FolderCardAdd from "../Folders/FolderItem/folder-card-add";
 import { selectArrayFolders } from "../../../Recoil/select-array-folders";
 import { selectAllFolders } from "../../../Recoil/select-all-folders";
 import { useRecoilState } from "recoil";
+import { pageNavigate } from "../../../Recoil/page-navigate";
 
 interface Folder {
     id: number,
@@ -24,6 +25,8 @@ function FoldersBody() {
     let [isShowing, setIsShowing] = useState(false);
     let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
+    const [selectedPage, setSelectedPage] = useRecoilState(pageNavigate);
+
     const [inputSelectAll, setInputSelectAll] = useState(false);
 
     const idSelectAllFolders = useRef<HTMLInputElement>(null);
@@ -40,22 +43,29 @@ function FoldersBody() {
     };
 
     useEffect(() => {
+        setSelectedPage("folder");
+    })
+
+    useEffect(() => {
         setIsShowing(false)
         resetIsShowing()
-    }, []);
+    }, [resetIsShowing]);
 
     useEffect(() => {
         if (selectAll) {
             let newArrayFolders : any[] = [];
             folderListStorage.map((folder : Folder) => {
-                newArrayFolders.push(String(folder.id));
+                newArrayFolders.push(Number(folder.id));
             })
             setArrayFolder(newArrayFolders);
         }
-        else {
+    }, [folderListStorage, selectAll, setArrayFolder]);
+
+    useEffect(() => {
+        if (!selectAll) {
             setInputSelectAll(false);
         }
-    }, [selectAll]);
+    }, [selectAll])
 
     useEffect(() => {
         // @ts-ignore

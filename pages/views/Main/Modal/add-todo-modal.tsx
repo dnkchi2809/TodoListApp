@@ -130,7 +130,7 @@ function AddTodoModal() {
             resetIsShowing();
             addModal.current?.classList.add("hidden");
         }
-    })
+    }, [newTodoItem, selectedFolder.id, openModalAddTodo, resetIsShowing])
     return (
         <>
             {/*Modal*/}

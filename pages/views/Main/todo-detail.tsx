@@ -169,7 +169,7 @@ function TodoDetail(props : any) {
                 name: todoItem.state
             });
         }
-    }, [todoItem]);
+    }, [setSelectedState, todoItem]);
 
     useEffect(() => {
         // @ts-ignore
@@ -182,7 +182,7 @@ function TodoDetail(props : any) {
                 }
             });
         }
-    }, [todoItem]);
+    }, [setSelectedFolder, todoItem]);
 
     useEffect(() => {
         if (todoItem !== null) {
@@ -197,6 +197,7 @@ function TodoDetail(props : any) {
                 history: todoItem.history
             })
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [todoItem])
 
     useEffect(() => {
