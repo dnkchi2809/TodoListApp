@@ -1,14 +1,12 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 import { useRecoilState } from 'recoil';
-import { openEditTodoModal } from '../../../../Recoil/open-edit-todo-modal';
 import { selectStateOfItem } from '../../../../Recoil/select-state-of-item';
 
 const state = [
     { name: 'Todo' },
     { name: 'In progess' },
-
     { name: 'Pending' },
     { name: 'Done' }
 ]
@@ -16,19 +14,6 @@ const state = [
 function TodoStateOfItem() {
 
     const [selectedState, setSelectedState] = useRecoilState(selectStateOfItem);
-
-    const [style, setStyle] = useState(0)
-
-    const [openModalEditTodo, setOpenModalEditTodo] = useRecoilState(openEditTodoModal);
-
-    useEffect(() => {
-        if (openModalEditTodo) {
-            setStyle(1);
-        }
-        else {
-            setStyle(0);
-        }
-    }, [openModalEditTodo])
 
     return (
         <>
@@ -64,7 +49,7 @@ function TodoStateOfItem() {
                                             }
                                             value={state}
                                         >
-                                            {({ selectedState }: any) => (
+                                            {(selectedState) => (
                                                 <>
                                                     <span
                                                         className={`block truncate ${selectedState ? 'font-medium' : 'font-normal'

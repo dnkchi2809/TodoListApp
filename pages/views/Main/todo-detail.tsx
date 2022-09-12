@@ -16,17 +16,20 @@ interface Todo {
         historyId: number,
         updateDate: string
     }[]
-};
+}
 
 interface Folder {
     id: number,
     name: string,
     createDate: string,
     todoItemArray: number[]
-};
+}
 
+interface ItemProps {
+    itemId : number
+}
 
-function TodoDetail(props : any) {
+function TodoDetail(props : ItemProps) {
     const itemId = props.itemId;
 
     const [todoItem, setTodoItem] = useState({
@@ -53,7 +56,10 @@ function TodoDetail(props : any) {
         state: selectedState.name,
         createDate: "",
         folderId: selectedFolder.id,
-        history: Array()
+        history: [{
+            historyId: 0,
+            updateDate: ""
+        }]
     })
 
     const [updateHistory, setUpdateHistory] = useState({
@@ -63,12 +69,12 @@ function TodoDetail(props : any) {
         updateDetail: ""
     });
 
-    const onChangeLabel = (event: any) => {
+    const onChangeLabel = (event: React.ChangeEvent<HTMLInputElement>) => {
         updateHistory.updateLabel = event.target.value;
         updateTodoItem.label = event.target.value;
     }
 
-    const onChangeTodoDetail = (event: any) => {
+    const onChangeTodoDetail = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         updateHistory.updateDetail = event.target.value;
         updateTodoItem.detail = event.target.value;
     }
@@ -81,7 +87,10 @@ function TodoDetail(props : any) {
             state: "",
             createDate: "",
             folderId: 0,
-            history: Array()
+            history: [{
+                historyId: 0,
+                updateDate: ""
+            }]
         });
 
         setUpdateHistory({
@@ -110,7 +119,7 @@ function TodoDetail(props : any) {
         updateHistory.updateDate = new Date().toISOString().slice(0, 10);
 
         //update history log
-        for (let item of updateTodoItem.history) {
+        for (const item of updateTodoItem.history) {
             if (item.historyId !== updateHistory.historyId) {
                 updateTodoItem.history = [...updateTodoItem.history, updateHistory];
                 break;
@@ -118,11 +127,10 @@ function TodoDetail(props : any) {
         }
 
         //save edit to storage
-        const validUpdateTodoItem = validateUpdateTodoItem(updateTodoItem);
+        const validUpdateTodoItem = validateUpdateTodoItem();
 
         if (validUpdateTodoItem) {
-            // @ts-ignore
-            const todoList = JSON.parse(localStorage.getItem("todoList"));
+            const todoList = JSON.parse(localStorage.getItem("todoList") || '[]');
             todoList.map((itemTodo: Todo, index: number) => {
                 if (itemTodo.id == updateTodoItem.id) {
                     todoList.splice(index, 1, updateTodoItem);
@@ -131,8 +139,7 @@ function TodoDetail(props : any) {
 
             localStorage.setItem("todoList", JSON.stringify(todoList));
 
-            // @ts-ignore
-            let folderListStorage = JSON.parse(localStorage.getItem("folderList"));
+            const folderListStorage = JSON.parse(localStorage.getItem("folderList") || '[]');
 
             folderListStorage.map((folder: Folder) => {
                 if (folder.id !== updateTodoItem.folderId) {
@@ -155,11 +162,7 @@ function TodoDetail(props : any) {
         }
     }
 
-    const validateUpdateTodoItem = (paramItem: Todo) => {
-        // if (paramItem.label == "") {
-        //     alert("Label is invalid");
-        //     return false
-        // }
+    const validateUpdateTodoItem = () => {
         return true;
     }
 
@@ -172,8 +175,7 @@ function TodoDetail(props : any) {
     }, [setSelectedState, todoItem]);
 
     useEffect(() => {
-        // @ts-ignore
-        let folderListStorage = JSON.parse(localStorage.getItem("folderList"));
+        const folderListStorage = JSON.parse(localStorage.getItem("folderList") || '[]');
 
         if (todoItem !== null) {
             folderListStorage.map((folder: Folder) => {
@@ -201,8 +203,7 @@ function TodoDetail(props : any) {
     }, [todoItem])
 
     useEffect(() => {
-        // @ts-ignore
-        const arrayTodoList = JSON.parse(localStorage.getItem("todoList"));
+        const arrayTodoList = JSON.parse(localStorage.getItem("todoList") || '[]');
         arrayTodoList.map((item: Todo) => {
             if (item.id == itemId) {
                 setTodoItem(item);

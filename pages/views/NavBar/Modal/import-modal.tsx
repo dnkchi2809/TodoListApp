@@ -7,8 +7,8 @@ import { ImportTodoFile } from "../import-todo-file";
 import { ImportFolderFile } from "../import-folder-file";
 
 function ImportModal() {
-    let [isShowing, setIsShowing] = useState(false);
-    let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
+    const [isShowing, setIsShowing] = useState(false);
+    const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
     const [importModal, setImportModal] = useRecoilState(openImportModal);
 

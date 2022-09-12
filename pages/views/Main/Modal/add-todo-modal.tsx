@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useState, useEffect, Fragment, useRef } from "react";
 import { useRecoilState } from "recoil";
 import { openAddTodoModal } from "../../../../Recoil/open-add-todo-modal";
@@ -17,23 +18,23 @@ interface Todo {
         historyId: number,
         updateDate: string
     }[]
-};
+}
 
 interface Folder {
     id: number,
     name: string,
     createDate: string,
     todoItemArray: number[]
-};
+}
 
 function AddTodoModal() {
 
-    let [isShowing, setIsShowing] = useState(false);
-    let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
+    const [isShowing, setIsShowing] = useState(false);
+    const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
     const [selectedFolder, setSelectedFolder] = useRecoilState(selectFolder);
 
-    const [newTodoItem, setNewTodoItem] = useState({
+    const [newTodoItem] = useState({
         id: 0,
         label: "",
         detail: "",
@@ -66,12 +67,12 @@ function AddTodoModal() {
         });
     }
 
-    const onInputLabelTodo = (event: any) => {
+    const onInputLabelTodo = (event: React.ChangeEvent<HTMLInputElement>) => {
         newTodoItem.label = event.target.value;
         newTodoItem.createDate = new Date().toISOString().slice(0, 10);
     }
 
-    const onInputDetailTodo = (event: any) => {
+    const onInputDetailTodo = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         newTodoItem.detail = event.target.value;
     }
 
@@ -79,11 +80,10 @@ function AddTodoModal() {
         const validTodo = validateNewTodoItem(newTodoItem);
 
         let arrayTempTodo = [];
-        // @ts-ignore
-        let todoListStorage = JSON.parse(localStorage.getItem("todoList")) || [];
+        const todoListStorage = JSON.parse(localStorage.getItem("todoList") || '[]');
         arrayTempTodo = todoListStorage;
-        // @ts-ignore
-        let folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
+
+        const folderListStorage = JSON.parse(localStorage.getItem("folderList") || '[]');
 
         if (validTodo) {
             if (todoListStorage.length <= 0) {

@@ -1,43 +1,26 @@
 import { useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import { openImportModal } from "../../../Recoil/open-import-modal";
-import { selectAllFolders } from "../../../Recoil/select-all-folders";
-import { selectAllItems } from "../../../Recoil/select-allI-iems";
 import { selectArrayFolders } from "../../../Recoil/select-array-folders";
 import { selectArrayItems } from "../../../Recoil/select-many-items";
 import { ExportFile } from "../NavBar/export-todo-file";
 import ImportModal from "../NavBar/Modal/import-modal";
 import Link from 'next/link';
-import { useRouter } from "next/router";
 import { pageNavigate } from "../../../Recoil/page-navigate";
 
-interface ItemData {
-    id: number,
-    label: string,
-    detail: string,
-    createDate: string,
-    state: string,
-    folderId: number,
-    history: [
-        {
-            historyId: number,
-            updateDate: string
-        }
-    ]
+interface itemSelect{
+    id : number
 }
 
 function NavBar() {
-    const [arrayItems, setArrayItems] = useRecoilState(selectArrayItems);
-    const [arrayFolder, setArrayFolder] = useRecoilState(selectArrayFolders);
+    const [arrayItems] = useRecoilState(selectArrayItems);
+    const [arrayFolder] = useRecoilState(selectArrayFolders);
 
-    const [selectAllItem, setSelectAllItem] = useRecoilState(selectAllItems);
-    const [selectAllFolder, setSelectAllFolder] = useRecoilState(selectAllFolders);
-
-    const [selectedPage, setSelectedPage] = useRecoilState(pageNavigate);
+    const [selectedPage] = useRecoilState(pageNavigate);
 
     const [dataType, setDataType] = useState(0);
 
-    const [importModal, setImportModal] = useRecoilState(openImportModal);
+    const [, setImportModal] = useRecoilState(openImportModal);
 
     const [allData, setAllData] = useState([]);
 
@@ -52,9 +35,9 @@ function NavBar() {
         window.location.href = "/folders";
     }
 
-    let dataSelected: any[] = [];
+    const dataSelected: itemSelect[] = [];
 
-    allData.map((itemData: any) => {
+    allData.map((itemData: itemSelect) => {
         if (dataType == 0) {
             arrayItems.map((item) => {
                 if (item == itemData.id) {
@@ -92,13 +75,11 @@ function NavBar() {
 
     useEffect(() => {
         if (arrayItems.length > 0) {
-            // @ts-ignore
-            setAllData(JSON.parse(localStorage.getItem("todoList")));
+            setAllData(JSON.parse(localStorage.getItem("todoList") || '[]'));
             setDataType(0);
         }
         if (arrayFolder.length > 0) {
-            // @ts-ignore
-            setAllData(JSON.parse(localStorage.getItem("folderList")));
+            setAllData(JSON.parse(localStorage.getItem("folderList") || '[]'));
             setDataType(1);
         }
 

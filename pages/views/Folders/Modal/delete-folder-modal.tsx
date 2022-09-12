@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { useState, useEffect, Fragment, useRef } from "react";
 import { useRecoilState } from "recoil";
 import { openDeleteFolderModal } from "../../../../Recoil/open-delete-folder-modal";
@@ -9,7 +10,7 @@ interface Folder {
     name: string,
     createDate: string,
     todoItemArray: []
-};
+}
 
 interface Todo {
     id: number,
@@ -22,16 +23,16 @@ interface Todo {
         historyId: number,
         updateDate: string
     }[]
-};
+}
 
 function DeleteFolderModal(props: Todo) {
 
-    let [isShowing, setIsShowing] = useState(false);
-    let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
+    const [isShowing, setIsShowing] = useState(false);
+    const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
-    let folderId = props.folderId;
+    const folderId = props.folderId;
 
-    const [folderSelect, setFolderSelect] = useState([]);
+    const [, setFolderSelect] = useState([]);
 
     const [todoItemList, setTodoItemList] = useState([]);
 
@@ -49,10 +50,9 @@ function DeleteFolderModal(props: Todo) {
             onCancelClick();
         }
         else {
-            let arrayTempFolder: [];
             // @ts-ignore
-            let folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
-            arrayTempFolder = folderListStorage;
+            const folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
+            const arrayTempFolder: [] = folderListStorage;
 
             folderListStorage.map((folder: Folder, index: number) => {
                 if (folder.id == folderId) {

@@ -20,14 +20,14 @@ interface Todo {
         historyId: number,
         updateDate: string
     }[]
-};
+}
 
 interface Folder {
     id: number,
     name: string,
     createDate: string,
     todoItemArray: number[]
-};
+}
 
 function EditTodoModal() {
     const [openModalEditTodo, setOpenModalEditTodo] = useRecoilState(openEditTodoModal);
@@ -35,8 +35,8 @@ function EditTodoModal() {
     const [selectedFolder, setSelectedFolder] = useRecoilState(selectFolder);
     const [selectedState, setSelectedState] = useRecoilState(selectStateOfItem);
 
-    let [isShowing, setIsShowing] = useState(false);
-    let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
+    const [isShowing, setIsShowing] = useState(false);
+    const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
     const editModal = useRef<HTMLDivElement>(null);
 
@@ -47,7 +47,10 @@ function EditTodoModal() {
         createDate: "",
         state: selectedState.name,
         folderId: selectedFolder.id,
-        history: Array()
+        history: [{
+            historyId: 0,
+            updateDate: ""
+        }]
     })
 
     const [updateHistory, setUpdateHistory] = useState({
@@ -96,7 +99,7 @@ function EditTodoModal() {
         updateHistory.updateDate = new Date().toISOString().slice(0, 10);
 
         //update history log
-        for (let item of updateTodoItem.history) {
+        for (const item of updateTodoItem.history) {
             if (item.historyId !== updateHistory.historyId) {
                 updateTodoItem.history = [...updateTodoItem.history, updateHistory];
                 break;
@@ -107,8 +110,7 @@ function EditTodoModal() {
         const validUpdateTodoItem = validateUpdateTodoItem(updateTodoItem);
 
         if (validUpdateTodoItem) {
-            // @ts-ignore
-            const todoList = JSON.parse(localStorage.getItem("todoList"));
+            const todoList = JSON.parse(localStorage.getItem("todoList") || '[]');
             todoList.map((itemTodo: Todo, index: number) => {
                 if (itemTodo.id == updateTodoItem.id) {
                     todoList.splice(index, 1, updateTodoItem);
@@ -117,8 +119,7 @@ function EditTodoModal() {
 
             localStorage.setItem("todoList", JSON.stringify(todoList));
 
-            // @ts-ignore
-            let folderListStorage = JSON.parse(localStorage.getItem("folderList"));
+            const folderListStorage = JSON.parse(localStorage.getItem("folderList") || '[]');
 
             folderListStorage.map((folder: Folder) => {
                 if (folder.id !== updateTodoItem.folderId) {
@@ -141,12 +142,12 @@ function EditTodoModal() {
         }
     }
 
-    const onChangeLabel = (event: any) => {
+    const onChangeLabel = (event: React.ChangeEvent<HTMLInputElement>) => {
         updateHistory.updateLabel = event.target.value;
         updateTodoItem.label = event.target.value;
     }
 
-    const onChangeTodoDetail = (event: any) => {
+    const onChangeTodoDetail = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         updateHistory.updateDetail = event.target.value;
         updateTodoItem.detail = event.target.value;
     }
@@ -168,8 +169,7 @@ function EditTodoModal() {
     }, [selectItem, setSelectedState]);
 
     useEffect(() => {
-        // @ts-ignore
-        let folderListStorage = JSON.parse(localStorage.getItem("folderList"));
+        const folderListStorage = JSON.parse(localStorage.getItem("folderList") || '[]');
 
         if (selectItem !== null) {
             folderListStorage.map((folder: Folder) => {

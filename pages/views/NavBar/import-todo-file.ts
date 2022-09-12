@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 interface DataItem {
     id: number,
     label: string,
@@ -11,22 +12,22 @@ interface DataItem {
             updateDate: string
         }
     ]
-};
+}
 
 interface Folder {
     id: number,
     todoItemArray: number[]
-};
+}
 
 function onChange(event: any) {
-    let reader = new FileReader();
+    const reader = new FileReader();
     reader.onload = onReaderLoad;
     reader.readAsText(event.target.files[0]);
 }
 
 function onReaderLoad(event: any) {
     try {
-        let obj = JSON.parse(event.target.result);
+        const obj = JSON.parse(event.target.result);
         addDataToStorage(obj);
     } catch (err) {
         alert("File input invalid")
@@ -34,17 +35,15 @@ function onReaderLoad(event: any) {
 }
 
 function addDataToStorage(data: []) {
-    let arrayTempTodo: DataItem[];
     // @ts-ignore
-    let todoListStorage = JSON.parse(localStorage.getItem("todoList")) || [];
+    const todoListStorage = JSON.parse(localStorage.getItem("todoList")) || [];
 
-    let folderListStorage: [];
     // @ts-ignore
-    folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
-    arrayTempTodo = todoListStorage;
+    const folderListStorage : [] = JSON.parse(localStorage.getItem("folderList")) || [];
+    const arrayTempTodo: DataItem[] = todoListStorage;
 
     data.map((dataItem: DataItem, index) => {
-        let newTodoItem: DataItem = {
+        const newTodoItem: DataItem = {
             id: 0,
             label: "",
             detail: "",
@@ -103,7 +102,7 @@ const validateNewTodoItem = (paramItem: DataItem, paramIndex: number) => {
 }
 
 export const ImportTodoFile = () => {
-    let linkElement = document.createElement('input');
+    const linkElement = document.createElement('input');
     linkElement.setAttribute('type', "file");
     linkElement.setAttribute('accept', '.json');
     linkElement.click();

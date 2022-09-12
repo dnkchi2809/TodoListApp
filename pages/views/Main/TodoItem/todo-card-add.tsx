@@ -4,7 +4,7 @@ import AddTodoModal from "../Modal/add-todo-modal";
 
 function TodoCardAdd() {
 
-    const [openModalAddTodo, setOpenModalAddTodo] = useRecoilState(openAddTodoModal);
+    const [, setOpenModalAddTodo] = useRecoilState(openAddTodoModal);
     const onAddTodoClick = () => {
         setOpenModalAddTodo(true);
     }

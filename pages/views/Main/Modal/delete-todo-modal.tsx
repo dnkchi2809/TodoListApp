@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { useState, useEffect, Fragment, useRef } from "react";
 import { useRecoilState } from "recoil";
 import { openDeleteTodoModal } from "../../../../Recoil/open-delete-todo-modal";
@@ -16,21 +17,21 @@ interface Todo {
         historyId: number,
         updateDate: string
     }[]
-};
+}
 
 interface Folder {
     id: number,
     name: string,
     createDate: string,
     todoItemArray: number[]
-};
+}
 
 function DeleteTodoModal() {
     const [openModalDeleteTodo, setOpenModalDeleteTodo] = useRecoilState(openDeleteTodoModal);
     const [selectItem, setSelectItem] = useRecoilState(todoItemSelect);
 
-    let [isShowing, setIsShowing] = useState(false);
-    let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
+    const [isShowing, setIsShowing] = useState(false);
+    const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
     const deleteModal = useRef<HTMLDivElement>(null);
 
@@ -44,19 +45,18 @@ function DeleteTodoModal() {
             state: "",
             folderId: 0,
             history: [{
-              historyId: 0,
-              updateDate: ""
+                historyId: 0,
+                updateDate: ""
             }]
-          });
+        });
     }
 
     const onConfirmDeleteClick = () => {
-        let arrayTempTodo: [];
         // @ts-ignore
-        let todoListStorage = JSON.parse(localStorage.getItem("todoList")) || [];
-        arrayTempTodo = todoListStorage;
+        const todoListStorage = JSON.parse(localStorage.getItem("todoList")) || [];
+        const arrayTempTodo: [] = todoListStorage;
         // @ts-ignore
-        let folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
+        const folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
 
         folderListStorage.map((folder: Folder) => {
             if (folder.id == selectItem.folderId) {

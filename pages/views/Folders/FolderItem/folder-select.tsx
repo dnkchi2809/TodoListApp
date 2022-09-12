@@ -9,7 +9,7 @@ interface Folder {
     name: string,
     createDate: string,
     todoItemArray: number[]
-};
+}
 
 function FolderSelect() {
     const [folderListStorage, setFolderListStorage] = useState([]);
@@ -17,8 +17,7 @@ function FolderSelect() {
     const [selectedFolder, setSelectedFolder] = useRecoilState(selectFolder);
 
     useEffect(() => {
-        // @ts-ignore
-        setFolderListStorage(JSON.parse(localStorage.getItem("folderList")));
+        setFolderListStorage(JSON.parse(localStorage.getItem("folderList") || '[]'));
     }, [selectedFolder]);
 
     return (
@@ -46,7 +45,7 @@ function FolderSelect() {
                                 leaveTo="opacity-0"
                             >
                                 <Listbox.Options className="absolute max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                    {folderListStorage.map((folderListStorage : Folder, folderListStorageIndex) => (
+                                    {folderListStorage.map((folderListStorage: Folder, folderListStorageIndex) => (
                                         <Listbox.Option
                                             key={folderListStorageIndex}
                                             className={({ active }) =>
@@ -55,7 +54,8 @@ function FolderSelect() {
                                             }
                                             value={folderListStorage}
                                         >
-                                            {({ selectedFolder } : any) => (
+                                            {(selectedFolder?: unknown
+                                            ) => (
                                                 <>
                                                     <span
                                                         className={`block truncate ${selectedFolder ? 'font-medium' : 'font-normal'

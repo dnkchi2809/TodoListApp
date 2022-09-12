@@ -13,19 +13,19 @@ interface Folder {
     name: string,
     createDate : string,
     todoItemArray : []
-};
+}
 
 function FoldersBody() {
     const [folderListStorage, setFolderListStorage] = useState([]);
 
-    const [arrayFolder, setArrayFolder] = useRecoilState(selectArrayFolders as any);
+    const [, setArrayFolder] = useRecoilState(selectArrayFolders);
 
     const [selectAll, setSelectAll] = useRecoilState(selectAllFolders);
 
-    let [isShowing, setIsShowing] = useState(false);
-    let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
+    const [isShowing, setIsShowing] = useState(false);
+    const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
-    const [selectedPage, setSelectedPage] = useRecoilState(pageNavigate);
+    const [, setSelectedPage] = useRecoilState(pageNavigate);
 
     const [inputSelectAll, setInputSelectAll] = useState(false);
 
@@ -53,7 +53,7 @@ function FoldersBody() {
 
     useEffect(() => {
         if (selectAll) {
-            let newArrayFolders : any[] = [];
+            const newArrayFolders : number[] = [];
             folderListStorage.map((folder : Folder) => {
                 newArrayFolders.push(Number(folder.id));
             })
@@ -68,8 +68,7 @@ function FoldersBody() {
     }, [selectAll])
 
     useEffect(() => {
-        // @ts-ignore
-        const folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
+        const folderListStorage = JSON.parse(localStorage.getItem("folderList") || '[]');
         if (folderListStorage.length == 0) {
             localStorage.setItem("folderList", JSON.stringify([{
                 id: 0,
@@ -81,8 +80,7 @@ function FoldersBody() {
     }, []);
 
     useEffect(() => {
-        // @ts-ignore
-        setFolderListStorage(JSON.parse(localStorage.getItem("folderList")) || []);
+        setFolderListStorage(JSON.parse(localStorage.getItem("folderList") || '[]'));
     }, [folderListStorage]);
 
     return (

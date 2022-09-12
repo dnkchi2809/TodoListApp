@@ -47,21 +47,22 @@ function TodoState() {
                                             }
                                             value={state}
                                         >
-                                            {({ selectedState } : any) => (
-                                                <>
-                                                    <span
-                                                        className={`block truncate ${selectedState ? 'font-medium' : 'font-normal'
-                                                            }`}
-                                                    >
-                                                        {state.name}
-                                                    </span>
-                                                    {selectedState ? (
-                                                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                                                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                            {(selectedState) => {
+                                                return (
+                                                    <>
+                                                        <span
+                                                            className={`block truncate ${selectedState ? 'font-medium' : 'font-normal'}`}
+                                                        >
+                                                            {state.name}
                                                         </span>
-                                                    ) : null}
-                                                </>
-                                            )}
+                                                        {selectedState ? (
+                                                            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
+                                                                <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                                            </span>
+                                                        ) : null}
+                                                    </>
+                                                );
+                                            }}
                                         </Listbox.Option>
                                     ))}
                                 </Listbox.Options>

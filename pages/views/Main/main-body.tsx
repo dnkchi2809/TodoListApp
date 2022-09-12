@@ -1,6 +1,6 @@
-import { useEffect, useState, Fragment, useRef } from "react";
+import React, { useEffect, useState, Fragment, useRef } from "react";
 import { useRecoilState } from "recoil";
-import { selectAllItems } from "../../../Recoil/select-allI-iems";
+import { selectAllItems } from "../../../Recoil/select-all-items";
 import { selectArrayItems } from "../../../Recoil/select-many-items";
 import TodoCard from "./TodoItem/todo-card";
 import TodoCardAdd from "./TodoItem/todo-card-add";
@@ -21,19 +21,19 @@ interface Todo {
         historyId: number,
         updateDate: string
     }[]
-};
+}
 
 function MainBody() {
     const [todoListStorage, setTodoListStorage] = useState([]);
     const [selectAll, setSelectAll] = useRecoilState(selectAllItems);
-    const [arrayItems, setArrayItems] = useRecoilState(selectArrayItems as any);
+    const [arrayItems, setArrayItems] = useRecoilState(selectArrayItems);
 
-    const [selectedState, setSelectedState] = useRecoilState(selectState);
+    const [selectedState] = useRecoilState(selectState);
 
-    const [selectedPage, setSelectedPage] = useRecoilState(pageNavigate);
+    const [, setSelectedPage] = useRecoilState(pageNavigate);
 
-    let [isShowing, setIsShowing] = useState(false);
-    let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
+    const [isShowing, setIsShowing] = useState(false);
+    const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
     const [inputSelectAll, setInputSelectAll] = useState(false);
 
@@ -54,11 +54,11 @@ function MainBody() {
         } else {
             setArrayItems([]);
             setSelectAll(false);
-        };
+        }
     };
 
-    const onWindowWheel = (event: any) => {
-        let y = event.deltaY;
+    const onWindowWheel = (event : React.WheelEvent<HTMLDivElement>) => {
+        const y = event.deltaY;
         if (y > 0) {
             if(page < totalPage){
                 setPage(page + 1);
@@ -81,7 +81,7 @@ function MainBody() {
 
     useEffect(() => {
         if (selectAll) {
-            let newArrayItems: any[] = [];
+            const newArrayItems: number[] = [];
             todoListStorage.map((todoItem: Todo) => {
                 newArrayItems.push(Number(todoItem.id));
             })
@@ -96,8 +96,7 @@ function MainBody() {
     }, [selectAll]);
 
     useEffect(() => {
-        // @ts-ignore
-        const folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
+        const folderListStorage = JSON.parse(localStorage.getItem("folderList") || '[]');
         if (folderListStorage.length == 0) {
             localStorage.setItem("folderList", JSON.stringify([{
                 id: 0,
@@ -110,13 +109,11 @@ function MainBody() {
 
     useEffect(() => {
         if (selectedState.name == "All") {
-            // @ts-ignore
-            setTodoListStorage(JSON.parse(localStorage.getItem("todoList")) || []);
+            setTodoListStorage(JSON.parse(localStorage.getItem("todoList") || '[]'));
         }
         else {
-            // @ts-ignore
-            let todoListStorage = JSON.parse(localStorage.getItem("todoList")) || [];
-            let filterTodoState = todoListStorage.filter((todo: Todo) => {
+            const todoListStorage = JSON.parse(localStorage.getItem("todoList") || '[]');
+            const filterTodoState = todoListStorage.filter((todo: Todo) => {
                 return todo.state == selectedState.name
             })
             setTodoListStorage(filterTodoState);
@@ -126,7 +123,7 @@ function MainBody() {
     useEffect(() => {
         setTotalPage(Math.ceil(todoListStorage.length / limit));
         setRows(todoListStorage.slice((page - 1) * limit, page * limit));
-    }, [todoListStorage, page])
+    }, [todoListStorage, page]);
 
     return (
         <div>

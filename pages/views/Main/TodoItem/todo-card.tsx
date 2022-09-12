@@ -3,7 +3,7 @@ import { useEffect, useState, Fragment, useRef } from "react";
 import { useRecoilState } from "recoil";
 import { openDeleteTodoModal } from "../../../../Recoil/open-delete-todo-modal";
 import { openEditTodoModal } from "../../../../Recoil/open-edit-todo-modal";
-import { selectAllItems } from "../../../../Recoil/select-allI-iems";
+import { selectAllItems } from "../../../../Recoil/select-all-items";
 import { selectArrayItems } from "../../../../Recoil/select-many-items";
 import { todoItemSelect } from "../../../../Recoil/todo-item-select";
 import DeleteTodoModal from "../Modal/delete-todo-modal";
@@ -24,20 +24,20 @@ interface Todo {
         historyId: number,
         updateDate: string
     }[]
-};
+}
 
 function TodoCard(props: Todo) {
     const router = useRouter();
 
-    const [openModalEditTodo, setOpenModalEditTodo] = useRecoilState(openEditTodoModal);
-    const [openModalDeleteTodo, setOpenModalDeleteTodo] = useRecoilState(openDeleteTodoModal);
+    const [, setOpenModalEditTodo] = useRecoilState(openEditTodoModal);
+    const [, setOpenModalDeleteTodo] = useRecoilState(openDeleteTodoModal);
 
-    const [selectItem, setSelectItem] = useRecoilState(todoItemSelect as any);
+    const [, setSelectItem] = useRecoilState(todoItemSelect as any);
     const [selectAll, setSelectAll] = useRecoilState(selectAllItems);
     const [arrayItems, setArrayItems] = useRecoilState(selectArrayItems);  
 
-    let [isShowing, setIsShowing] = useState(false);
-    let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
+    const [isShowing, setIsShowing] = useState(false);
+    const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
     const [checkedSkeleton, setCheckedSkeleton] = useState(false);
 

@@ -4,32 +4,12 @@ import { Transition } from '@headlessui/react';
 import { useTimeoutFn } from 'react-use';
 import { openAddFolderModal } from "../../../../Recoil/openn-add-folder-modal";
 
-interface Folder {
-    id: number,
-    name: string,
-    createDate: string,
-    todoItemArray: []
-};
+function AddFolderModal(): JSX.Element {
 
-interface Todo {
-    id: number,
-    label: string,
-    detail: string,
-    createDate: string,
-    state: string,
-    folderId: number,
-    history: {
-        historyId: number,
-        updateDate: string
-    }[]
-};
+    const [isShowing, setIsShowing] = useState(false);
+    const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
-function AddFolderModal() {
-
-    let [isShowing, setIsShowing] = useState(false);
-    let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
-
-    const [newFolderItem, setNewFolderItem] = useState({
+    const [newFolderItem] = useState({
         id: 0,
         name: "",
         createDate: "",
@@ -40,25 +20,19 @@ function AddFolderModal() {
 
     const addFolderModal = useRef<HTMLDivElement>(null);
 
-    const onChangeFolderName = (event : any) => {
+    const onChangeFolderName = (event: React.ChangeEvent<HTMLInputElement>) => {
         newFolderItem.name = event.target.value;
     }
 
-    const clearData = () => {
-    }
-
     const onCancelClick = () => {
-        clearData();
         setOpenModalAddFolder(false);
     }
 
     const onCreateFolderClick = () => {
-        // const validFolder = validateFolder(newFolderItem);
         const validFolder = true;
 
         let arrayTempFolder = [];
-        // @ts-ignore
-        let folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
+        const folderListStorage = JSON.parse(localStorage.getItem("folderList") || '[]');
         arrayTempFolder = folderListStorage;
 
         if (validFolder) {
@@ -75,14 +49,6 @@ function AddFolderModal() {
             localStorage.setItem("folderList", JSON.stringify(arrayTempFolder));
             onCancelClick();
         }
-    }
-
-    const validateFolder = (paramFolder : Folder) => {
-        if (paramFolder.name == "") {
-            alert("Folder Name is invalid");
-            return false;
-        }
-        return true;
     }
 
     useEffect(() => {

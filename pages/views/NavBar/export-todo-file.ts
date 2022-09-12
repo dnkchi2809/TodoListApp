@@ -1,10 +1,10 @@
 export const ExportFile = (data : string) => {
 
-    let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(data);
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(data);
 
-    let exportFileDefaultName = 'data.json';
+    const exportFileDefaultName = 'data.json';
 
-    let linkElement = document.createElement('a');
+    const linkElement = document.createElement('a');
     linkElement.setAttribute('href', dataUri);
     linkElement.setAttribute('download', exportFileDefaultName);
     linkElement.click();

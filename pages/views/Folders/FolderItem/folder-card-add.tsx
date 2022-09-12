@@ -3,7 +3,7 @@ import { openAddFolderModal } from "../../../../Recoil/openn-add-folder-modal";
 import AddFolderModal from "../Modal/add-folder-modal";
 
 function FolderCardAdd(){
-    const [openModalAddFolder, setOpenModalAddFolder] = useRecoilState(openAddFolderModal);
+    const [, setOpenModalAddFolder] = useRecoilState(openAddFolderModal);
 
     const onAddFolderClick = () => {
         setOpenModalAddFolder(true);

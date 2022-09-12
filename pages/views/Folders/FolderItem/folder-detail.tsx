@@ -6,7 +6,7 @@ import TodoCard from "../../Main/TodoItem/todo-card";
 import { useRecoilState } from "recoil";
 import { openDeleteFolderModal } from "../../../../Recoil/open-delete-folder-modal";
 import DeleteFolderModal from "../Modal/delete-folder-modal";
-import { selectAllItems } from "../../../../Recoil/select-allI-iems";
+import { selectAllItems } from "../../../../Recoil/select-all-items";
 import { selectArrayItems } from "../../../../Recoil/select-many-items";
 import { selectState } from "../../../../Recoil/select-state";
 import TodoState from "../../Main/TodoItem/todo-state";
@@ -22,20 +22,20 @@ interface Todo {
         historyId: number,
         updateDate: string
     }[]
-};
+}
 
 interface Folder {
     id: number,
     name: string,
     createDate: string,
     todoItemArray: []
-};
+}
 
 function FolderDetail(props: Todo) {
-    let [isShowing, setIsShowing] = useState(false);
-    let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
+    const [isShowing, setIsShowing] = useState(false);
+    const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
-    let folderId = Number(props.folderId);
+    const folderId = Number(props.folderId);
 
     const [folderSelect, setFolderSelect] = useState([{
         id: 0,
@@ -47,21 +47,20 @@ function FolderDetail(props: Todo) {
     const [todoItemList, setTodoItemList] = useState([]);
 
     const [selectAll, setSelectAll] = useRecoilState(selectAllItems);
-    const [arrayItems, setArrayItems] = useRecoilState(selectArrayItems);
+    const [, setArrayItems] = useRecoilState(selectArrayItems);
 
-    const [selectedState, setSelectedState] = useRecoilState(selectState);
+    const [selectedState] = useRecoilState(selectState);
 
-    const [deleteFolderModal, setDeleteFolderModal] = useRecoilState(openDeleteFolderModal);
+    const [, setDeleteFolderModal] = useRecoilState(openDeleteFolderModal);
 
     const [inputSelectAll, setInputSelectAll] = useState(false);
 
     const idSelectAllTodoOfFolder = useRef<HTMLInputElement>(null);
 
-    const onChangeFolderName = (event: any) => {
+    const onChangeFolderName = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.value !== "") {
             let arrayTempFolder = [];
-            // @ts-ignore
-            let folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
+            const folderListStorage = JSON.parse(localStorage.getItem('folderList') || '[]');
             arrayTempFolder = folderListStorage;
             arrayTempFolder.map((folder: Folder) => {
                 if (folder.id == folderId) {
@@ -99,9 +98,9 @@ function FolderDetail(props: Todo) {
 
     useEffect(() => {
         if (selectAll) {
-            let newArrayItems: any[] = [];
+            const newArrayItems: number[] = [];
             todoItemList.map((todoItem: Todo) => {
-                newArrayItems.push(String(todoItem.id));
+                newArrayItems.push(Number(todoItem.id));
             })
             setArrayItems(newArrayItems);
         }
@@ -111,8 +110,7 @@ function FolderDetail(props: Todo) {
     }, [selectAll, setArrayItems, todoItemList]);
 
     useEffect(() => {
-        // @ts-ignore
-        const folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
+        const folderListStorage = JSON.parse(localStorage.getItem("folderList") || '[]');
 
         setFolderSelect(folderListStorage.filter((folder: Folder) => {
             return folder.id == folderId;
@@ -121,8 +119,7 @@ function FolderDetail(props: Todo) {
 
     useEffect(() => {
         if (folderId >= 0) {
-            // @ts-ignore
-            const todoListStorage = JSON.parse(localStorage.getItem("todoList")) || [];
+            const todoListStorage = JSON.parse(localStorage.getItem("todoList") || '[]');
 
             if (selectedState.name == "All") {
                 setTodoItemList(todoListStorage.filter((todo: Todo) => {
@@ -130,9 +127,8 @@ function FolderDetail(props: Todo) {
                 }));
             }
             else {
-                // @ts-ignore
-                let todoListStorage = JSON.parse(localStorage.getItem("todoList")) || [];
-                let filterTodoState = todoListStorage.filter((todo: Todo) => {
+                const todoListStorage = JSON.parse(localStorage.getItem("todoList") || '[]');
+                const filterTodoState = todoListStorage.filter((todo: Todo) => {
                     return todo.folderId == folderId && todo.state == selectedState.name
                 })
                 setTodoItemList(filterTodoState);

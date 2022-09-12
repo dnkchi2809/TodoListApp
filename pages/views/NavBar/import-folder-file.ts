@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 interface DataItem {
     id: number,
     name: string,
@@ -6,14 +7,14 @@ interface DataItem {
 }
 
 function onChange(event: any) {
-    let reader = new FileReader();
+    const reader = new FileReader();
     reader.onload = onReaderLoad;
     reader.readAsText(event.target.files[0]);
 }
 
 function onReaderLoad(event: any) {
     try {
-        let obj = JSON.parse(event.target.result);
+        const obj = JSON.parse(event.target.result);
         addDataToStorage(obj);
     } catch (err) {
         alert("File input invalid")
@@ -21,13 +22,12 @@ function onReaderLoad(event: any) {
 }
 
 function addDataToStorage(data: []) {
-    let arrayTempFolder: [DataItem];
     // @ts-ignore
-    let folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
-    arrayTempFolder = folderListStorage;
+    const folderListStorage = JSON.parse(localStorage.getItem("folderList")) || [];
+    const arrayTempFolder: [DataItem] = folderListStorage;
 
     data.map((dataItem: DataItem, index) => {
-        let newFolderItem: DataItem = {
+        const newFolderItem: DataItem = {
             id: 0,
             name: "",
             createDate: "",
@@ -66,7 +66,7 @@ const validateNewFolderItem = (paramItem: DataItem, paramIndex: number) => {
 }
 
 export const ImportFolderFile = () => {
-    let linkElement = document.createElement('input');
+    const linkElement = document.createElement('input');
     linkElement.setAttribute('type', "file");
     linkElement.setAttribute('accept', '.json');
     linkElement.click();
