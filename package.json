@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --ext .tsx"
+    "lint": "eslint . --ext .tsx",
+    "prettier": "prettier --write **/*.{js,tsx,scss}",
+    "prettier:check": "prettier --list-different **/*.{js,tsx,scss}"
   },
   "dependencies": {
     "@headlessui/react": "^1.6.6",
@@ -26,6 +28,7 @@
     "eslint": "^8.23.0",
     "eslint-config-next": "12.3.0",
     "eslint-config-prettier": "^8.5.0",
+    "prettier": "^2.7.1",
     "typescript": "^4.8.2"
   },
   "description": "This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).",
