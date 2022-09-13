@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useRouter } from "next/router";
 import { useEffect, useState, Fragment, useRef } from "react";
-import { useRecoilState } from "recoil";
-import { openDeleteTodoModal } from "../../../../Recoil/open-delete-todo-modal";
-import { openEditTodoModal } from "../../../../Recoil/open-edit-todo-modal";
-import { selectAllItems } from "../../../../Recoil/select-all-items";
-import { selectArrayItems } from "../../../../Recoil/select-many-items";
-import { todoItemSelect } from "../../../../Recoil/todo-item-select";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { openDeleteTodoModal } from "../../../../recoil/open-delete-todo-modal";
+import { openEditTodoModal } from "../../../../recoil/open-edit-todo-modal";
+import { selectAllItems } from "../../../../recoil/select-all-items";
+import { selectArrayItems } from "../../../../recoil/select-many-items";
+import { todoItemSelect } from "../../../../recoil/todo-item-select";
 import DeleteTodoModal from "../Modal/delete-todo-modal";
 import EditTodoModal from "../Modal/edit-todo-modal";
 import { Transition } from "@headlessui/react";
@@ -29,10 +30,10 @@ interface Todo {
 function TodoCard(props: Todo) {
   const router = useRouter();
 
-  const [, setOpenModalEditTodo] = useRecoilState(openEditTodoModal);
-  const [, setOpenModalDeleteTodo] = useRecoilState(openDeleteTodoModal);
+  const setOpenModalEditTodo = useSetRecoilState(openEditTodoModal);
+  const setOpenModalDeleteTodo = useSetRecoilState(openDeleteTodoModal);
 
-  const [, setSelectItem] = useRecoilState(todoItemSelect as any);
+  const setSelectItem = useSetRecoilState(todoItemSelect as any);
   const [selectAll, setSelectAll] = useRecoilState(selectAllItems);
   const [arrayItems, setArrayItems] = useRecoilState(selectArrayItems);
 

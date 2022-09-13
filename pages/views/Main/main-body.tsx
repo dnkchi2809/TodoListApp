@@ -1,14 +1,15 @@
 import React, { useEffect, useState, Fragment, useRef } from "react";
-import { useRecoilState } from "recoil";
-import { selectAllItems } from "../../../Recoil/select-all-items";
-import { selectArrayItems } from "../../../Recoil/select-many-items";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { selectAllItems } from "../../../recoil/select-all-items";
+import { selectArrayItems } from "../../../recoil/select-many-items";
 import TodoCard from "./TodoItem/todo-card";
 import TodoCardAdd from "./TodoItem/todo-card-add";
 import TodoState from "./TodoItem/todo-state";
 import { Transition } from "@headlessui/react";
 import { useTimeoutFn } from "react-use";
-import { selectState } from "../../../Recoil/select-state";
-import { pageNavigate } from "../../../Recoil/page-navigate";
+import { selectState } from "../../../recoil/select-state";
+import { pageNavigate } from "../../../recoil/page-navigate";
+import { todoLocalStorageChange } from "../../../recoil/todo-localstorage-change";
 
 interface Todo {
   id: number;
@@ -24,13 +25,17 @@ interface Todo {
 }
 
 function MainBody() {
+  const [todoStorageChange, setTodoStorageChange] = useRecoilState(
+    todoLocalStorageChange
+  );
+
   const [todoListStorage, setTodoListStorage] = useState([]);
   const [selectAll, setSelectAll] = useRecoilState(selectAllItems);
-  const [arrayItems, setArrayItems] = useRecoilState(selectArrayItems);
+  const setArrayItems = useSetRecoilState(selectArrayItems);
 
   const [selectedState] = useRecoilState(selectState);
 
-  const [, setSelectedPage] = useRecoilState(pageNavigate);
+  const setSelectedPage = useSetRecoilState(pageNavigate);
 
   const [isShowing, setIsShowing] = useState(false);
   const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
@@ -72,12 +77,12 @@ function MainBody() {
 
   useEffect(() => {
     setSelectedPage("home");
-  });
+  }, [setSelectedPage]);
 
   useEffect(() => {
     setIsShowing(false);
     resetIsShowing();
-  }, [page, resetIsShowing, selectedState]);
+  }, [resetIsShowing]);
 
   useEffect(() => {
     if (selectAll) {
@@ -114,24 +119,35 @@ function MainBody() {
     }
   }, []);
 
+  const [storage, setStorage] = useState([]);
+
   useEffect(() => {
+    setStorage(JSON.parse(localStorage.getItem("todoList") || "[]"));
+  }, []);
+
+  useEffect(() => {
+    if (todoStorageChange) {
+      setStorage(JSON.parse(localStorage.getItem("todoList") || "[]"));
+      setTodoStorageChange(false);
+    }
+  }, [setTodoStorageChange, todoStorageChange]);
+
+  useEffect(() => {
+    // const storage = JSON.parse(localStorage.getItem("todoList") || "[]");
     if (selectedState.name == "All") {
-      setTodoListStorage(JSON.parse(localStorage.getItem("todoList") || "[]"));
+      setTodoListStorage(storage);
     } else {
-      const todoListStorage = JSON.parse(
-        localStorage.getItem("todoList") || "[]"
-      );
-      const filterTodoState = todoListStorage.filter((todo: Todo) => {
+      const filterTodoState = storage.filter((todo: Todo) => {
         return todo.state == selectedState.name;
       });
       setTodoListStorage(filterTodoState);
     }
-  }, [todoListStorage, selectAll, arrayItems, selectedState.name]);
+  }, [selectedState.name, storage]);
 
   useEffect(() => {
     setTotalPage(Math.ceil(todoListStorage.length / limit));
     setRows(todoListStorage.slice((page - 1) * limit, page * limit));
-  }, [todoListStorage, page]);
+  }, [page, todoListStorage]);
 
   return (
     <div>

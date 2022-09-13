@@ -1,13 +1,14 @@
 import { useState, useEffect, Fragment, useRef } from "react";
-import { useRecoilState } from "recoil";
-import { openEditTodoModal } from "../../../../Recoil/open-edit-todo-modal";
-import { todoItemSelect } from "../../../../Recoil/todo-item-select";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { openEditTodoModal } from "../../../../recoil/open-edit-todo-modal";
+import { todoItemSelect } from "../../../../recoil/todo-item-select";
 import { Transition } from "@headlessui/react";
 import { useTimeoutFn } from "react-use";
 import FolderSelect from "../../Folders/FolderItem/folder-select";
-import { selectFolder } from "../../../../Recoil/select-folder";
-import { selectStateOfItem } from "../../../../Recoil/select-state-of-item";
+import { selectFolder } from "../../../../recoil/select-folder";
+import { selectStateOfItem } from "../../../../recoil/select-state-of-item";
 import TodoStateOfItem from "../TodoItem/todo-state-of-item";
+import { todoLocalStorageChange } from "../../../../recoil/todo-localstorage-change";
 
 interface Todo {
   id: number;
@@ -30,6 +31,7 @@ interface Folder {
 }
 
 function EditTodoModal() {
+  const setTodoStorageChange = useSetRecoilState(todoLocalStorageChange);
   const [openModalEditTodo, setOpenModalEditTodo] =
     useRecoilState(openEditTodoModal);
   const [selectItem, setSelectItem] = useRecoilState(todoItemSelect);
@@ -143,6 +145,7 @@ function EditTodoModal() {
       });
 
       localStorage.setItem("folderList", JSON.stringify(folderListStorage));
+      setTodoStorageChange(true);
 
       onCancelClick();
     }
@@ -226,7 +229,7 @@ function EditTodoModal() {
         aria-hidden="true"
         className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full"
       >
-        <div className="fixed inset-0 bg-gray-200 bg-opacity-60 transition-opacity"></div>
+        <div className="fixed inset-0 bg-gray-200 bg-opacity-60 transition-opacity" />
         <Transition
           as={Fragment}
           show={isShowing}
@@ -249,7 +252,7 @@ function EditTodoModal() {
                         onChange={onChangeLabel}
                         value={updateTodoItem.label}
                         className="w-full mb-3 text-lg font-medium"
-                      ></input>
+                      />
                     </div>
                     <div className="w-1/4">
                       <p className="mb-3 font-thin text-blue-500 text-right">
@@ -471,7 +474,7 @@ function EditTodoModal() {
                             <div
                               className="tooltip-arrow"
                               data-popper-arrow=""
-                            ></div>
+                            />
                           </div>
                         </div>
                         <div className="py-2 px-4 bg-white rounded-b-lg dark:bg-gray-800">

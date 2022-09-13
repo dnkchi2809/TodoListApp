@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
-import { selectFolder } from "../../../../Recoil/select-folder";
+import { selectFolder } from "../../../../recoil/select-folder";
 import { useRecoilState } from "recoil";
 
 interface Folder {

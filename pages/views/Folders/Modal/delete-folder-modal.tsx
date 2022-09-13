@@ -1,9 +1,10 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { useState, useEffect, Fragment, useRef } from "react";
-import { useRecoilState } from "recoil";
-import { openDeleteFolderModal } from "../../../../Recoil/open-delete-folder-modal";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { openDeleteFolderModal } from "../../../../recoil/open-delete-folder-modal";
 import { Transition } from "@headlessui/react";
 import { useTimeoutFn } from "react-use";
+import { useRouter } from "next/router";
+import { folderLocalStorageChange } from "../../../../recoil/folder-localstorage-change";
 
 interface Folder {
   id: number;
@@ -26,6 +27,10 @@ interface Todo {
 }
 
 function DeleteFolderModal(props: Todo) {
+  const router = useRouter();
+
+  const setFolderStorageChange = useSetRecoilState(folderLocalStorageChange);
+
   const [isShowing, setIsShowing] = useState(false);
   const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
@@ -50,9 +55,9 @@ function DeleteFolderModal(props: Todo) {
       alert("Cannot delete Folder having Todo!");
       onCancelClick();
     } else {
-      // @ts-ignore
-      const folderListStorage =
-        JSON.parse(localStorage.getItem("folderList")) || [];
+      const folderListStorage = JSON.parse(
+        localStorage.getItem("folderList") || "[]"
+      );
       const arrayTempFolder: [] = folderListStorage;
 
       folderListStorage.map((folder: Folder, index: number) => {
@@ -62,18 +67,22 @@ function DeleteFolderModal(props: Todo) {
       });
 
       localStorage.setItem("folderList", JSON.stringify(arrayTempFolder));
+      setFolderStorageChange(true);
 
       alert("Delete folder success!");
 
       onCancelClick();
-      window.location.href = "/folders";
+
+      router.push("/folders").then(() => {
+        router.reload();
+      });
     }
   };
 
   useEffect(() => {
-    // @ts-ignore
-    const folderListStorage =
-      JSON.parse(localStorage.getItem("folderList")) || [];
+    const folderListStorage = JSON.parse(
+      localStorage.getItem("folderList") || "[]"
+    );
 
     setFolderSelect(
       folderListStorage.filter((folder: Folder) => {
@@ -84,9 +93,9 @@ function DeleteFolderModal(props: Todo) {
 
   useEffect(() => {
     if (folderId >= 0) {
-      // @ts-ignore
-      const todoListStorage =
-        JSON.parse(localStorage.getItem("todoList")) || [];
+      const todoListStorage = JSON.parse(
+        localStorage.getItem("todoList") || "[]"
+      );
 
       setTodoItemList(
         todoListStorage.filter((todo: Todo) => {
@@ -109,7 +118,6 @@ function DeleteFolderModal(props: Todo) {
   }, [deleteFolderModal, resetIsShowing]);
   return (
     <>
-      {/*Modal*/}
       <div
         ref={delFolderModal}
         tabIndex={-1}

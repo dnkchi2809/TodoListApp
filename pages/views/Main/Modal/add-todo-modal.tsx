@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useState, useEffect, Fragment, useRef } from "react";
-import { useRecoilState } from "recoil";
-import { openAddTodoModal } from "../../../../Recoil/open-add-todo-modal";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { openAddTodoModal } from "../../../../recoil/open-add-todo-modal";
 import { Transition } from "@headlessui/react";
 import { useTimeoutFn } from "react-use";
 import FolderSelect from "../../Folders/FolderItem/folder-select";
-import { selectFolder } from "../../../../Recoil/select-folder";
+import { selectFolder } from "../../../../recoil/select-folder";
+import { todoLocalStorageChange } from "../../../../recoil/todo-localstorage-change";
 
 interface Todo {
   id: number;
@@ -28,6 +29,7 @@ interface Folder {
 }
 
 function AddTodoModal() {
+  const setTodoStorageChange = useSetRecoilState(todoLocalStorageChange);
   const [isShowing, setIsShowing] = useState(false);
   const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
@@ -109,7 +111,7 @@ function AddTodoModal() {
       });
 
       localStorage.setItem("folderList", JSON.stringify(folderListStorage));
-
+      setTodoStorageChange(true);
       onCancelClick();
     }
   };
@@ -137,14 +139,13 @@ function AddTodoModal() {
   }, [newTodoItem, selectedFolder.id, openModalAddTodo, resetIsShowing]);
   return (
     <>
-      {/*Modal*/}
       <div
         ref={addModal}
         tabIndex={-1}
         aria-hidden="true"
         className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full"
       >
-        <div className="fixed inset-0 bg-gray-200 bg-opacity-70 transition-opacity"></div>
+        <div className="fixed inset-0 bg-gray-200 bg-opacity-70 transition-opacity" />
 
         <Transition
           as={Fragment}
@@ -166,7 +167,7 @@ function AddTodoModal() {
                       placeholder="To Do Label"
                       className="w-full mb-3 text-lg font-medium"
                       onInput={onInputLabelTodo}
-                    ></input>
+                    />
                   </div>
                   <FolderSelect />
                   <div className="sm:flex sm:items-start">
@@ -381,7 +382,7 @@ function AddTodoModal() {
                             <div
                               className="tooltip-arrow"
                               data-popper-arrow=""
-                            ></div>
+                            />
                           </div>
                         </div>
                         <div className="py-2 px-4 bg-white rounded-b-lg dark:bg-gray-800">

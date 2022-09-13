@@ -2,5 +2,5 @@ import { atom } from "recoil";
 
 export const selectArrayFolders = atom({
   key: "selectArrayFolders",
-  default: [] as number[]
+  default: [] as number[],
 });

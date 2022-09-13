@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { selectFolder } from "../../../Recoil/select-folder";
+import { selectFolder } from "../../../recoil/select-folder";
 import FolderSelect from "../Folders/FolderItem/folder-select";
 import { useRecoilState } from "recoil";
-import { selectStateOfItem } from "../../../Recoil/select-state-of-item";
+import { selectStateOfItem } from "../../../recoil/select-state-of-item";
 import TodoStateOfItem from "./TodoItem/todo-state-of-item";
+import { useRouter } from "next/router";
 
 interface Todo {
   id: number;
@@ -30,6 +31,8 @@ interface ItemProps {
 }
 
 function TodoDetail(props: ItemProps) {
+  const router = useRouter();
+
   const itemId = props.itemId;
 
   const [todoItem, setTodoItem] = useState({
@@ -111,7 +114,9 @@ function TodoDetail(props: ItemProps) {
 
   const onBackClick = () => {
     clearData();
-    window.location.href = "/";
+    router.push("/").then(() => {
+      router.reload();
+    });
   };
 
   const onUpdateClick = () => {
@@ -231,7 +236,7 @@ function TodoDetail(props: ItemProps) {
             onChange={onChangeLabel}
             value={todoItem.label}
             className="w-full mb-3 text-lg font-medium"
-          ></input>
+          />
         </div>
         <div className="w-1/4">
           <p className="mb-3 font-thin text-blue-500 text-right">

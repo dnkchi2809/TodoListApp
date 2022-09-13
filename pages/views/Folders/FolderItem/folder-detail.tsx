@@ -3,13 +3,15 @@ import { Transition } from "@headlessui/react";
 import { useTimeoutFn } from "react-use";
 import TodoCardAdd from "../../Main/TodoItem/todo-card-add";
 import TodoCard from "../../Main/TodoItem/todo-card";
-import { useRecoilState } from "recoil";
-import { openDeleteFolderModal } from "../../../../Recoil/open-delete-folder-modal";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { openDeleteFolderModal } from "../../../../recoil/open-delete-folder-modal";
 import DeleteFolderModal from "../Modal/delete-folder-modal";
-import { selectAllItems } from "../../../../Recoil/select-all-items";
-import { selectArrayItems } from "../../../../Recoil/select-many-items";
-import { selectState } from "../../../../Recoil/select-state";
+import { selectAllItems } from "../../../../recoil/select-all-items";
+import { selectArrayItems } from "../../../../recoil/select-many-items";
+import { selectState } from "../../../../recoil/select-state";
 import TodoState from "../../Main/TodoItem/todo-state";
+import { useRouter } from "next/router";
+import { folderLocalStorageChange } from "../../../../recoil/folder-localstorage-change";
 
 interface Todo {
   id: number;
@@ -32,6 +34,10 @@ interface Folder {
 }
 
 function FolderDetail(props: Todo) {
+  const router = useRouter();
+
+  const setFolderStorageChange = useSetRecoilState(folderLocalStorageChange);
+
   const [isShowing, setIsShowing] = useState(false);
   const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
@@ -49,11 +55,11 @@ function FolderDetail(props: Todo) {
   const [todoItemList, setTodoItemList] = useState([]);
 
   const [selectAll, setSelectAll] = useRecoilState(selectAllItems);
-  const [, setArrayItems] = useRecoilState(selectArrayItems);
+  const setArrayItems = useSetRecoilState(selectArrayItems);
 
   const [selectedState] = useRecoilState(selectState);
 
-  const [, setDeleteFolderModal] = useRecoilState(openDeleteFolderModal);
+  const setDeleteFolderModal = useSetRecoilState(openDeleteFolderModal);
 
   const [inputSelectAll, setInputSelectAll] = useState(false);
 
@@ -73,11 +79,14 @@ function FolderDetail(props: Todo) {
       });
 
       localStorage.setItem("folderList", JSON.stringify(arrayTempFolder));
+      setFolderStorageChange(true);
     }
   };
 
   const onBackClick = () => {
-    window.location.href = "/folders";
+    router.push("/folders").then(() => {
+      router.reload();
+    });
   };
 
   const onDeleteFolderClick = () => {
@@ -156,7 +165,7 @@ function FolderDetail(props: Todo) {
               onChange={onChangeFolderName}
               defaultValue={folderSelect.length > 0 ? folderSelect[0].name : ""}
               className="w-full mb-3 text-lg font-medium"
-            ></input>
+            />
           </div>
           <div className="w-1/4">
             <p className="mb-3 font-thin text-blue-500 text-right">

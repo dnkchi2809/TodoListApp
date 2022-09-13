@@ -1,18 +1,20 @@
 import { useEffect, useRef, useState } from "react";
-import { useRecoilState } from "recoil";
-import { openImportModal } from "../../../Recoil/open-import-modal";
-import { selectArrayFolders } from "../../../Recoil/select-array-folders";
-import { selectArrayItems } from "../../../Recoil/select-many-items";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { openImportModal } from "../../../recoil/open-import-modal";
+import { selectArrayFolders } from "../../../recoil/select-array-folders";
+import { selectArrayItems } from "../../../recoil/select-many-items";
 import { ExportFile } from "../NavBar/export-todo-file";
 import ImportModal from "../NavBar/Modal/import-modal";
 import Link from "next/link";
-import { pageNavigate } from "../../../Recoil/page-navigate";
+import { pageNavigate } from "../../../recoil/page-navigate";
+import { useRouter } from "next/router";
 
 interface itemSelect {
   id: number;
 }
 
 function NavBar() {
+  const router = useRouter();
   const [arrayItems] = useRecoilState(selectArrayItems);
   const [arrayFolder] = useRecoilState(selectArrayFolders);
 
@@ -20,7 +22,7 @@ function NavBar() {
 
   const [dataType, setDataType] = useState(0);
 
-  const [, setImportModal] = useRecoilState(openImportModal);
+  const setImportModal = useSetRecoilState(openImportModal);
 
   const [allData, setAllData] = useState([]);
 
@@ -28,11 +30,15 @@ function NavBar() {
   const folderLink = useRef<HTMLAnchorElement>(null);
 
   const onHomeLinkClick = () => {
-    window.location.href = "/";
+    router.push("/").then(() => {
+      router.reload();
+    });
   };
 
   const onFolderLinkClick = () => {
-    window.location.href = "/folders";
+    router.push("/folders").then(() => {
+      router.reload();
+    });
   };
 
   const dataSelected: itemSelect[] = [];
@@ -114,7 +120,7 @@ function NavBar() {
                 <Link href="/">
                   <a
                     ref={homeLink}
-                    className="text-blue-700"
+                    className="text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                     onClick={onHomeLinkClick}
                   >
                     Home
@@ -123,7 +129,11 @@ function NavBar() {
               </li>
               <li>
                 <Link href="/folders">
-                  <a ref={folderLink} onClick={onFolderLinkClick}>
+                  <a
+                    ref={folderLink}
+                    onClick={onFolderLinkClick}
+                    className="text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                  >
                     Folders
                   </a>
                 </Link>

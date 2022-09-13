@@ -2,7 +2,7 @@ import { useState, useEffect, Fragment, useRef } from "react";
 import { useRecoilState } from "recoil";
 import { Transition } from "@headlessui/react";
 import { useTimeoutFn } from "react-use";
-import { openImportModal } from "../../../../Recoil/open-import-modal";
+import { openImportModal } from "../../../../recoil/open-import-modal";
 import { ImportTodoFile } from "../import-todo-file";
 import { ImportFolderFile } from "../import-folder-file";
 
@@ -47,7 +47,7 @@ function ImportModal() {
         className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full"
         onClick={onCancelClick}
       >
-        <div className="fixed inset-0 bg-gray-200 bg-opacity-70 transition-opacity"></div>
+        <div className="fixed inset-0 bg-gray-200 bg-opacity-70 transition-opacity" />
 
         <Transition
           as={Fragment}
@@ -69,7 +69,7 @@ function ImportModal() {
                         id="image-note"
                         className="image-import px-3 py-4 w-full h-40 flex justify-center items-center text-white"
                         title="Import Todo"
-                      ></div>
+                      />
                       <div className="text-center">Import Todo</div>
                     </div>
                     <div className="w-1/2" onClick={onImportFolderClick}>
@@ -77,7 +77,7 @@ function ImportModal() {
                         id="image-folder"
                         className="image-import px-3 py-4 w-full h-40 flex justify-center items-center text-white"
                         title="Import Folder"
-                      ></div>
+                      />
                       <div className="text-center">Import Folders</div>
                     </div>
                   </div>

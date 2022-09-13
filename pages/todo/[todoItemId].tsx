@@ -17,7 +17,7 @@ export default function DetailTodo() {
 
       <main>
         <NavBar />
-        <TodoDetail itemId={todoItemId} />
+        <TodoDetail itemId={Number(todoItemId)} />
       </main>
     </div>
   );

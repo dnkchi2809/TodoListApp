@@ -1,6 +1,6 @@
 import { atom } from "recoil";
 
 export const selectState = atom({
-    key: "selectState",
-    default: { name: 'All' }
+  key: "selectState",
+  default: { name: "All" },
 });

@@ -9,9 +9,11 @@ export const todoItemSelect = atom({
     createDate: "",
     state: "",
     folderId: 0,
-    history: [{
-      historyId: 0,
-      updateDate: ""
-    }]
-  }
+    history: [
+      {
+        historyId: 0,
+        updateDate: "",
+      },
+    ],
+  },
 });

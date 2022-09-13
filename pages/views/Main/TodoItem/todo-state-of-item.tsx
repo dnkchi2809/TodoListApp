@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 import { useRecoilState } from "recoil";
-import { selectStateOfItem } from "../../../../Recoil/select-state-of-item";
+import { selectStateOfItem } from "../../../../recoil/select-state-of-item";
 
 const state = [
   { name: "Todo" },

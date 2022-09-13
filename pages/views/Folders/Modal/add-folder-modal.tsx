@@ -1,10 +1,13 @@
 import { useState, useEffect, Fragment, useRef } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { Transition } from "@headlessui/react";
 import { useTimeoutFn } from "react-use";
-import { openAddFolderModal } from "../../../../Recoil/openn-add-folder-modal";
+import { openAddFolderModal } from "../../../../recoil/openn-add-folder-modal";
+import { folderLocalStorageChange } from "../../../../recoil/folder-localstorage-change";
 
 function AddFolderModal(): JSX.Element {
+  const setFolderStorageChange = useSetRecoilState(folderLocalStorageChange);
+
   const [isShowing, setIsShowing] = useState(false);
   const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
@@ -49,6 +52,7 @@ function AddFolderModal(): JSX.Element {
       arrayTempFolder.push(newFolderItem);
 
       localStorage.setItem("folderList", JSON.stringify(arrayTempFolder));
+      setFolderStorageChange(true);
       onCancelClick();
     }
   };
@@ -73,7 +77,7 @@ function AddFolderModal(): JSX.Element {
         aria-hidden="true"
         className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full"
       >
-        <div className="fixed inset-0 bg-gray-200 bg-opacity-70 transition-opacity"></div>
+        <div className="fixed inset-0 bg-gray-200 bg-opacity-70 transition-opacity" />
 
         <Transition
           as={Fragment}

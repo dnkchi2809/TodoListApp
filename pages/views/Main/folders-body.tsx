@@ -3,10 +3,11 @@ import { Transition } from "@headlessui/react";
 import { useTimeoutFn } from "react-use";
 import FolderCard from "../Folders/FolderItem/folder-card";
 import FolderCardAdd from "../Folders/FolderItem/folder-card-add";
-import { selectArrayFolders } from "../../../Recoil/select-array-folders";
-import { selectAllFolders } from "../../../Recoil/select-all-folders";
-import { useRecoilState } from "recoil";
-import { pageNavigate } from "../../../Recoil/page-navigate";
+import { selectArrayFolders } from "../../../recoil/select-array-folders";
+import { selectAllFolders } from "../../../recoil/select-all-folders";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { pageNavigate } from "../../../recoil/page-navigate";
+import { folderLocalStorageChange } from "../../../recoil/folder-localstorage-change";
 
 interface Folder {
   id: number;
@@ -16,16 +17,20 @@ interface Folder {
 }
 
 function FoldersBody() {
+  const [folderStorageChange, setFolderStorageChange] = useRecoilState(
+    folderLocalStorageChange
+  );
+
   const [folderListStorage, setFolderListStorage] = useState([]);
 
-  const [, setArrayFolder] = useRecoilState(selectArrayFolders);
+  const setArrayFolder = useSetRecoilState(selectArrayFolders);
 
   const [selectAll, setSelectAll] = useRecoilState(selectAllFolders);
 
   const [isShowing, setIsShowing] = useState(false);
   const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
-  const [, setSelectedPage] = useRecoilState(pageNavigate);
+  const setSelectedPage = useSetRecoilState(pageNavigate);
 
   const [inputSelectAll, setInputSelectAll] = useState(false);
 
@@ -43,7 +48,7 @@ function FoldersBody() {
 
   useEffect(() => {
     setSelectedPage("folder");
-  });
+  }, [setSelectedPage]);
 
   useEffect(() => {
     setIsShowing(false);
@@ -89,7 +94,16 @@ function FoldersBody() {
     setFolderListStorage(
       JSON.parse(localStorage.getItem("folderList") || "[]")
     );
-  }, [folderListStorage]);
+  }, []);
+
+  useEffect(() => {
+    if (folderStorageChange) {
+      setFolderListStorage(
+        JSON.parse(localStorage.getItem("folderList") || "[]")
+      );
+      setFolderStorageChange(false);
+    }
+  }, [setFolderStorageChange, folderStorageChange]);
 
   return (
     <>

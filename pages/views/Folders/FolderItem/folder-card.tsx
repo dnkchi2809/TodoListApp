@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
-import { selectAllFolders } from "../../../../Recoil/select-all-folders";
-import { selectArrayFolders } from "../../../../Recoil/select-array-folders";
+import { selectAllFolders } from "../../../../recoil/select-all-folders";
+import { selectArrayFolders } from "../../../../recoil/select-array-folders";
 
 interface Folder {
   id: number;
