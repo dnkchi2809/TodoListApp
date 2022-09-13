@@ -73,9 +73,7 @@ function DeleteFolderModal(props: Todo) {
 
       onCancelClick();
 
-      router.push("/folders").then(() => {
-        router.reload();
-      });
+      router.push("/folders");
     }
   };
 

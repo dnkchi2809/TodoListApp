@@ -84,9 +84,7 @@ function FolderDetail(props: Todo) {
   };
 
   const onBackClick = () => {
-    router.push("/folders").then(() => {
-      router.reload();
-    });
+    router.push("/folders");
   };
 
   const onDeleteFolderClick = () => {

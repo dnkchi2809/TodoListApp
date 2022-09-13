@@ -25,9 +25,6 @@ function FolderCard(props: Folder) {
       .push({
         pathname: "/folders/[folderItemId]",
         query: { folderItemId: props.id },
-      })
-      .then(() => {
-        router.reload();
       });
   };
 

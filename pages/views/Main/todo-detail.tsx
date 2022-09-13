@@ -114,9 +114,7 @@ function TodoDetail(props: ItemProps) {
 
   const onBackClick = () => {
     clearData();
-    router.push("/").then(() => {
-      router.reload();
-    });
+    router.push("/");
   };
 
   const onUpdateClick = () => {

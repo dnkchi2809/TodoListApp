@@ -60,9 +60,6 @@ function TodoCard(props: Todo) {
       .push({
         pathname: "/todo/[todoItemId]",
         query: { todoItemId: props.id },
-      })
-      .then(() => {
-        router.reload();
       });
   };
 

@@ -30,15 +30,11 @@ function NavBar() {
   const folderLink = useRef<HTMLAnchorElement>(null);
 
   const onHomeLinkClick = () => {
-    router.push("/").then(() => {
-      router.reload();
-    });
+    router.push("/");
   };
 
   const onFolderLinkClick = () => {
-    router.push("/folders").then(() => {
-      router.reload();
-    });
+    router.push("/folders");
   };
 
   const dataSelected: itemSelect[] = [];
