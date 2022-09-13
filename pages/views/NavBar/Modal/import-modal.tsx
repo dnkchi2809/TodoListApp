@@ -3,8 +3,8 @@ import { useRecoilState } from "recoil";
 import { Transition } from "@headlessui/react";
 import { useTimeoutFn } from "react-use";
 import { openImportModal } from "../../../../recoil/open-import-modal";
-import { ImportTodoFile } from "../import-todo-file";
-import { ImportFolderFile } from "../import-folder-file";
+import { ImportTodoFile } from "../../../../action/import-todo-file";
+import { ImportFolderFile } from "../../../../action/import-folder-file";
 
 function ImportModal() {
   const [isShowing, setIsShowing] = useState(false);

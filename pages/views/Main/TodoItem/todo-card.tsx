@@ -94,10 +94,11 @@ function TodoCard(props: Todo) {
   useEffect(() => {
     if (selectAll) {
       setCheckedInput(true);
-    } else if (arrayItems.length == 0) {
+    }
+    else if (Object.keys(arrayItems).length == 0) {
       setCheckedInput(false);
     }
-  }, [arrayItems.length, selectAll]);
+  }, [arrayItems, selectAll]);
 
   return (
     <>
@@ -120,9 +121,14 @@ function TodoCard(props: Todo) {
                 title="Double click to see detail"
               >
                 <p className="text-lg font-medium">
-                  {props.label.length > 15
-                    ? props.label.substring(0, 15) + "..."
-                    : props.label}
+                  {props.label !== undefined
+                    ?
+                    props.label.length > 15
+                      ? props.label.substring(0, 15) + "..."
+                      : props.label
+                    :
+                    null
+                  }
                 </p>
               </div>
               <div className="w-1/5 flex justify-end">

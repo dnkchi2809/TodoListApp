@@ -49,10 +49,10 @@ function FolderCard(props: Folder) {
   useEffect(() => {
     if (selectAll) {
       setCheckedInput(true);
-    } else if (arrayFolder.length == 0) {
+    } else if (Object.keys(arrayFolder).length == 0) {
       setCheckedInput(false);
     }
-  }, [arrayFolder.length, selectAll]);
+  }, [arrayFolder, selectAll]);
 
   return (
     <>
@@ -70,7 +70,7 @@ function FolderCard(props: Folder) {
         </div>
         <div className="text-center" onClick={onFolderCardClick}>
           <p>{props.name}</p>
-          <p>Todo : {props.todoItemArray.length}</p>
+          <p>Todo : {props.todoItemArray !== undefined ? props.todoItemArray.length : null}</p>
         </div>
       </div>
     </>
