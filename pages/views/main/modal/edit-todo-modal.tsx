@@ -8,8 +8,8 @@ import { selectFolder } from "../../../../recoil/select-folder";
 import { selectStateOfItem } from "../../../../recoil/select-state-of-item";
 import TodoStateOfItem from "../todo-item/todo-state-of-item";
 import { todoLocalStorageChange } from "../../../../recoil/todo-localstorage-change";
-import { Dialog } from '@headlessui/react';
-import { useTranslation } from 'react-i18next';
+import { Dialog } from "@headlessui/react";
+import { useTranslation } from "react-i18next";
 
 interface Todo {
   id: number;
@@ -40,7 +40,7 @@ function EditTodoModal() {
   const [openModalEditTodo, setOpenModalEditTodo] =
     useRecoilState(openEditTodoModal);
   const [selectItem, setSelectItem] = useRecoilState(todoItemSelect);
-  
+
   const [selectedFolder, setSelectedFolder] = useRecoilState(selectFolder);
   const [selectedState, setSelectedState] = useRecoilState(selectStateOfItem);
 
@@ -165,7 +165,7 @@ function EditTodoModal() {
 
   const validateUpdateTodoItem = (paramItem: Todo) => {
     if (paramItem.label == "") {
-      alert(t('content.Label is invalid'));
+      alert(t("content.Label is invalid"));
       return false;
     }
     return true;
@@ -212,8 +212,7 @@ function EditTodoModal() {
   useEffect(() => {
     if (openModalEditTodo) {
       setIsOpen(true);
-    }
-    else{
+    } else {
       setIsOpen(false);
     }
   }, [openModalEditTodo]);
@@ -326,7 +325,9 @@ function EditTodoModal() {
                                         clipRule="evenodd"
                                       ></path>
                                     </svg>
-                                    <span className="sr-only">Upload image</span>
+                                    <span className="sr-only">
+                                      Upload image
+                                    </span>
                                   </button>
                                   <button
                                     type="button"
@@ -489,7 +490,7 @@ function EditTodoModal() {
                                 defaultValue={updateTodoItem.detail}
                                 rows={10}
                                 className="block px-0 w-full text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
-                                placeholder={t('content.Write an article...')}
+                                placeholder={t("content.Write an article...")}
                               />
                             </div>
                           </div>
@@ -503,7 +504,7 @@ function EditTodoModal() {
                         className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
                         onClick={onSaveClick}
                       >
-                        {t('content.Save')}
+                        {t("content.Save")}
                       </button>
                       <button
                         data-modal-toggle="editModal"
@@ -511,7 +512,7 @@ function EditTodoModal() {
                         className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
                         onClick={onCancelClick}
                       >
-                        {t('content.Cancel')}
+                        {t("content.Cancel")}
                       </button>
                     </div>
                   </div>

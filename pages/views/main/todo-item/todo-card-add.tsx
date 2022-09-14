@@ -1,7 +1,7 @@
 import { useSetRecoilState } from "recoil";
 import { openAddTodoModal } from "../../../../recoil/open-add-todo-modal";
 import AddTodoModal from "../modal/add-todo-modal";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 function TodoCardAdd() {
   const { t } = useTranslation();
@@ -19,7 +19,7 @@ function TodoCardAdd() {
           type="button"
           onClick={onAddTodoClick}
           data-toggle="tooltip"
-          title={t('content.Add New Todo')}
+          title={t("content.Add New Todo")}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

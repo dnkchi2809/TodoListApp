@@ -4,18 +4,18 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { selectState } from "../../../../recoil/select-state";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import { changeLanguage } from "../../../../recoil/change-language";
 
 function TodoState() {
   const { t } = useTranslation();
 
   const state = [
-    { name: t('content.All') },
-    { name: t('content.Todo') },
-    { name: t('content.In progress') },
-    { name: t('content.Pending') },
-    { name: t('content.Done') },
+    { name: t("content.All") },
+    { name: t("content.Todo") },
+    { name: t("content.In progress") },
+    { name: t("content.Pending") },
+    { name: t("content.Done") },
   ];
 
   const [stateValue, setStateValue] = useState(state[0]);
@@ -81,7 +81,10 @@ function TodoState() {
                     <Listbox.Option
                       key={stateIndex}
                       className={({ active }) =>
-                        `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-amber-100 text-amber-900' : 'text-gray-900'
+                        `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                          active
+                            ? "bg-amber-100 text-amber-900"
+                            : "text-gray-900"
                         }`
                       }
                       value={stateItem}
@@ -89,19 +92,20 @@ function TodoState() {
                       {(selectedState) => (
                         <>
                           <span
-                            className={`block truncate ${selectedState ? 'font-normal' : 'font-normal'
-                              }`}
+                            className={`block truncate ${
+                              selectedState ? "font-normal" : "font-normal"
+                            }`}
                           >
                             {stateItem.name}
                           </span>
-                          {
-                            stateItem.name == stateValue.name
-                              ?
-                              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                                <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                              </span>
-                              : null
-                          }
+                          {stateItem.name == stateValue.name ? (
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
+                              <CheckIcon
+                                className="h-5 w-5"
+                                aria-hidden="true"
+                              />
+                            </span>
+                          ) : null}
                         </>
                       )}
                     </Listbox.Option>

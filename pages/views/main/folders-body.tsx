@@ -8,7 +8,7 @@ import { selectAllFolders } from "../../../recoil/select-all-folders";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { pageNavigate } from "../../../recoil/page-navigate";
 import { folderLocalStorageChange } from "../../../recoil/folder-localstorage-change";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 interface Folder {
   id: number;
@@ -118,7 +118,7 @@ function FoldersBody() {
           onChange={onSelectAllClick}
           className="ml-3 w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
         />{" "}
-        &nbsp;&nbsp;&nbsp;&nbsp;{t('content.Select All')}
+        &nbsp;&nbsp;&nbsp;&nbsp;{t("content.Select All")}
       </div>
       <div className="flex flex-wrap mt-5">
         {folderListStorage.length > 0

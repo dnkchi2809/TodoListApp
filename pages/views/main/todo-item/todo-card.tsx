@@ -56,11 +56,10 @@ function TodoCard(props: Todo) {
   };
 
   const onSelectTodoItemClick = () => {
-    router
-      .push({
-        pathname: "/todo/[todoItemId]",
-        query: { todoItemId: props.id },
-      });
+    router.push({
+      pathname: "/todo/[todoItemId]",
+      query: { todoItemId: props.id },
+    });
   };
 
   const onSelectManyItemClick = () => {
@@ -94,8 +93,7 @@ function TodoCard(props: Todo) {
   useEffect(() => {
     if (selectAll) {
       setCheckedInput(true);
-    }
-    else if (Object.keys(arrayItems).length == 0) {
+    } else if (Object.keys(arrayItems).length == 0) {
       setCheckedInput(false);
     }
   }, [arrayItems, selectAll]);
@@ -122,13 +120,10 @@ function TodoCard(props: Todo) {
               >
                 <p className="text-lg font-medium">
                   {props.label !== undefined
-                    ?
-                    props.label.length > 15
+                    ? props.label.length > 15
                       ? props.label.substring(0, 15) + "..."
                       : props.label
-                    :
-                    null
-                  }
+                    : null}
                 </p>
               </div>
               <div className="w-1/5 flex justify-end">

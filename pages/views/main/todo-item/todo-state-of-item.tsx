@@ -3,19 +3,19 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 import { useRecoilState } from "recoil";
 import { selectStateOfItem } from "../../../../recoil/select-state-of-item";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 function TodoStateOfItem() {
   const { t } = useTranslation();
 
   const state = [
-    { name: t('content.Todo') },
-    { name: t('content.In progress') },
-    { name: t('content.Pending') },
-    { name: t('content.Done') },
+    { name: t("content.Todo") },
+    { name: t("content.In progress") },
+    { name: t("content.Pending") },
+    { name: t("content.Done") },
   ];
-  
-  const [stateValue, setStateValue ] = useState(state[0])
+
+  const [stateValue, setStateValue] = useState(state[0]);
   const [selectedState, setSelectedState] = useRecoilState(selectStateOfItem);
 
   useEffect(() => {
@@ -44,14 +44,14 @@ function TodoStateOfItem() {
   }, [selectedState, setSelectedState]);
 
   useEffect(() => {
-    setStateValue({name : t(`content.${selectedState.name}`)});
+    setStateValue({ name: t(`content.${selectedState.name}`) });
   }, [t, selectedState.name]);
 
   return (
     <>
       <div className="flex mb-2">
         <div className="flex justify-center items-center text-gray-600 text-blue-500 mr-5">
-          {t('content.State')}:
+          {t("content.State")}:
         </div>
         <div className="flex flex-wrap">
           <Listbox value={selectedState} onChange={setSelectedState}>
@@ -93,14 +93,14 @@ function TodoStateOfItem() {
                           >
                             {stateItem.name}
                           </span>
-                          {
-                            stateItem.name == stateValue.name
-                              ?
-                              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                                <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                              </span>
-                              : null
-                          }
+                          {stateItem.name == stateValue.name ? (
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
+                              <CheckIcon
+                                className="h-5 w-5"
+                                aria-hidden="true"
+                              />
+                            </span>
+                          ) : null}
                         </>
                       )}
                     </Listbox.Option>

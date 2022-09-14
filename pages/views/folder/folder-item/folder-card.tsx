@@ -21,11 +21,10 @@ function FolderCard(props: Folder) {
   const [checkedInput, setCheckedInput] = useState(false);
 
   const onFolderCardClick = () => {
-    router
-      .push({
-        pathname: "/folders/[folderItemId]",
-        query: { folderItemId: props.id },
-      });
+    router.push({
+      pathname: "/folders/[folderItemId]",
+      query: { folderItemId: props.id },
+    });
   };
 
   const onSelectFolderClick = () => {
@@ -70,7 +69,12 @@ function FolderCard(props: Folder) {
         </div>
         <div className="text-center" onClick={onFolderCardClick}>
           <p>{props.name}</p>
-          <p>Todo : {props.todoItemArray !== undefined ? props.todoItemArray.length : null}</p>
+          <p>
+            Todo :{" "}
+            {props.todoItemArray !== undefined
+              ? props.todoItemArray.length
+              : null}
+          </p>
         </div>
       </div>
     </>
