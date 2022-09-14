@@ -1,6 +1,6 @@
 import Head from "next/head";
-import FoldersBody from "./views/main/folders-body";
-import NavBar from "./views/main/nav-bar";
+import FoldersBody from "./views/Main1/folders-body";
+import NavBar from "./views/Main1/nav-bar";
 
 export default function Home() {
   return (

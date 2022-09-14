@@ -1,6 +1,6 @@
 import Head from "next/head";
-import NavBar from "../views/main/nav-bar";
-import TodoDetail from "../views/main/todo-detail";
+import NavBar from "../views/Main1/nav-bar";
+import TodoDetail from "../views/Main1/todo-detail";
 import { useRouter } from "next/router";
 
 export default function DetailTodo() {
