@@ -1,5 +1,5 @@
 import Head from "next/head";
-import NavBar from "../views/Main1/nav-bar";
+import NavBar from "../views/main/nav-bar";
 import { useRouter } from "next/router";
 import FolderDetail from "../views/folder/folder-item/folder-detail";
 

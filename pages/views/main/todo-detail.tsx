@@ -5,6 +5,7 @@ import { useRecoilState } from "recoil";
 import { selectStateOfItem } from "../../../recoil/select-state-of-item";
 import TodoStateOfItem from "./todo-item/todo-state-of-item";
 import { useRouter } from "next/router";
+import { useTranslation } from 'react-i18next';
 
 interface Todo {
   id: number;
@@ -31,6 +32,8 @@ interface ItemProps {
 }
 
 function TodoDetail(props: ItemProps) {
+  const { t } = useTranslation();
+  
   const router = useRouter();
 
   const itemId = props.itemId;
@@ -170,7 +173,7 @@ function TodoDetail(props: ItemProps) {
 
       localStorage.setItem("folderList", JSON.stringify(folderListStorage));
 
-      alert("Update successfull");
+      alert(t('content.Update successfull'));
     }
   };
 

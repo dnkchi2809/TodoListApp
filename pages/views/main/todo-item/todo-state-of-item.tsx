@@ -1,30 +1,63 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 import { useRecoilState } from "recoil";
 import { selectStateOfItem } from "../../../../recoil/select-state-of-item";
-
-const state = [
-  { name: "Todo" },
-  { name: "In progess" },
-  { name: "Pending" },
-  { name: "Done" },
-];
+import { useTranslation } from 'react-i18next';
 
 function TodoStateOfItem() {
+  const { t } = useTranslation();
+
+  const state = [
+    { name: t('content.Todo') },
+    { name: t('content.In progress') },
+    { name: t('content.Pending') },
+    { name: t('content.Done') },
+  ];
+  
+  const [stateValue, setStateValue ] = useState(state[0])
   const [selectedState, setSelectedState] = useRecoilState(selectStateOfItem);
+
+  useEffect(() => {
+    switch (selectedState.name) {
+      case "Tất cả": {
+        setSelectedState({ name: "All" });
+        break;
+      }
+      case "Cần làm": {
+        setSelectedState({ name: "Todo" });
+        break;
+      }
+      case "Đang thực hiện": {
+        setSelectedState({ name: "In progress" });
+        break;
+      }
+      case "Đang đợi": {
+        setSelectedState({ name: "Pending" });
+        break;
+      }
+      case "Hoàn thành": {
+        setSelectedState({ name: "Done" });
+        break;
+      }
+    }
+  }, [selectedState, setSelectedState]);
+
+  useEffect(() => {
+    setStateValue({name : t(`content.${selectedState.name}`)});
+  }, [t, selectedState.name]);
 
   return (
     <>
       <div className="flex mb-2">
         <div className="flex justify-center items-center text-gray-600 text-blue-500 mr-5">
-          State:
+          {t('content.State')}:
         </div>
         <div className="flex flex-wrap">
           <Listbox value={selectedState} onChange={setSelectedState}>
             <div className="relative mt-1 w-40">
               <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-                <span className="block truncate">{selectedState.name}</span>
+                <span className="block truncate">{t(stateValue.name)}</span>
                 <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                   <SelectorIcon
                     className="h-5 w-5 text-gray-400"

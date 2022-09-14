@@ -5,8 +5,11 @@ import { useTimeoutFn } from "react-use";
 import { openImportModal } from "../../../../recoil/open-import-modal";
 import { ImportTodoFile } from "../../../../action/import-todo-file";
 import { ImportFolderFile } from "../../../../action/import-folder-file";
+import { useTranslation } from 'react-i18next';
 
 function ImportModal() {
+  const { t } = useTranslation();
+
   const [isShowing, setIsShowing] = useState(false);
   const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
@@ -70,7 +73,7 @@ function ImportModal() {
                         className="image-import px-3 py-4 w-full h-40 flex justify-center items-center text-white"
                         title="Import Todo"
                       />
-                      <div className="text-center">Import Todo</div>
+                      <div className="text-center">{t('content.Import Todo')}</div>
                     </div>
                     <div className="w-1/2" onClick={onImportFolderClick}>
                       <div
@@ -78,7 +81,7 @@ function ImportModal() {
                         className="image-import px-3 py-4 w-full h-40 flex justify-center items-center text-white"
                         title="Import Folder"
                       />
-                      <div className="text-center">Import Folders</div>
+                      <div className="text-center">{t('content.Import Folder')}</div>
                     </div>
                   </div>
                 </div>

@@ -1,17 +1,18 @@
 import { useEffect, useState, Fragment, useRef } from "react";
 import { Transition } from "@headlessui/react";
 import { useTimeoutFn } from "react-use";
-import TodoCardAdd from "../../Main1/todo-item/todo-card-add";
-import TodoCard from "../../Main1/todo-item/todo-card";
+import TodoCardAdd from "../../main/todo-item/todo-card-add";
+import TodoCard from "../../main/todo-item/todo-card";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { openDeleteFolderModal } from "../../../../recoil/open-delete-folder-modal";
 import DeleteFolderModal from "../modal/delete-folder-modal";
 import { selectAllItems } from "../../../../recoil/select-all-items";
 import { selectArrayItems } from "../../../../recoil/select-many-items";
 import { selectState } from "../../../../recoil/select-state";
-import TodoState from "../../Main1/todo-item/todo-state";
+import TodoState from "../../main/todo-item/todo-state";
 import { useRouter } from "next/router";
 import { folderLocalStorageChange } from "../../../../recoil/folder-localstorage-change";
+import { useTranslation } from 'react-i18next';
 
 interface Todo {
   id: number;
@@ -34,6 +35,8 @@ interface Folder {
 }
 
 function FolderDetail(props: Todo) {
+  const { t } = useTranslation();
+
   const router = useRouter();
 
   const setFolderStorageChange = useSetRecoilState(folderLocalStorageChange);
@@ -167,7 +170,7 @@ function FolderDetail(props: Todo) {
           </div>
           <div className="w-1/4">
             <p className="mb-3 font-thin text-blue-500 text-right">
-              Create Date:{" "}
+              {t('content.Create Date')}:{" "}
               {folderSelect.length > 0 ? folderSelect[0].createDate : null}
             </p>
           </div>
@@ -181,7 +184,7 @@ function FolderDetail(props: Todo) {
               onChange={onSelectAllClick}
               className="ml-5 w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
             />{" "}
-            Select All
+            {t('content.Select All')}
           </div>
           <div className="w-1/2">
             <TodoState />
@@ -219,13 +222,13 @@ function FolderDetail(props: Todo) {
               className="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
               onClick={onBackClick}
             >
-              Back
+              {t('content.Back')}
             </button>
             <button
               className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
               onClick={onDeleteFolderClick}
             >
-              Delete Folder
+              {t('content.Delete Folder')}
             </button>
           </div>
         </div>

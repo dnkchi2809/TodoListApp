@@ -8,17 +8,22 @@ import ImportModal from "../navbar/modal/import-modal";
 import Link from "next/link";
 import { pageNavigate } from "../../../recoil/page-navigate";
 import { useRouter } from "next/router";
+import { useTranslation } from 'react-i18next';
+import { changeLanguage } from "../../../recoil/change-language";
 
 interface itemSelect {
   id: number;
 }
 
 function NavBar() {
+  const { t, i18n } = useTranslation();
+
   const router = useRouter();
   const [arrayItems] = useRecoilState(selectArrayItems);
   const [arrayFolder] = useRecoilState(selectArrayFolders);
 
   const [selectedPage] = useRecoilState(pageNavigate);
+  const [language, setLanguage] = useRecoilState(changeLanguage);
 
   const [dataType, setDataType] = useState(0);
 
@@ -62,6 +67,17 @@ function NavBar() {
   const onImportClick = () => {
     setImportModal(true);
   };
+
+  const onChangeLanguage = () => {
+    if(language == "en"){
+      i18n.changeLanguage("vi");
+      setLanguage("vi");
+    }
+    else{
+      i18n.changeLanguage("en");
+      setLanguage("en");
+    }
+  }
 
   useEffect(() => {
     if (selectedPage == "folder") {
@@ -119,7 +135,7 @@ function NavBar() {
                     className="text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                     onClick={onHomeLinkClick}
                   >
-                    Home
+                    {t('content.Home')}
                   </a>
                 </Link>
               </li>
@@ -130,7 +146,7 @@ function NavBar() {
                     onClick={onFolderLinkClick}
                     className="text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                   >
-                    Folders
+                    {t('content.Folders')}
                   </a>
                 </Link>
               </li>
@@ -140,7 +156,7 @@ function NavBar() {
                   onClick={onImportClick}
                   className="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 >
-                  Import
+                  {t('content.Import')}
                 </a>
               </li>
               <li>
@@ -149,7 +165,16 @@ function NavBar() {
                   onClick={onExportClick}
                   className="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
                 >
-                  Export
+                  {t('content.Export')}
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  onClick={onChangeLanguage}
+                  className="block py-2 pr-4 pl-3 text-red-500 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >
+                  {t('content.Language')}
                 </a>
               </li>
             </ul>

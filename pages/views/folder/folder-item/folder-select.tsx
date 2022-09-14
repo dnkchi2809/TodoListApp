@@ -3,6 +3,7 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 import { selectFolder } from "../../../../recoil/select-folder";
 import { useRecoilState } from "recoil";
+import { useTranslation } from 'react-i18next';
 
 interface Folder {
   id: number;
@@ -12,6 +13,8 @@ interface Folder {
 }
 
 function FolderSelect() {
+  const { t } = useTranslation();
+
   const [folderListStorage, setFolderListStorage] = useState([]);
 
   const [selectedFolder, setSelectedFolder] = useRecoilState(selectFolder);
@@ -26,7 +29,7 @@ function FolderSelect() {
     <>
       <div className="flex mb-3">
         <div className="w-1/2 flex items-center text-gray-600">
-          <p className="">Select Folder</p>
+          <p className="">{t('content.Select Folder')}</p>
         </div>
         <div className="w-1/2 flex flex-wrap justify-end items-end mx-auto">
           <Listbox value={selectedFolder} onChange={setSelectedFolder}>

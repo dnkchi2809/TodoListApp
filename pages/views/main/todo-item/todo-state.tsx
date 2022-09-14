@@ -1,19 +1,59 @@
-import { Fragment } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { selectState } from "../../../../recoil/select-state";
-
-const state = [
-  { name: "All" },
-  { name: "Todo" },
-  { name: "In progess" },
-  { name: "Pending" },
-  { name: "Done" },
-];
+import { useTranslation } from 'react-i18next';
+import { changeLanguage } from "../../../../recoil/change-language";
 
 function TodoState() {
+  const { t } = useTranslation();
+
+  const state = [
+    { name: t('content.All') },
+    { name: t('content.Todo') },
+    { name: t('content.In progress') },
+    { name: t('content.Pending') },
+    { name: t('content.Done') },
+  ];
+
+  const [stateValue, setStateValue] = useState(state[0]);
   const [selectedState, setSelectedState] = useRecoilState(selectState);
+  const language = useRecoilValue(changeLanguage);
+
+  useEffect(() => {
+    setStateValue(state[0]);
+  }, [language]);
+
+  useEffect(() => {
+    switch (selectedState.name) {
+      case "Tất cả": {
+        setSelectedState({ name: "All" });
+        break;
+      }
+      case "Cần làm": {
+        setSelectedState({ name: "Todo" });
+        break;
+      }
+      case "Đang thực hiện": {
+        setSelectedState({ name: "In progress" });
+        break;
+      }
+      case "Đang đợi": {
+        setSelectedState({ name: "Pending" });
+        break;
+      }
+      case "Hoàn thành": {
+        setSelectedState({ name: "Done" });
+        break;
+      }
+    }
+  }, [selectedState]);
+
+  useEffect(() => {
+    setStateValue({name : t(`content.${selectedState.name}`)});
+  }, [selectedState]);
 
   return (
     <>
@@ -22,7 +62,7 @@ function TodoState() {
           <Listbox value={selectedState} onChange={setSelectedState}>
             <div className="relative mt-1 w-40">
               <Listbox.Button className="relative w-full cursor-default shadow-md rounded-lg bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-                <span className="block truncate">{selectedState.name}</span>
+                <span className="block truncate">{t(stateValue.name)}</span>
                 <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                   <SelectorIcon
                     className="h-5 w-5 text-gray-400"
@@ -41,10 +81,9 @@ function TodoState() {
                     <Listbox.Option
                       key={stateIndex}
                       className={({ active }) =>
-                        `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                          active
-                            ? "bg-amber-100 text-amber-900"
-                            : "text-gray-900"
+                        `relative cursor-default select-none py-2 pl-10 pr-4 ${active
+                          ? "bg-amber-100 text-amber-900"
+                          : "text-gray-900"
                         }`
                       }
                       value={state}
@@ -53,9 +92,8 @@ function TodoState() {
                         return (
                           <>
                             <span
-                              className={`block truncate ${
-                                selectedState ? "font-medium" : "font-normal"
-                              }`}
+                              className={`block truncate ${selectedState ? "font-medium" : "font-normal"
+                                }`}
                             >
                               {state.name}
                             </span>

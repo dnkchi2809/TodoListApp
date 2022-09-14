@@ -1,8 +1,11 @@
 import { useSetRecoilState } from "recoil";
 import { openAddFolderModal } from "../../../../recoil/openn-add-folder-modal";
 import AddFolderModal from "../modal/add-folder-modal";
+import { useTranslation } from 'react-i18next';
 
 function FolderCardAdd() {
+  const { t } = useTranslation();
+
   const setOpenModalAddFolder = useSetRecoilState(openAddFolderModal);
 
   const onAddFolderClick = () => {
@@ -16,7 +19,7 @@ function FolderCardAdd() {
           className="w-full h-full rounded flex justify-center items-center py-2"
           type="button"
           onClick={onAddFolderClick}
-          title="Add New Folder"
+          title={t('content.Add New Folder')}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

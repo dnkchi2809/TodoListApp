@@ -7,6 +7,7 @@ import FolderSelect from "../../folder/folder-item/folder-select";
 import { selectFolder } from "../../../../recoil/select-folder";
 import { todoLocalStorageChange } from "../../../../recoil/todo-localstorage-change";
 import { Dialog } from '@headlessui/react';
+import { useTranslation } from 'react-i18next';
 
 interface Todo {
   id: number;
@@ -29,6 +30,8 @@ interface Folder {
 }
 
 function AddTodoModal() {
+  const { t } = useTranslation();
+
   const [isOpen, setIsOpen] = useState(false);
 
   const setTodoStorageChange = useSetRecoilState(todoLocalStorageChange);
@@ -117,7 +120,7 @@ function AddTodoModal() {
 
   const validateNewTodoItem = (paramItem: Todo) => {
     if (paramItem.label == "") {
-      alert("Label is invalid");
+      alert(t('content.Label is invalid'));
       return false;
     }
     return true;
@@ -165,7 +168,7 @@ function AddTodoModal() {
                   <div className="sm:flex sm:items-start">
                     <input
                       ref={idLabel}
-                      placeholder="To Do Label"
+                      placeholder={t('content.To Do Label')}
                       className="w-full mb-3 text-lg font-medium"
                       onInput={onInputLabelTodo}
                     />
@@ -394,7 +397,7 @@ function AddTodoModal() {
                             ref={idDetail}
                             rows={8}
                             className="block px-0 w-full text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
-                            placeholder="Write an article..."
+                            placeholder={t('content.Write an article...')}
                             onInput={onInputDetailTodo}
                           ></textarea>
                         </div>
@@ -409,7 +412,7 @@ function AddTodoModal() {
                     className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
                     onClick={onSaveNewTodo}
                   >
-                    Save
+                    {t('content.Save')}
                   </button>
                   <button
                     data-modal-toggle="addModal"
@@ -417,7 +420,7 @@ function AddTodoModal() {
                     className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
                     onClick={onCancelClick}
                   >
-                    Cancel
+                    {t('content.Cancel')}
                   </button>
                 </div>
               </div>
