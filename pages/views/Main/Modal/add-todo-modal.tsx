@@ -3,10 +3,10 @@ import { useState, useEffect, Fragment, useRef } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { openAddTodoModal } from "../../../../recoil/open-add-todo-modal";
 import { Transition } from "@headlessui/react";
-import { useTimeoutFn } from "react-use";
 import FolderSelect from "../../Folders/FolderItem/folder-select";
 import { selectFolder } from "../../../../recoil/select-folder";
 import { todoLocalStorageChange } from "../../../../recoil/todo-localstorage-change";
+import { Dialog } from '@headlessui/react';
 
 interface Todo {
   id: number;
@@ -29,9 +29,9 @@ interface Folder {
 }
 
 function AddTodoModal() {
+  const [isOpen, setIsOpen] = useState(false);
+
   const setTodoStorageChange = useSetRecoilState(todoLocalStorageChange);
-  const [isShowing, setIsShowing] = useState(false);
-  const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
   const [selectedFolder, setSelectedFolder] = useRecoilState(selectFolder);
 
@@ -53,7 +53,6 @@ function AddTodoModal() {
   const [openModalAddTodo, setOpenModalAddTodo] =
     useRecoilState(openAddTodoModal);
 
-  const addModal = useRef<HTMLDivElement>(null);
   const idLabel = useRef<HTMLInputElement>(null);
   const idDetail = useRef<HTMLTextAreaElement>(null);
 
@@ -128,38 +127,40 @@ function AddTodoModal() {
     newTodoItem.folderId = selectedFolder.id;
 
     if (openModalAddTodo) {
-      addModal.current?.classList.remove("hidden");
-      setIsShowing(true);
-      resetIsShowing();
+      setIsOpen(true);
     } else {
-      setIsShowing(false);
-      resetIsShowing();
-      addModal.current?.classList.add("hidden");
+      setIsOpen(false);
     }
-  }, [newTodoItem, selectedFolder.id, openModalAddTodo, resetIsShowing]);
+  }, [newTodoItem, selectedFolder.id, openModalAddTodo]);
   return (
     <>
-      <div
-        ref={addModal}
-        tabIndex={-1}
-        aria-hidden="true"
-        className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full"
-      >
-        <div className="fixed inset-0 bg-gray-200 bg-opacity-70 transition-opacity" />
+      <Transition appear show={isOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={onCancelClick}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
 
-        <Transition
-          as={Fragment}
-          show={isShowing}
-          enter="transform transition duration-[4000ms] linear"
-          enterFrom="opacity-0 scale-50"
-          enterTo="opacity-100 scale-100"
-          leave="transform duration-200 transition ease-in-out"
-          leaveFrom="opacity-100 scale-100 "
-          leaveTo="opacity-0 scale-50 "
-        >
-          <div className="fixed z-10 inset-0 overflow-y-auto shadow-md">
-            <div className="flex items-center sm:items-center justify-center min-h-full p-4 text-center sm:p-0">
-              <div className="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="bg-blue-300 w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
+                  <div className="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
                 <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                   <div className="sm:flex sm:items-start">
                     <input
@@ -420,10 +421,12 @@ function AddTodoModal() {
                   </button>
                 </div>
               </div>
+                </Dialog.Panel>
+              </Transition.Child>
             </div>
           </div>
-        </Transition>
-      </div>
+        </Dialog>
+      </Transition>
     </>
   );
 }
