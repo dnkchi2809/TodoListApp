@@ -245,7 +245,7 @@ function EditTodoModal() {
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel className="bg-blue-300 w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
-                  <div className="relative text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-lg sm:w-full">
+                  <div className="relative text-left overflow-hidden shadow-xl transform transition-all rounded-2xl sm:my-8 sm:max-w-lg sm:w-full">
                     <div className="bg-white px-4 pb-4 sm:p-6 sm:pb-4">
                       <div className="flex">
                         <div className="w-3/4">

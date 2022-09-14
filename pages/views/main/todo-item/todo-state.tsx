@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -52,7 +52,7 @@ function TodoState() {
   }, [selectedState]);
 
   useEffect(() => {
-    setStateValue({name : t(`content.${selectedState.name}`)});
+    setStateValue({ name: t(`content.${selectedState.name}`) });
   }, [selectedState]);
 
   return (
@@ -77,37 +77,33 @@ function TodoState() {
                 leaveTo="opacity-0"
               >
                 <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                  {state.map((state, stateIndex) => (
+                  {state.map((stateItem, stateIndex) => (
                     <Listbox.Option
                       key={stateIndex}
                       className={({ active }) =>
-                        `relative cursor-default select-none py-2 pl-10 pr-4 ${active
-                          ? "bg-amber-100 text-amber-900"
-                          : "text-gray-900"
+                        `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-amber-100 text-amber-900' : 'text-gray-900'
                         }`
                       }
-                      value={state}
+                      value={stateItem}
                     >
-                      {(selectedState) => {
-                        return (
-                          <>
-                            <span
-                              className={`block truncate ${selectedState ? "font-medium" : "font-normal"
-                                }`}
-                            >
-                              {state.name}
-                            </span>
-                            {selectedState ? (
+                      {(selectedState) => (
+                        <>
+                          <span
+                            className={`block truncate ${selectedState ? 'font-normal' : 'font-normal'
+                              }`}
+                          >
+                            {stateItem.name}
+                          </span>
+                          {
+                            stateItem.name == stateValue.name
+                              ?
                               <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                                <CheckIcon
-                                  className="h-5 w-5"
-                                  aria-hidden="true"
-                                />
+                                <CheckIcon className="h-5 w-5" aria-hidden="true" />
                               </span>
-                            ) : null}
-                          </>
-                        );
-                      }}
+                              : null
+                          }
+                        </>
+                      )}
                     </Listbox.Option>
                   ))}
                 </Listbox.Options>

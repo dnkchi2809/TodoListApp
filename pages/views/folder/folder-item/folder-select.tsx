@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
-import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
+import { SelectorIcon } from "@heroicons/react/solid";
 import { selectFolder } from "../../../../recoil/select-folder";
 import { useRecoilState } from "recoil";
 import { useTranslation } from 'react-i18next';
@@ -72,14 +72,6 @@ function FolderSelect() {
                             >
                               {folderListStorage.name}
                             </span>
-                            {selectedFolder ? (
-                              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                                <CheckIcon
-                                  className="h-5 w-5"
-                                  aria-hidden="true"
-                                />
-                              </span>
-                            ) : null}
                           </>
                         )}
                       </Listbox.Option>
