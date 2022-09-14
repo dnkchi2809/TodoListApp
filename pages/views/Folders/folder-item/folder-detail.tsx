@@ -1,15 +1,15 @@
 import { useEffect, useState, Fragment, useRef } from "react";
 import { Transition } from "@headlessui/react";
 import { useTimeoutFn } from "react-use";
-import TodoCardAdd from "../../Main/TodoItem/todo-card-add";
-import TodoCard from "../../Main/TodoItem/todo-card";
+import TodoCardAdd from "../../main/todo-item/todo-card-add";
+import TodoCard from "../../main/todo-item/todo-card";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { openDeleteFolderModal } from "../../../../recoil/open-delete-folder-modal";
-import DeleteFolderModal from "../Modal/delete-folder-modal";
+import DeleteFolderModal from "../modal/delete-folder-modal";
 import { selectAllItems } from "../../../../recoil/select-all-items";
 import { selectArrayItems } from "../../../../recoil/select-many-items";
 import { selectState } from "../../../../recoil/select-state";
-import TodoState from "../../Main/TodoItem/todo-state";
+import TodoState from "../../main/todo-item/todo-state";
 import { useRouter } from "next/router";
 import { folderLocalStorageChange } from "../../../../recoil/folder-localstorage-change";
 

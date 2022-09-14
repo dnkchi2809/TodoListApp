@@ -4,7 +4,7 @@ import { openImportModal } from "../../../recoil/open-import-modal";
 import { selectArrayFolders } from "../../../recoil/select-array-folders";
 import { selectArrayItems } from "../../../recoil/select-many-items";
 import { ExportFile } from "../../../action/export-todo-file";
-import ImportModal from "../NavBar/Modal/import-modal";
+import ImportModal from "../navbar/modal/import-modal";
 import Link from "next/link";
 import { pageNavigate } from "../../../recoil/page-navigate";
 import { useRouter } from "next/router";

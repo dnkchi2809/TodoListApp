@@ -1,6 +1,6 @@
 import { useSetRecoilState } from "recoil";
 import { openAddTodoModal } from "../../../../recoil/open-add-todo-modal";
-import AddTodoModal from "../Modal/add-todo-modal";
+import AddTodoModal from "../modal/add-todo-modal";
 
 function TodoCardAdd() {
   const setOpenModalAddTodo = useSetRecoilState(openAddTodoModal);

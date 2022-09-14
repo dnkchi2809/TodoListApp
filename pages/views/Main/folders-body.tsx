@@ -1,8 +1,8 @@
 import { useEffect, useState, Fragment, useRef } from "react";
 import { Transition } from "@headlessui/react";
 import { useTimeoutFn } from "react-use";
-import FolderCard from "../Folders/FolderItem/folder-card";
-import FolderCardAdd from "../Folders/FolderItem/folder-card-add";
+import FolderCard from "../folders/folder-item/folder-card";
+import FolderCardAdd from "../folders/folder-item/folder-card-add";
 import { selectArrayFolders } from "../../../recoil/select-array-folders";
 import { selectAllFolders } from "../../../recoil/select-all-folders";
 import { useRecoilState, useSetRecoilState } from "recoil";

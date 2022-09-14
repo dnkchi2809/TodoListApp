@@ -3,10 +3,10 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { openEditTodoModal } from "../../../../recoil/open-edit-todo-modal";
 import { todoItemSelect } from "../../../../recoil/todo-item-select";
 import { Transition } from "@headlessui/react";
-import FolderSelect from "../../Folders/FolderItem/folder-select";
+import FolderSelect from "../../folders/folder-item/folder-select";
 import { selectFolder } from "../../../../recoil/select-folder";
 import { selectStateOfItem } from "../../../../recoil/select-state-of-item";
-import TodoStateOfItem from "../TodoItem/todo-state-of-item";
+import TodoStateOfItem from "../todo-item/todo-state-of-item";
 import { todoLocalStorageChange } from "../../../../recoil/todo-localstorage-change";
 import { Dialog } from '@headlessui/react';
 

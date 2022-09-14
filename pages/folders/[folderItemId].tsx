@@ -1,7 +1,7 @@
 import Head from "next/head";
-import NavBar from "../views/Main/nav-bar";
+import NavBar from "../views/main/nav-bar";
 import { useRouter } from "next/router";
-import FolderDetail from "../views/Folders/FolderItem/folder-detail";
+import FolderDetail from "../views/folders/folder-item/folder-detail";
 
 export default function DetailFolder() {
   const router = useRouter();
