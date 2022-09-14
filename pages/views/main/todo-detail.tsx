@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { selectFolder } from "../../../recoil/select-folder";
-import FolderSelect from "../Folders1/folder-item/folder-select";
+import FolderSelect from "../folder/folder-item/folder-select";
 import { useRecoilState } from "recoil";
 import { selectStateOfItem } from "../../../recoil/select-state-of-item";
 import TodoStateOfItem from "./todo-item/todo-state-of-item";

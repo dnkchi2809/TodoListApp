@@ -3,7 +3,7 @@ import { useState, useEffect, Fragment, useRef } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { openAddTodoModal } from "../../../../recoil/open-add-todo-modal";
 import { Transition } from "@headlessui/react";
-import FolderSelect from "../../Folders1/folder-item/folder-select";
+import FolderSelect from "../../folder/folder-item/folder-select";
 import { selectFolder } from "../../../../recoil/select-folder";
 import { todoLocalStorageChange } from "../../../../recoil/todo-localstorage-change";
 import { Dialog } from '@headlessui/react';
