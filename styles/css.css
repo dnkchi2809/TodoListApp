@@ -63,7 +63,7 @@ body::-webkit-scrollbar {
     }
 
     .image-import {
-        background-size: auto 100%;
+        background-size: auto 80%;
         background-repeat: no-repeat;
         background-position: center;
     }
