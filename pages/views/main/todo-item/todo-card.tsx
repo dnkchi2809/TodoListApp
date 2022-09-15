@@ -104,7 +104,7 @@ function TodoCard(props: Todo) {
         <Transition
           as={Fragment}
           show={isShowing}
-          enter="transform transition duration-[400ms] linear"
+          enter="transform transition duration-[100ms] linear"
           enterFrom="opacity-0 scale-50"
           enterTo="opacity-100 scale-100"
           leave="transform duration-200 transition ease-in-out"
