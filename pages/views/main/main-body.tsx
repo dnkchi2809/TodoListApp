@@ -136,7 +136,6 @@ function MainBody() {
   }, [setTodoStorageChange, todoStorageChange]);
 
   useEffect(() => {
-    // const storage = JSON.parse(localStorage.getItem("todoList") || "[]");
     if (selectedState.name == "All") {
       setTodoListStorage(storage);
     } else {

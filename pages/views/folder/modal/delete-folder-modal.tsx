@@ -104,11 +104,7 @@ function DeleteFolderModal(props: Todo) {
   }, [folderId]);
 
   useEffect(() => {
-    if (deleteFolderModal) {
-      setIsOpen(true);
-    } else {
-      setIsOpen(false);
-    }
+    setIsOpen(deleteFolderModal);
   }, [deleteFolderModal]);
   return (
     <>

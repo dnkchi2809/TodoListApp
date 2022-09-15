@@ -58,11 +58,7 @@ function AddFolderModal(): JSX.Element {
   };
 
   useEffect(() => {
-    if (openModalAddFolder) {
-      setIsOpen(true);
-    } else {
-      setIsOpen(false);
-    }
+    setIsOpen(openModalAddFolder);
   }, [openModalAddFolder]);
 
   return (

@@ -90,11 +90,7 @@ function DeleteTodoModal() {
   };
 
   useEffect(() => {
-    if (openModalDeleteTodo) {
-      setIsOpen(true);
-    } else {
-      setIsOpen(false);
-    }
+    setIsOpen(openModalDeleteTodo);
   }, [openModalDeleteTodo]);
   return (
     <>

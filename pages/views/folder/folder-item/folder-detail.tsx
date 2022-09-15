@@ -13,6 +13,7 @@ import TodoState from "../../main/todo-item/todo-state";
 import { useRouter } from "next/router";
 import { folderLocalStorageChange } from "../../../../recoil/folder-localstorage-change";
 import { useTranslation } from "react-i18next";
+import { todoLocalStorageChange } from "../../../../recoil/todo-localstorage-change";
 
 interface Todo {
   id: number;
@@ -43,6 +44,10 @@ function FolderDetail(props: Todo) {
 
   const [isShowing, setIsShowing] = useState(false);
   const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
+
+  const [todoStorageChange, setTodoStorageChange] = useRecoilState(
+    todoLocalStorageChange
+  );
 
   const folderId = Number(props.folderId);
 
@@ -133,29 +138,35 @@ function FolderDetail(props: Todo) {
     );
   }, [folderId]);
 
+  const [storage, setStorage] = useState([]);
+
+  useEffect(() => {
+    setStorage(JSON.parse(localStorage.getItem("todoList") || "[]"));
+  }, []);
+
+  useEffect(() => {
+    if (todoStorageChange) {
+      setStorage(JSON.parse(localStorage.getItem("todoList") || "[]"));
+      setTodoStorageChange(false);
+    }
+  }, [setTodoStorageChange, todoStorageChange]);
+
   useEffect(() => {
     if (folderId >= 0) {
-      const todoListStorage = JSON.parse(
-        localStorage.getItem("todoList") || "[]"
-      );
-
       if (selectedState.name == "All") {
         setTodoItemList(
-          todoListStorage.filter((todo: Todo) => {
+          storage.filter((todo: Todo) => {
             return todo.folderId == folderId;
           })
         );
       } else {
-        const todoListStorage = JSON.parse(
-          localStorage.getItem("todoList") || "[]"
-        );
-        const filterTodoState = todoListStorage.filter((todo: Todo) => {
+        const filterTodoState = storage.filter((todo: Todo) => {
           return todo.folderId == folderId && todo.state == selectedState.name;
         });
         setTodoItemList(filterTodoState);
       }
     }
-  }, [folderId, selectedState.name]);
+  }, [folderId, selectedState.name, storage]);
 
   return (
     <>
@@ -193,12 +204,12 @@ function FolderDetail(props: Todo) {
         <div className="flex flex-wrap">
           {todoItemList.length > 0
             ? todoItemList.map((todoItem: Todo, index) => {
-                return (
-                  <div className="col-todo-list" key={"todoCardItem" + index}>
-                    <TodoCard {...todoItem} />
-                  </div>
-                );
-              })
+              return (
+                <div className="col-todo-list" key={"todoCardItem" + index}>
+                  <TodoCard {...todoItem} />
+                </div>
+              );
+            })
             : null}
           <Transition
             as={Fragment}

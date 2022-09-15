@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { selectFolder } from "../../../recoil/select-folder";
 import FolderSelect from "../folder/folder-item/folder-select";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { selectStateOfItem } from "../../../recoil/select-state-of-item";
 import TodoStateOfItem from "./todo-item/todo-state-of-item";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
+import { todoLocalStorageChange } from "../../../recoil/todo-localstorage-change";
 
 interface Todo {
   id: number;
@@ -54,6 +55,8 @@ function TodoDetail(props: ItemProps) {
   });
 
   const [selectedFolder, setSelectedFolder] = useRecoilState(selectFolder);
+
+  const setTodoStorageChange = useSetRecoilState(todoLocalStorageChange);
 
   const [selectedState, setSelectedState] = useRecoilState(selectStateOfItem);
 
@@ -174,6 +177,8 @@ function TodoDetail(props: ItemProps) {
       localStorage.setItem("folderList", JSON.stringify(folderListStorage));
 
       alert(t("content.Update successfull"));
+
+      setTodoStorageChange(true);
     }
   };
 

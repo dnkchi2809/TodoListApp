@@ -128,12 +128,7 @@ function AddTodoModal() {
 
   useEffect(() => {
     newTodoItem.folderId = selectedFolder.id;
-
-    if (openModalAddTodo) {
-      setIsOpen(true);
-    } else {
-      setIsOpen(false);
-    }
+    setIsOpen(openModalAddTodo);
   }, [newTodoItem, selectedFolder.id, openModalAddTodo]);
   return (
     <>
