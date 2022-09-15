@@ -1,11 +1,13 @@
 import { useState, useEffect, Fragment } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { Transition } from "@headlessui/react";
 import { openImportModal } from "../../../../recoil/open-import-modal";
 import { ImportTodoFile } from "../../../../action/import-todo-file";
 import { ImportFolderFile } from "../../../../action/import-folder-file";
 import { useTranslation } from "react-i18next";
 import { Dialog } from "@headlessui/react";
+import { todoLocalStorageChange } from "../../../../recoil/todo-localstorage-change";
+import { folderLocalStorageChange } from "../../../../recoil/folder-localstorage-change";
 
 function ImportModal() {
   const { t } = useTranslation();
@@ -13,7 +15,13 @@ function ImportModal() {
 
   const [importModal, setImportModal] = useRecoilState(openImportModal);
 
+  const setTodoStorageChange = useSetRecoilState(todoLocalStorageChange);
+  
+  const setFolderStorageChange = useSetRecoilState(folderLocalStorageChange);
+
   function onCancelClick() {
+    setTodoStorageChange(true);
+    setFolderStorageChange(true);
     setImportModal(false);
   }
 
