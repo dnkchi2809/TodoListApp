@@ -38,9 +38,9 @@ function TodoCard(props: Todo) {
   const [arrayItems, setArrayItems] = useRecoilState(selectArrayItems);
 
   const [isShowing, setIsShowing] = useState(false);
-  const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
+  const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 50);
 
-  const [checkedSkeleton, setCheckedSkeleton] = useState(false);
+  const [checkedSkeleton, setCheckedSkeleton] = useState(true);
 
   const inputSelectTodo = useRef<HTMLInputElement>(null);
   const [checkedInput, setCheckedInput] = useState(false);
@@ -81,12 +81,11 @@ function TodoCard(props: Todo) {
   };
 
   useEffect(() => {
-    setIsShowing(false);
     resetIsShowing();
-  }, [resetIsShowing]);
+  }, [resetIsShowing, checkedSkeleton]);
 
   useEffect(() => {
-    setCheckedSkeleton(!checkedSkeleton);
+    setCheckedSkeleton(!isShowing);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isShowing]);
 
@@ -104,10 +103,10 @@ function TodoCard(props: Todo) {
         <Transition
           as={Fragment}
           show={isShowing}
-          enter="transform transition duration-[100ms] linear"
+          enter="transform transition duration-1000 ease"
           enterFrom="opacity-0 scale-50"
           enterTo="opacity-100 scale-100"
-          leave="transform duration-200 transition ease-in-out"
+          leave="transform duration-2000 transition ease-in-out"
           leaveFrom="opacity-100 scale-100 "
           leaveTo="opacity-0 scale-50 "
         >

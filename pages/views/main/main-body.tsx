@@ -85,7 +85,7 @@ function MainBody() {
   useEffect(() => {
     setIsShowing(false);
     resetIsShowing();
-  }, [resetIsShowing]);
+  }, [resetIsShowing, page]);
 
   useEffect(() => {
     if (selectAll) {
