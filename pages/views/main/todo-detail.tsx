@@ -240,7 +240,7 @@ function TodoDetail(props: ItemProps) {
           <input
             type="text"
             onChange={onChangeLabel}
-            value={todoItem.label}
+            defaultValue={todoItem.label}
             className="w-full mb-3 text-lg font-medium"
           />
         </div>
