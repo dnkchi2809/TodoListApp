@@ -40,13 +40,15 @@ function FolderDetail(props: Todo) {
 
   const router = useRouter();
 
-  const setFolderStorageChange = useSetRecoilState(folderLocalStorageChange);
-
   const [isShowing, setIsShowing] = useState(false);
   const [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 500);
 
   const [todoStorageChange, setTodoStorageChange] = useRecoilState(
     todoLocalStorageChange
+  );
+
+  const [folderStorageChange, setFolderStorageChange] = useRecoilState(
+   folderLocalStorageChange
   );
 
   const folderId = Number(props.folderId);
@@ -136,7 +138,7 @@ function FolderDetail(props: Todo) {
         return folder.id == folderId;
       })
     );
-  }, [folderId]);
+  }, [folderId, folderStorageChange]);
 
   const [storage, setStorage] = useState([]);
 
@@ -150,6 +152,13 @@ function FolderDetail(props: Todo) {
       setTodoStorageChange(false);
     }
   }, [setTodoStorageChange, todoStorageChange]);
+
+  useEffect(() => {
+    if (folderStorageChange) {
+      setStorage(JSON.parse(localStorage.getItem("folderList") || "[]"));
+      setFolderStorageChange(false);
+    }
+  }, [setFolderStorageChange, folderStorageChange]);
 
   useEffect(() => {
     if (folderId >= 0) {
@@ -204,12 +213,12 @@ function FolderDetail(props: Todo) {
         <div className="flex flex-wrap">
           {todoItemList.length > 0
             ? todoItemList.map((todoItem: Todo, index) => {
-              return (
-                <div className="col-todo-list" key={"todoCardItem" + index}>
-                  <TodoCard {...todoItem} />
-                </div>
-              );
-            })
+                return (
+                  <div className="col-todo-list" key={"todoCardItem" + index}>
+                    <TodoCard {...todoItem} />
+                  </div>
+                );
+              })
             : null}
           <Transition
             as={Fragment}

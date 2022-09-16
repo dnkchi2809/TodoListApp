@@ -16,7 +16,7 @@ function ImportModal() {
   const [importModal, setImportModal] = useRecoilState(openImportModal);
 
   const setTodoStorageChange = useSetRecoilState(todoLocalStorageChange);
-  
+
   const setFolderStorageChange = useSetRecoilState(folderLocalStorageChange);
 
   function onCancelClick() {

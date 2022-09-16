@@ -32,6 +32,7 @@
         "Import Todo" : "Nhập file ghi chú",
         "Import Folder" : "Nhập file thư mục",
         "Label is invalid": "Tên không được để trống",
-        "Update successfull" : "Cập nhật thành công"
+        "Update successfull" : "Cập nhật thành công",
+        "Delete folder success!" : "Xóa thư mục thành công!"
     }
 }

@@ -1,11 +1,12 @@
 import { useState, useEffect, Fragment } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { openDeleteFolderModal } from "../../../../recoil/open-delete-folder-modal";
 import { Transition } from "@headlessui/react";
 import { useRouter } from "next/router";
 import { folderLocalStorageChange } from "../../../../recoil/folder-localstorage-change";
 import { Dialog } from "@headlessui/react";
 import { useTranslation } from "react-i18next";
+import { todoLocalStorageChange } from "../../../../recoil/todo-localstorage-change";
 
 interface Folder {
   id: number;
@@ -35,6 +36,8 @@ function DeleteFolderModal(props: Todo) {
   const router = useRouter();
 
   const setFolderStorageChange = useSetRecoilState(folderLocalStorageChange);
+
+  const todoStorageChange = useRecoilValue(todoLocalStorageChange);
 
   const folderId = props.folderId;
 
@@ -69,7 +72,7 @@ function DeleteFolderModal(props: Todo) {
       localStorage.setItem("folderList", JSON.stringify(arrayTempFolder));
       setFolderStorageChange(true);
 
-      alert("Delete folder success!");
+      alert(t("content.Delete folder success!"));
 
       onCancelClick();
 
@@ -101,7 +104,7 @@ function DeleteFolderModal(props: Todo) {
         })
       );
     }
-  }, [folderId]);
+  }, [folderId, todoStorageChange]);
 
   useEffect(() => {
     setIsOpen(deleteFolderModal);
