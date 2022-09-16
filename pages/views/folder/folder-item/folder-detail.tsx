@@ -48,7 +48,7 @@ function FolderDetail(props: Todo) {
   );
 
   const [folderStorageChange, setFolderStorageChange] = useRecoilState(
-   folderLocalStorageChange
+    folderLocalStorageChange
   );
 
   const folderId = Number(props.folderId);
